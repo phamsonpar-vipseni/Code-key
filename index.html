@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEADVIP - PINK PURPLE EDITION</title>
+    <style>
+        body {
+            margin: 0; padding: 0;
+            background: #000 radial-gradient(circle at 50% 50%, #2e1a2e 0%, #000 100%);
+            color: white; font-family: 'Segoe UI', sans-serif;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; overflow: hidden;
+        }
+
+        /* Hạt bụi neon hồng */
+        body::before {
+            content: ""; position: absolute; width: 100%; height: 100%;
+            background-image: radial-gradient(rgba(255, 0, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px; z-index: 0;
+        }
+
+        .container { z-index: 1; width: 90%; max-width: 350px; text-align: center; }
+
+        h1 {
+            font-size: 38px; letter-spacing: 8px; margin: 0;
+            text-shadow: 0 0 20px #ff00ff, 0 0 40px #800080;
+            font-weight: bold; color: #fff;
+        }
+
+        /* AVATAR INFINITY */
+        .avatar-wrapper { position: relative; width: 120px; height: 120px; margin: 30px auto; }
+        .avatar {
+            width: 100%; height: 100%;
+            /* Sử dụng ảnh Infinity cực nét */
+            background: #1c252a url('https://img.icons8.com') center/cover;
+            border-radius: 50%; border: 3px solid #ff00ff;
+            box-shadow: 0 0 25px rgba(255, 0, 255, 0.7);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 15px #ff00ff; }
+            50% { box-shadow: 0 0 30px #ff00ff, 0 0 15px #fff; }
+            100% { box-shadow: 0 0 15px #ff00ff; }
+        }
+
+        /* INPUT & BUTTON TÍM HỒNG */
+        input {
+            width: 100%; padding: 18px; border-radius: 40px; border: 1px solid #4b0082;
+            background: rgba(30, 0, 30, 0.8); color: #fff; margin-bottom: 18px;
+            text-align: center; box-sizing: border-box; outline: none; font-size: 16px;
+        }
+        input:focus { border-color: #ff00ff; box-shadow: 0 0 15px #ff00ff; }
+
+        .login-btn {
+            width: 100%; padding: 16px; border-radius: 40px; border: none;
+            background: linear-gradient(45deg, #8a2be2, #ff007f);
+            color: white; font-weight: bold; font-size: 17px; letter-spacing: 3px;
+            cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.5); transition: 0.3s;
+        }
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px #ff00ff; }
+
+        /* CONTACT ICONS - SỬ DỤNG SVG (100% HIỆN ẢNH) */
+        .social-icons { display: flex; justify-content: center; gap: 40px; margin-top: 30px; }
+        .icon-box { 
+            width: 60px; height: 60px; cursor: pointer; transition: 0.4s; 
+            border-radius: 15px; background: rgba(255,255,255,0.1);
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .icon-box:hover { transform: scale(1.2) translateY(-8px); box-shadow: 0 10px 25px #ff00ff; }
+        .icon-box svg { width: 35px; height: 35px; fill: white; }
+
+        /* Popup Zalo */
+        #zaloPopup {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 100; justify-content: center; align-items: center;
+        }
+        .popup-content {
+            background: #1a001a; padding: 35px; border-radius: 25px; width: 85%; max-width: 320px;
+            border: 1px solid #ff00ff; text-align: center; box-shadow: 0 0 40px rgba(255,0,255,0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div style="font-size: 14px; margin-bottom: 15px; cursor: pointer; opacity: 0.5;" onclick="history.back()">← Back</div>
+    <h1>HEADVIP</h1>
+    
+    <div class="avatar-wrapper">
+        <div class="avatar"></div>
+    </div>
+
+    <div style="font-size: 13px; letter-spacing: 5px; margin-bottom: 25px; font-weight: bold; color: #ff00ff;">KEY LOGIN</div>
+
+    <input type="text" id="key" placeholder="Enter your key...">
+    <button class="login-btn" onclick="checkKey()">LOGIN</button>
+
+    <div style="margin-top: 50px; font-size: 11px; letter-spacing: 6px; opacity: 0.5; font-weight: bold; color: #ff00ff;">CONTACT</div>
+    
+    <div class="social-icons">
+        <!-- Zalo Icon (SVG) -->
+        <div class="icon-box" onclick="toggleZalo()">
+            <svg viewBox="0 0 24 24"><path d="M24 12c0 6.627-5.373 12-12 12S0 18.627 0 12 5.373 0 12 0s12 5.373 12 12zm-12 11c6.075 0 11-4.925 11-11S18.075 1 12 1 1 5.925 1 12s4.925 11 11 11zm1.25-15.5h-2.5a.75.75 0 00-.75.75v5.5c0 .414.336.75.75.75h2.5a.75.75 0 00.75-.75v-5.5a.75.75 0 00-.75-.75zM12 17.25c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25z""")/>></svg>
+        </div>
+        
+        <!-- Facebook Icon (SVG) -->
+        <a href="https://www.facebook.com" target="_blank" style="text-decoration: none;">
+            <div class="icon-box">
+                <svg viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z""")/>></svg>
+            </div>
+        </a>
+    </div>
+
+    <div style="margin-top: 45px; font-size: 11px; opacity: 0.2; letter-spacing: 2px;">by PhTrgSon</div>
+</div>
+
+<div id="zaloPopup" onclick="toggleZalo()">
+    <div class="popup-content" onclick="event.stopPropagation()">
+        <h3 style="color:#ff00ff; margin-top:0;">ZALO THÔNG TIN</h3>
+        <div style="margin: 20px 0; font-size: 20px;">SĐT: <b>0347320672</b></div>
+        <a href="https://zalo.me" style="display:block; background:linear-gradient(45deg, #8a2be2, #ff007f); color:#fff; padding:14px; border-radius:35px; text-decoration:none; font-weight:bold;" target="_blank">VÀO BOX ZALO</a>
+        <span style="color:#555; cursor:pointer; display:block; margin-top:20px; font-size:13px;" onclick="toggleZalo()">[ Đóng ]</span>
+    </div>
+</div>
+
+<script>
+    function checkKey(){
+        var k = document.getElementById("key").value;
+        if(k.startsWith("PhamSon-Vip-")) alert("✅ Cảm Ơn Thằng Em đã Buy Key của Anh!");
+        else alert("❌ Đéo Buy Đòi Nhập Key!");
+    }
+    function toggleZalo() {
+        var p = document.getElementById("zaloPopup");
+        p.style.display = (p.style.display === "flex") ? "none" : "flex";
+    }
+</script>
+
+</body>
+</html>
