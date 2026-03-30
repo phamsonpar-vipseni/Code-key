@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HEADVIP - PhamTrgSon</title>
+<style>
+body {
+    margin:0; padding:0;
+    background:#000 radial-gradient(circle at 50% 50%, #2e1a2e 0%, #000 100%);
+    color:#fff; font-family:'Segoe UI',sans-serif;
+    display:flex; justify-content:center; align-items:center;
+    height:100vh; overflow:hidden; position:relative;
+}
+
+.snow-container { position:absolute; width:100%; height:100%; top:0; left:0; pointer-events:none; z-index:0; }
+.snowflake { position:absolute; background:#ff00ff; border-radius:50%; opacity:0.4; animation:fall linear infinite; }
+@keyframes fall { to { transform: translateY(100vh); } }
+
+.container { z-index:1; width:90%; max-width:360px; text-align:center; }
+h1 { font-size:38px; letter-spacing:8px; text-shadow:0 0 20px #ff00ff,0 0 40px #800080; font-weight:900; color:#fff; margin:0; }
+
+.avatar-wrapper { position:relative; width:120px; height:120px; margin:25px auto; }
+.avatar {
+    width:100%; height:100%; background:#1c252a; border-radius:50%; border:3px solid #ff00ff;
+    box-shadow:0 0 25px rgba(255,0,255,0.7); display:flex; justify-content:center; align-items:center;
+    animation:pulse 2.5s infinite;
+}
+.avatar svg { width:70px; fill:#ff00ff; }
+@keyframes pulse { 0%,100%{box-shadow:0 0 10px #ff00ff;}50%{box-shadow:0 0 30px #ff00ff,0 0 15px #fff;} }
+
+input {
+    width:100%; padding:18px; border-radius:40px; border:2px solid #4b0082;
+    background:rgba(30,0,30,0.9); color:#fff; margin-top:25px;
+    text-align:center; box-sizing:border-box; outline:none; font-size:16px;
+}
+input:focus { border-color:#ff00ff; box-shadow:0 0 15px #ff00ff; }
+
+.login-btn {
+    width:100%; padding:16px; border-radius:40px; border:none; margin-top:15px;
+    background:linear-gradient(45deg,#8a2be2,#ff007f);
+    color:white; font-weight:bold; font-size:17px; letter-spacing:4px; cursor:pointer;
+    box-shadow:0 5px 25px rgba(255,0,255,0.3); transition:0.3s;
+}
+.login-btn:hover { transform:scale(1.02); box-shadow:0 5px 30px #ff00ff; }
+
+.social-icons { display:flex; justify-content:center; gap:40px; margin-top:35px; }
+.icon-box { width:55px; height:55px; cursor:pointer; transition:0.4s; border-radius:12px; background:rgba(255,255,255,0.05); display:flex; justify-content:center; align-items:center; }
+.icon-box:hover { transform:translateY(-8px) scale(1.1); box-shadow:0 0 20px #ff00ff; }
+.icon-box svg { width:32px; height:32px; fill:white; }
+
+#zaloPopup { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:100; justify-content:center; align-items:center; }
+.popup-content { background:#1a001a; padding:35px; border-radius:25px; width:85%; border:1px solid #ff00ff; text-align:center; }
+
+.menu { display:none; flex-direction:column; gap:12px; margin-top:20px; }
+.menu-btn { padding:14px; border-radius:25px; background:#111; color:white; border:1px solid #ff00ff; cursor:pointer; font-weight:bold; transition:0.2s; }
+.menu-btn:hover { background:#ff00ff; transform:scale(1.05); }
+</style>
+</head>
+<body>
+
+<div class="snow-container" id="snow"></div>
+
+<div class="container" id="loginContainer">
+    <h1>HEADVIP</h1>
+    <div class="avatar-wrapper">
+        <div class="avatar">
+            <svg viewBox="0 0 24 24"><path d="M18.121 6.75c-1.38 0-2.615.511-3.613 1.341l-2.508 2.087-2.508-2.087c-.998-.83-2.233-1.341-3.613-1.341-3.102 0-5.625 2.523-5.625 5.625s2.523 5.625 5.625 5.625c1.38 0 2.615-.511 3.613-1.341l2.508-2.087 2.508 2.087c.998.83 2.233 1.341 3.613 1.341 3.102 0 5.625-2.523 5.625-5.625s-2.523-5.625-5.625-5.625zm-12.242 9.75c-2.275 0-4.125-1.85-4.125-4.125s1.85-4.125 4.125-4.125c1.011 0 1.916.375 2.651.986l3.491 2.905-3.491 2.905c-.735.611-1.64.986-2.651.986zm12.242 0c-1.011 0-1.916-.375-2.651-.986l-3.491-2.905 3.491-2.905c.735-.611 1.64-.986 2.651-.986 2.275 0 4.125 1.85 4.125 4.125s-1.85 4.125-4.125 4.125z"/></svg>
+        </div>
+    </div>
+    <div style="font-size:13px;color:#ff00ff;letter-spacing:5px;font-weight:bold;">LOGIN SYSTEM</div>
+    <input type="password" id="keyInput" placeholder="Nhập Key (PhamSon-ViP-xxxxxx)">
+    <button class="login-btn" onclick="checkKey()">ACCESS LOGIN</button>
+
+    <div style="margin-top:50px; font-size:10px; color:#ff00ff; letter-spacing:5px; opacity:0.6;">CONTACT ADMIN</div>
+    <div class="social-icons">
+        <div class="icon-box" onclick="toggleZalo()">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+        </div>
+        <div class="icon-box" onclick="window.open('https://www.facebook.com/share/1bfDoGHGY5/?mibextid=wwXIfr','_blank')">
+            <svg viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
+        </div>
+    </div>
+</div>
+
+<div class="container menu" id="menuContainer">
+    <h1>HEADVIP TOOL</h1>
+    <button class="menu-btn" onclick="fakeFunc('Tăng FPS')">Tăng FPS</button>
+    <button class="menu-btn" onclick="fakeFunc('Tối ưu RAM')">Tối ưu RAM</button>
+    <button class="menu-btn" onclick="fakeFunc('Boost RAM')">Boost RAM</button>
+    <button class="menu-btn" onclick="fakeFunc('Fix Rung')">Fix Rung</button>
+    <button class="menu-btn" onclick="fakeFunc('HeadLock')">HeadLock</button>
+
+    <div style="margin-top:25px; font-size:14px; color:#ff00ff;">
+        👑 Tác giả: PhamTrgSon<br>
+        📱 Zalo: 0347320672<br>
+        🌐 <a href="https://www.facebook.com/share/1bfDoGHGY5/?mibextid=wwXIfr" target="_blank" style="color:cyan;">Facebook của tôi</a>
+    </div>
+</div>
+
+<div id="zaloPopup" onclick="toggleZalo()">
+    <div class="popup-content" onclick="event.stopPropagation()">
+        <h3 style="color:#ff00ff; margin-top:0;">ADMIN ZALO</h3>
+        <p style="font-size:18px;">SĐT: 0347320672</p>
+        <a href="https://zalo.me/0347320672" target="_blank" style="display:block; background:linear-gradient(45deg,#8a2be2,#ff007f); color:#fff; padding:15px; border-radius:40px; text-decoration:none; font-weight:bold;">VÀO BOX VIP</a>
+    </div>
+</div>
+
+<script>
+// 100 KEY CỐ ĐỊNH
+const keys = [
+"PhamSon-ViP-1A2B3C4D","PhamSon-ViP-5E6F7G8H","PhamSon-ViP-9I0J1K2L","PhamSon-ViP-3M4N5O6P","PhamSon-ViP-7Q8R9S0T",
+"PhamSon-ViP-U1V2W3X4","PhamSon-ViP-Y5Z6A7B","PhamSon-ViP-C8D9E0F1","PhamSon-ViP-G2H3I4J5","PhamSon-ViP-K6L7M8N9",
+"PhamSon-ViP-P0Q1R2S3","PhamSon-ViP-T4U5V6W7","PhamSon-ViP-X8Y9Z0A1","PhamSon-ViP-B2C3D4E5","PhamSon-ViP-F6G7H8I9",
+"PhamSon-ViP-J0K1L2M3","PhamSon-ViP-N4O5P6Q7","PhamSon-ViP-R8S9T0U1","PhamSon-ViP-V2W3X4Y5","PhamSon-ViP-Z6A7B8C9",
+"PhamSon-ViP-D0E1F2G3","PhamSon-ViP-H4I5J6K7","PhamSon-ViP-L8M9N0O1","PhamSon-ViP-Q2R3S4T5","PhamSon-ViP-U6V7W8X9",
+"PhamSon-ViP-Y0Z1A2B3","PhamSon-ViP-C4D5E6F7","PhamSon-ViP-G8H9I0J1","PhamSon-ViP-K2L3M4N5","PhamSon-ViP-P6Q7R8S9",
+"PhamSon-ViP-T0U1V2W3","PhamSon-ViP-X4Y5Z6A7","PhamSon-ViP-B8C9D0E1","PhamSon-ViP-F2G3H4I5","PhamSon-ViP-J6K7L8M9",
+"PhamSon-ViP-N0O1P2Q3","PhamSon-ViP-R4S5T6U7","PhamSon-ViP-V8W9X0Y1","PhamSon-ViP-Z2A3B4C5","PhamSon-ViP-D6E7F8G9",
+"PhamSon-ViP-H0I1J2K3","PhamSon-ViP-L4M5N6O7","PhamSon-ViP-Q8R9S0T1","PhamSon-ViP-U2V3W4X5","PhamSon-ViP-Y6Z7A8B9",
+"PhamSon-ViP-C0D1E2F3","PhamSon-ViP-G4H5I6J7","PhamSon-ViP-K8L9M0N1","PhamSon-ViP-P2Q3R4S5","PhamSon-ViP-T6U7V8W9",
+"PhamSon-ViP-X0Y1Z2A3","PhamSon-ViP-B4C5D6E7","PhamSon-ViP-F8G9H0I1","PhamSon-ViP-J2K3L4M5","PhamSon-ViP-N6O7P8Q9",
+"PhamSon-ViP-R0S1T2U3","PhamSon-ViP-V4W5X6Y7","PhamSon-ViP-Z8A9B0C1","PhamSon-ViP-D2E3F4G5","PhamSon-ViP-H6I7J8K9",
+"PhamSon-ViP-L0M1N2O3","PhamSon-ViP-Q4R5S6T7","PhamSon-ViP-U8V9W0X1","PhamSon-ViP-Y2Z3A4B5","PhamSon-ViP-C6D7E8F9",
+"PhamSon-ViP-G0H1I2J3","PhamSon-ViP-K4L5M6N7","PhamSon-ViP-P8Q9R0S1","PhamSon-ViP-T2U3V4W5","PhamSon-ViP-X6Y7Z8A9",
+"PhamSon-ViP-B0C1D2E3","PhamSon-ViP-F4G5H6I7","PhamSon-ViP-J8K9L0M1","PhamSon-ViP-N2O3P4Q5","PhamSon-ViP-R6S7T8U9",
+"PhamSon-ViP-V0W1X2Y3","PhamSon-ViP-Z4A5B6C7","PhamSon-ViP-D8E9F0G1","PhamSon-ViP-H2I3J4K5","PhamSon-ViP-L6M7N8O9",
+"PhamSon-ViP-Q0R1S2T3","PhamSon-ViP-U4V5W6X7","PhamSon-ViP-Y8Z9A0B1","PhamSon-ViP-C2D3E4F5","PhamSon-ViP-G6H7I8J9",
+"PhamSon-ViP-K0L1M2N3","PhamSon-ViP-P4Q5R6S7","PhamSon-ViP-T8U9V0W1","PhamSon-ViP-X2Y3Z4A5","PhamSon-ViP-B6C7D8E9"
+];
+
+function checkKey(){
+    const input = document.getElementById("keyInput").value.trim();
+    if(keys.includes(input)){
+        document.getElementById("loginContainer").style.display="none";
+        document.getElementById("menuContainer").style.display="flex";
+        alert("✅ Đăng nhập thành công!");
+    } else if(input===""){
+        alert("⚠️ Vui lòng nhập Key!");
+    } else {
+        alert("❌ Key sai!");
+    }
+}
+
+function fakeFunc(name){ alert("✅ "+name+" đã kích hoạt!"); }
+function toggleZalo(){ const p=document.getElementById("zaloPopup"); p.style.display=(p.style.display==="flex")?"none":"flex"; }
+
+// Tạo snow effect
+function createSnow() {
+    const snow = document.getElementById('snow');
+    for(let i=0;i<40;i++){
+        let flake = document.createElement('div');
+        flake.className='snowflake';
+        let size = Math.random()*3+1+'px';
+        flake.style.width=size; flake.style.height=size;
+        flake.style.left=Math.random()*100+'vw';
+        flake.style.animationDuration=Math.random()*3+4+'s';
+        flake.style.animationDelay=Math
