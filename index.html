@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HEADViP - PhamTrgSon</title>
+
+<style>
+body { background:#000; color:#fff; font-family:Arial; text-align:center; margin:0; }
+@keyframes glow { 0%{box-shadow:0 0 5px red;}50%{box-shadow:0 0 20px red;}100%{box-shadow:0 0 5px red;} }
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+h1 { color:red; margin-top:100px; }
+#login { animation: fadeIn 1s; }
+input { padding:12px; width:220px; border:none; outline:none; margin-top:20px; text-align:center; }
+button { padding:12px; width:160px; margin-top:10px; border:none; background:red; color:white; cursor:pointer; animation: glow 2s infinite; }
+.menu { display:none; animation: fadeIn 0.8s; margin-top:50px; }
+.btn { display:block; margin:12px auto; padding:14px; width:240px; background:#111; border:1px solid red; color:white; transition:0.2s; }
+.btn:hover { background:red; transform:scale(1.05); }
+.footer { margin-top:30px; font-size:14px; color:#aaa; }
+</style>
+
+</head>
+<body>
+
+<div id="login">
+<h1>🔐 KEY LOGIN</h1>
+<input id="keyInput" placeholder="Nhập key...">
+<br>
+<button onclick="checkKey()">Đăng nhập</button>
+</div>
+
+<div class="menu" id="menu">
+<h1>HEADViP TOOL</h1>
+<button class="btn" onclick="fake('REG FILES')">REG FILES</button>
+<button class="btn" onclick="fake('BOOST RAM')">BOOST RAM</button>
+<button class="btn" onclick="fake('HEADLOCK')">HEADLOCK</button>
+<button class="btn" onclick="fake('FIX RUNG')">FIX RUNG</button>
+
+<div class="footer">
+👑 Tác giả: PhamTrgSon <br>
+📱 Zalo: 0347320672 <br>
+🌐 <a href="https://www.facebook.com/share/1bfDoGHGY5/?mibextid=wwXIfr" target="_blank" style="color:cyan;">Facebook của tôi</a>
+</div>
+</div>
+
+<script>
+// ✅ 100 key cố định dạng PhamSom-ViP-XXXXXXXX
+const keyList = [
+{key:"PhamSom-ViP-1A2B3C4D",expire:"2026-04-30"},
+{key:"PhamSom-ViP-5E6F7G8H",expire:"2026-04-30"},
+{key:"PhamSom-ViP-9I0J1K2L",expire:"2026-04-30"},
+{key:"PhamSom-ViP-3M4N5O6P",expire:"2026-04-30"},
+{key:"PhamSom-ViP-7Q8R9S0T",expire:"2026-04-30"},
+{key:"PhamSom-ViP-1U2V3W4X",expire:"2026-04-30"},
+{key:"PhamSom-ViP-5Y6Z7A8B",expire:"2026-04-30"},
+{key:"PhamSom-ViP-9C0D1E2F",expire:"2026-04-30"},
+{key:"PhamSom-ViP-3G4H5I6J",expire:"2026-04-30"},
+{key:"PhamSom-ViP-7K8L9M0N",expire:"2026-04-30"},
+
+{key:"PhamSom-ViP-1O2P3Q4R",expire:"2026-04-30"},
+{key:"PhamSom-ViP-5S6T7U8V",expire:"2026-04-30"},
+{key:"PhamSom-ViP-9W0X1Y2Z",expire:"2026-04-30"},
+{key:"PhamSom-ViP-3A4B5C6D",expire:"2026-04-30"},
+{key:"PhamSom-ViP-7E8F9G0H",expire:"2026-04-30"},
+{key:"PhamSom-ViP-1I2J3K4L",expire:"2026-04-30"},
+{key:"PhamSom-ViP-5M6N7O8P",expire:"2026-04-30"},
+{key:"PhamSom-ViP-9Q0R1S2T",expire:"2026-04-30"},
+{key:"PhamSom-ViP-3U4V5W6X",expire:"2026-04-30"},
+{key:"PhamSom-ViP-7Y8Z9A0B",expire:"2026-04-30"},
+
+// ... tiếp tục đến 100 key
+];
+
+// check key
+function checkKey() {
+    const input = document.getElementById("keyInput").value.trim();
+    const today = new Date();
+    const found = keyList.find(k => k.key === input);
+    if(!found){ alert("❌ Key không hợp lệ!"); return; }
+    const expireDate = new Date(found.expire);
+    if(today > expireDate){ alert("❌ Key đã hết hạn!"); return; }
+    document.getElementById("login").style.display="none";
+    document.getElementById("menu").style.display="block";
+}
+
+// fake tool
+function fake(name){
+    alert("✅ " + name + " đã kích hoạt!");
+}
+</script>
+
+</body>
+</html>
