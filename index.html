@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HEADViP PANEL</title>
+
+<style>
+body{
+  margin:0;
+  font-family:sans-serif;
+  background:#0f0f0f;
+  color:#fff;
+  text-align:center;
+}
+
+.hidden{display:none}
+
+.box{
+  margin-top:120px;
+}
+
+input{
+  padding:12px;
+  width:220px;
+  border:none;
+  border-radius:8px;
+}
+
+button{
+  padding:12px 20px;
+  border:none;
+  border-radius:8px;
+  background:#00ffcc;
+  margin-top:10px;
+}
+
+.panel{
+  margin-top:60px;
+}
+
+.btn{
+  display:block;
+  margin:10px auto;
+  width:200px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="loginView" class="box">
+  <h2>HEADViP LOGIN</h2>
+  <input id="keyInput" placeholder="Nhập key...">
+  <br>
+  <button onclick="dangNhap()">Đăng nhập</button>
+  <p id="msg"></p>
+</div>
+
+<!-- PANEL -->
+<div id="panelView" class="panel hidden">
+  <h2>WELCOME VIP</h2>
+  <p id="info"></p>
+
+  <button class="btn">Aim Head</button>
+  <button class="btn">Fix Lag</button>
+  <button class="btn">Boost FPS</button>
+</div>
+
+<script>
+// ====== 30 KEY ======
+const VALID_KEYS = [
+"PhamTrgSon-Seni-A1B2C","PhamTrgSon-Seni-X9K2L","PhamTrgSon-Seni-7HD2Q",
+"PhamTrgSon-Seni-P9L3X","PhamTrgSon-Seni-Z8M2N","PhamTrgSon-Seni-Q1W2E",
+"PhamTrgSon-Seni-R4T6Y","PhamTrgSon-Seni-U7I8O","PhamTrgSon-Seni-PLK9J",
+"PhamTrgSon-Seni-HG5FD","PhamTrgSon-Seni-S2D4F","PhamTrgSon-Seni-G7H8J",
+"PhamTrgSon-Seni-K9L0P","PhamTrgSon-Seni-ZX3CV","PhamTrgSon-Seni-B5NMK",
+"PhamTrgSon-Seni-L8OPQ","PhamTrgSon-Seni-W3ERT","PhamTrgSon-Seni-Y6UIO",
+"PhamTrgSon-Seni-A9SDF","PhamTrgSon-Seni-GH4JK","PhamTrgSon-Seni-Q7WER",
+"PhamTrgSon-Seni-TY5UI","PhamTrgSon-Seni-OP2LK","PhamTrgSon-Seni-MN8BV",
+"PhamTrgSon-Seni-CX6ZA","PhamTrgSon-Seni-AS1DF","PhamTrgSon-Seni-FG3HJ",
+"PhamTrgSon-Seni-JK7LP","PhamTrgSon-Seni-ZQ9WX","PhamTrgSon-Seni-VB2NM"
+];
+
+// ====== UI FUNC ======
+const msg = document.getElementById("msg");
+const loginView = document.getElementById("loginView");
+const panelView = document.getElementById("panelView");
+
+function setMsg(text,color){
+  msg.innerText = text;
+  msg.style.color = color === "ok" ? "lime" : "red";
+}
+
+// ====== SESSION ======
+function saveSession(data){
+  localStorage.setItem("session",JSON.stringify(data));
+  localStorage.setItem("key",data.key);
+}
+
+function getSession(){
+  return JSON.parse(localStorage.getItem("session"));
+}
+
+function getSavedKey(){
+  return localStorage.getItem("key");
+}
+
+// ====== LOGIN ======
+function dangNhap(){
+  const key = document.getElementById("keyInput").value.trim();
+
+  if(!key){
+    setMsg("Nhập key đi","err");
+    return;
+  }
+
+  if(!key.startsWith("PhamTrgSon-Seni-") || key.length !== 22){
+    setMsg("Sai định dạng","err");
+    return;
+  }
+
+  if(VALID_KEYS.includes(key)){
+    setMsg("Đúng key!","ok");
+
+    saveSession({
+      token:"vip_"+Math.random().toString(36).slice(2),
+      key:key
+    });
+
+    setTimeout(()=>{
+      loginView.classList.add("hidden");
+      panelView.classList.remove("hidden");
+
+      document.getElementById("info").innerText =
+        "Key: " + key + " | Hạn: 7 ngày";
+
+    },500);
+
+  }else{
+    setMsg("Key sai","err");
+  }
+}
+
+// ====== AUTO LOGIN ======
+window.onload = function(){
+  const s = getSession();
+  const k = getSavedKey();
+
+  if(s && k){
+    loginView.classList.add("hidden");
+    panelView.classList.remove("hidden");
+
+    document.getElementById("info").innerText =
+      "Key: " + k + " | Hạn: 7 ngày";
+  }
+};
+</script>
+
+</body>
+</html>
