@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhamSonNex - Key System</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 50px 40px;
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.5),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            max-width: 480px;
+            width: 95%;
+            text-align: center;
+            position: relative;
+            animation: containerGlow 2s ease-out;
+        }
+
+        @keyframes containerGlow {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) rotateX(10deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotateX(0);
+            }
+        }
+
+        .logo {
+            font-size: 3em;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00f5ff, #ff00ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            text-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.8),
+                0 0 40px rgba(255, 0, 255, 0.6);
+            animation: logoPulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        .subtitle {
+            color: #00ff88;
+            font-size: 1.2em;
+            margin-bottom: 35px;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        .key-input-group {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .key-input {
+            width: 100%;
+            padding: 22px 25px 22px 60px;
+            font-size: 1.3em;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            border: 2px solid #00f5ff;
+            border-radius: 20px;
+            outline: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(0, 255, 255, 0.1);
+            color: #00f5ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            backdrop-filter: blur(10px);
+            box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+
+        .key-input::placeholder {
+            color: rgba(0, 245, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .key-input:focus {
+            border-color: #ff00ff;
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.6),
+                0 0 60px rgba(255, 0, 255, 0.4),
+                inset 0 0 20px rgba(255, 0, 255, 0.2);
+            background: rgba(255, 0, 255, 0.15);
+            transform: scale(1.03);
+        }
+
+        .key-icon {
+            position: absolute;
+            left: 22px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.6em;
+            color: #00f5ff;
+            text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(-50%) translateX(0px); }
+            50% { transform: translateY(-50%) translateX(5px); }
+        }
+
+        .scan-line {
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #00f5ff, #ff00ff, transparent);
+            border-radius: 20px 20px 0 0;
+            animation: scanLine 3s linear infinite;
+        }
+
+        @keyframes scanLine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .verify-btn {
+            width: 100%;
+            padding: 22px;
+            background: linear-gradient(45deg, #ff00ff, #00f5ff, #00ff88);
+            background-size: 300% 300%;
+            color: #000;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.3em;
+            font-weight: 900;
+            font-family: 'Orbitron', monospace;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 15px 35px rgba(255, 0, 255, 0.4),
+                0 0 0 0 rgba(0, 255, 255, 0.5);
+            animation: btnGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes btnGlow {
+            0% { box-shadow: 0 15px 35px rgba(255, 0, 255, 0.4), 0 0 0 0 rgba(0, 255, 255, 0.5); }
+            100% { box-shadow: 0 15px 35px rgba(0, 255, 255, 0.6), 0 0 0 15px rgba(255, 0, 255, 0.2); }
+        }
+
+        .verify-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 
+                0 25px 50px rgba(255, 0, 255, 0.6),
+                0 0 50px rgba(0, 255, 255, 0.8);
+        }
+
+        .verify-btn:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .btn-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.6s ease;
+        }
+
+        .btn-glow.active {
+            width: 300px;
+            height: 300px;
+        }
+
+        .status {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 1.1em;
+            display: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status.success {
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            color: #000;
+            border: 2px solid #00ff88;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.6);
+            animation: successPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes successPulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(0, 255, 136, 0.6); }
+            50% { box-shadow: 0 0 50px rgba(0, 255, 136, 0.9); }
+        }
+
+        .status.error {
+            background: linear-gradient(45deg, #ff4757, #ff3838);
+            color: #fff;
+            border: 2px solid #ff4757;
+            box-shadow: 0 0 30px rgba(255, 71, 87, 0.6);
+            animation: errorShake 0.5s ease-in-out;
+        }
+
+        @keyframes errorShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: particleFloat 8s infinite linear;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+                transform: translateY(-100px) scale(1) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .loading {
+            display: none;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(0, 255, 255, 0.2);
+            border-top: 4px solid #00f5ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer {
+            margin-top: 35px;
+            color: #00ff88;
+            font-size: 0.95em;
+            font-weight: 500;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        .success-check {
+            font-size: 2em;
+            margin-bottom: 10px;
+            display: block;
+            animation: checkBounce 1s ease;
+        }
+
+        @keyframes checkBounce {
+            0% { transform: scale(0) rotate(-180deg); }
+            50% { transform: scale(1.2) rotate(20deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+    </style>
+</head>
+<body>
+    <canvas class="matrix-bg" id="matrix"></canvas>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="logo">𝑷𝒉𝒂𝒎𝑺𝒐𝒏𝑵𝒆𝒙</div>
+        <div class="subtitle">ENTER ACTIVATION KEY</div>
+        
+        <div class="key-input-group">
+            <div class="scan-line"></div>
+            <i class="fas fa-key key-icon">
+                <i class="fas fa-lock"></i>
+            </i>
+            <input type="text" class="key-input" id="keyInput" placeholder="PHAMSONNEX-XXXX-XXXX-XXXX" maxlength="50">
+        </div>
+        
+        <button class="verify-btn" onclick="verifyKey()">
+            <span id="btnText">VERIFY KEY</span>
+            <div class="btn-glow" id="btnGlow"></div>
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <span style="color: #00f5ff; font-weight: 700;">AUTHENTICATING...</span>
+            </div>
+        </button>
+        
+        <div class="status" id="status"></div>
+        
+        <div class="footer">
+            🔐 SECURE AUTHENTICATION | v2.0 | 2024
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script>
+        // Matrix background effect
+        function createMatrix() {
+            const canvas = document.getElementById('matrix');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+            const drops = Array(Math.floor(columns)).fill(1);
+
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#00f5ff';
+                ctx.font = `${fontSize}px monospace`;
+                
+                drops.forEach((y, i) => {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * fontSize, y * fontSize);
+                    
+                    if (y * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                });
+            }
+
+            setInterval(draw, 50);
+        }
+
+        // Particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 80; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.background = `hsl(${Math.random() * 60 + 180}, 100%, 60%)`;
+                particle.style.width = particle.style.height = (Math.random() * 6 + 2) + 'px';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Keys hợp lệ
+        const validKeys = [
+            'PHAMSONNEX-2024-VIP-001',
+            'PHAMSONNEX-PRO-9999-777',
+            'PHAMSONNEX-ULTIMATE-KEY',
+            'PHAMSONNEX-FREEFIRE-VN',
+            'PHAMSONNEX-ADMIN-0001',
+            'PHAMSONNEX-GAMER-ELITE'
+        ];
+
+        function verifyKey() {
+            const keyInput = document.getElementById('keyInput');
+            const status = document.getElementById('status');
+            const btnText = document.getElementById('btnText');
+            const loading = document.getElementById('loading');
+            const verifyBtn = document.querySelector('.verify-btn');
+            const btnGlow = document.getElementById('btnGlow');
+            
+            const key = keyInput.value.trim().toUpperCase();
+            
+            if (!key) {
+                showStatus('🚫 KEY REQUIRED!', 'error');
+                return;
+            }
+            
+            // Hiệu ứng verify
+            verifyBtn.disabled = true;
+            btnText.style.display = 'none';
+            loading.style.display = 'block';
+            btnGlow.classList.add('active');
+            
+            // Sound effect (Web Audio API)
+            playVerifySound();
+            
+            setTimeout(() => {
+                btnGlow.classList.remove('active');
+                
+                if (validKeys.includes(key)) {
+                    showStatus(`
+                        <i class="fas fa-check-circle success-check"></i>
+                        ✅ KEY VALIDATED SUCCESSFULLY!
+                        <br><small>Redirecting to Dashboard...</small>
+                    `, 'success');
+                    
+                    // Hiệu ứng thành công
+                    document.body.style.background = 'linear-gradient(-45deg, #00ff88, #00cc6a, #00aa55)';
+                    keyInput.style.borderColor = '#00ff88';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'index.html'; // Thay đổi URL này
+                    }, 2500);
+                } else {
+                    showStatus('❌ INVALID KEY OR EXPIRED!', 'error');
+                    keyInput.value = '';
+                    keyInput.style.borderColor = '#ff4757';
+                    keyInput.style.animation = 'errorShake 0.5s ease-in-out';
+                    setTimeout(() => {
+                        keyInput.style.animation = '';
+                        keyInput.style.borderColor = '#00f5ff';
+                                            }, 500);
+                }
+                
+                verifyBtn.disabled = false;
+                btnText.style.display = 'inline';
+                loading.style.display = 'none';
+            }, 2500);
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.innerHTML = message;
+            status.className = `status ${type}`;
+            status.style.display = 'block';
+            
+            if (type === 'error') {
+                setTimeout(() => {
+                    status.style.display = 'none';
+                }, 4000);
+            }
+        }
+
+        function playVerifySound() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.1);
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+        }
+
+        // Event listeners
+        document.getElementById('keyInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                verifyKey();
+            }
+        });
+
+        document.getElementById('keyInput').addEventListener('input', function() {
+            this.style.borderColor = '#00f5ff';
+        });
+
+        document.getElementById('keyInput').addEventListener('click', function() {
+            this.select();
+        });
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('matrix');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Init
+        window.onload = function() {
+            createMatrix();
+            createParticles();
+            document.getElementById('keyInput').focus();
+        };
+    </script>
+</body>
+</html>
