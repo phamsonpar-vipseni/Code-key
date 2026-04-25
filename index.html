@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UltraLock VIP - PHẠM SƠN NEX</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #2d1b69 100%);
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* KEY SCREEN - FULL EFFECTS */
+        .key-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #2d1b69 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        /* 3 LAYER PARTICLES */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        #particles1 { z-index: 1; }
+        #particles2 { z-index: 2; }
+        #particles3 { z-index: 3; }
+
+        /* MCHAU LETTERS */
+        .letters {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 4;
+        }
+
+        /* HEARTS */
+        .hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .key-content {
+            background: rgba(0,0,0,0.95);
+            padding: 50px;
+            border-radius: 25px;
+            border: 3px solid #00ff88;
+            box-shadow: 0 0 60px rgba(0,255,136,0.6), inset 0 0 30px rgba(0,255,136,0.1);
+            text-align: center;
+            z-index: 100;
+            position: relative;
+            backdrop-filter: blur(15px);
+            max-width: 600px;
+            width: 90%;
+            animation: keyPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes keyPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 60px rgba(0,255,136,0.6); }
+            50% { transform: scale(1.02); box-shadow: 0 0 80px rgba(255,0,255,0.8); }
+        }
+
+        .title {
+            font-size: 4em;
+            background: linear-gradient(45deg, #00ff88, #ff00ff, #00bfff, #ffaa00);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 0 40px 0;
+            text-shadow: 0 0 40px rgba(0,255,136,0.8);
+            animation: titleGlow 3s ease-in-out infinite, titleMove 6s linear infinite;
+            font-weight: 900;
+            letter-spacing: 5px;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px #00ff88); }
+            33% { filter: drop-shadow(0 0 30px #ff00ff); }
+            66% { filter: drop-shadow(0 0 30px #00bfff); }
+        }
+
+        @keyframes titleMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
+        }
+
+        .key-table {
+            margin: 40px 0;
+        }
+
+        .key-table table {
+            border-collapse: separate;
+            border-spacing: 0;
+            background: linear-gradient(145deg, rgba(0,255,136,0.2), rgba(255,0,255,0.2));
+            border-radius: 20px;
+            overflow: hidden;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .key-table td {
+            padding: 20px;
+        }
+
+        #keyInput {
+            width: 100%;
+            padding: 20px 25px;
+            border: 3px solid transparent;
+            border-radius: 15px;
+            background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)) padding-box,
+                        linear-gradient(45deg, #00ff88, #ff00ff) border-box;
+            color: #fff;
+            font-size: 18px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        #keyInput:focus {
+            outline: none;
+            border-color: #ffffff;
+            box-shadow: 0 0 30px rgba(255,255,255,0.6);
+            transform: scale(1.05);
+            background: linear-gradient(rgba(0,0,0,0.95), rgba(0,0,0,0.95)) padding-box,
+                        linear-gradient(45deg, #ffffff, #00ff88) border-box;
+        }
+
+        #keyInput::placeholder {
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .activate-btn {
+            padding: 20px 40px;
+            background: linear-gradient(45deg, #00ff88, #00cc66, #00ff88);
+            background-size: 300% 300%;
+            border: none;
+            border-radius: 15px;
+            color: #000;
+            font-size: 18px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.4s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 10px 30px rgba(0,255,136,0.5);
+            position: relative;
+            overflow: hidden;
+            animation: btnShine 2s linear infinite;
+        }
+
+        .activate-btn:hover {
+            background: linear-gradient(45deg, #ff00ff, #cc00cc, #ff00ff);
+            color: #fff;
+            box-shadow: 0 15px 40px rgba(255,0,255,0.7);
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        @keyframes btnShine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        .admin-info {
+            margin: 30px 0;
+            color: #ccc;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(0,255,136,0.3);
+        }
+
+        .admin-info p {
+            margin: 15px 0;
+            font-size: 16px;
+        }
+
+        .admin-info strong { color: #00ff88; }
+        .admin-info a {
+            color: #ff00ff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .admin-info a:hover {
+            color: #00ff88;
+            text-shadow: 0 0 15px #00ff88;
+            transform: scale(1.1);
+        }
+
+        .key-status {
+            margin-top: 30px;
+            min-height: 40px;
+            font-weight: 900;
+            font-size: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.5s;
+        }
+
+        /* PARTICLE ANIMATIONS */
+        @keyframes fall1 {
+            0% { transform: translateY(-100vh) rotate(0deg) scale(0.5); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg) scale(1); opacity: 0; }
+        }
+
+        @keyframes fall2 {
+            0% { transform: translateY(-100vh) rotate(180deg); opacity: 0.8; }
+            100% { transform: translateY(120vh) rotate(540deg); opacity: 0; }
+        }
+
+        @keyframes fall3 {
+            0% { transform: translateY(-120vh) scale(0.3); opacity: 1; }
+            100% { transform: translateY(100vh) scale(1.5); opacity: 0; }
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: fall1 linear infinite;
+        }
+
+        .particle.layer2 { animation-name: fall2; animation-duration: 8s; }
+        .particle.layer3 { animation-name: fall3; animation-duration: 12s; }
+
+        .particle:nth-child(4n) { background: linear-gradient(45deg, #00ff88, #00cc66); }
+        .particle:nth-child(4n+1) { background: linear-gradient(45deg, #ff00ff, #cc00cc); }
+        .particle:nth-child(4n+2) { background: linear-gradient(45deg, #00bfff, #0088cc); }
+        .particle:nth-child(4n+3) { background: linear-gradient(45deg, #ffaa00, #cc8800); }
+
+        .letter {
+            position: absolute;
+            font-size: 32px;
+            font-weight: 900;
+            color: #ff00ff;
+            text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff;
+            animation: fall2 linear infinite;
+            white-space: nowrap;
+            filter: drop-shadow(0 0 10px rgba(255,0,255,0.8));
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 28px;
+            animation: fall3 linear infinite;
+            filter: drop-shadow(0 0 15px rgba(255,182,193,0.8));
+        }
+
+        /* DASHBOARD - GIỮ NGUYÊN 100% */
+        #dashboard {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: headerFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes headerFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .header h1 {
+            font-size: 3em;
+            background: linear-gradient(45deg, #00ff88, #ff00ff, #00bfff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            animation: headerGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes headerGlow {
+            from { filter: drop-shadow(0 0 20px #00ff88); }
+            to { filter: drop-shadow(0 0 30px #ff00ff); }
+        }
+
+        .status-bar {
+            background: linear-gradient(145deg, rgba(0,0,0,0.9), rgba(0,255,136,0.1));
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 2px solid #00ff88;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .control-card {
+            background: linear-gradient(145deg, rgba(0,0,0,0.9), rgba(0,0,0,0.7));
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(0,255,136,0.3);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .control-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0,255,136,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .control-card:hover::before {
+            animation: shine 1.5s infinite;
+            opacity: 1;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .control-card:hover {
+            border-color: #00ff88;
+            box-shadow: 0 20px 60px rgba(0,255,136,0.4);
+            transform: translateY(-10px);
+        }
+
+        .control-card h3 {
+            color: #00ff88;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-align: center;
+            position: relative;
+        }
+
+        .control-card h3::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #00ff88, #ff00ff);
+            border-radius: 2px;
+        }
+
+        .toggle-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .toggle-btn {
+            padding: 12px 20px;
+            border: 2px solid #333;
+            border-radius: 25px;
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .toggle-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .toggle-btn:hover::before {
+            left: 100%;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(45deg, #00ff88, #00cc66);
+            border-color: #00ff88;
+            box-shadow: 0 0 20px rgba(0,255,136,0.6);
+            transform: scale(1.05);
+        }
+
+        .slider-container {
+            margin: 15px 0;
+        }
+
+        .slider-container label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ccc;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #333, #666, #333);
+            outline: none;
+            -webkit-appearance: none;
+            position: relative;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00ff88, #ff00ff);
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0,255,136,0.8);
+            transition: all 0.3s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 25px rgba(0,255,136,1);
+        }
+
+        .slider-value {
+            color: #00ff88;
+            font-weight: 900;
+            margin-top: 8px;
+            font-size: 16px;
+            text-shadow: 0 0 10px rgba(0,255,136,0.5);
+        }
+
+        .master-controls {
+            grid-column: 1 / -1;
+            background: linear-gradient(145deg, rgba(0,255,136,0.15), rgba(255,0,255,0.1));
+            border: 3px solid #00ff88;
+            position: relative;
+        }
+
+        .master-controls::after {
+            content: '⚡ MASTER CONTROL';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #00ff88, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 18px;
+            font-weight: 900;
+            padding: 0 20px;
+        }
+
+        .fps-display {
+            text-align: center;
+            font-size: 3em;
+            color: #00ff88;
+            font-weight: 900;
+            margin: 30px 0;
+            text-shadow: 0 0 30px rgba(0,255,136,0.8);
+            animation: fpsPulse 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes fpsPulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+
+        @media (max-width: 768px) {
+            .title { font-size: 2.8em; letter-spacing: 2px; }
+            .controls-grid { grid-template-columns: 1fr; }
+            .key-content { padding: 30px 20px; }
+            .toggle-group { justify-content: center; flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <!-- KEY SCREEN - FULL EFFECTS -->
+    <div id="keyScreen" class="key-container">
+        <div class="particles" id="particles1"></div>
+        <div class="particles" id="particles2"></div>
+        <div class="particles" id="particles3"></div>
+        <div class="letters" id="letters"></div>
+        <div class="hearts" id="hearts"></div>
+        
+        <div class="key-content">
+            <h1 class="title">PHẠM SƠN NEX</h1>
+            <div class="key-table">
+                <table>
+                    <tr>
+                        <td><input type="text" id="keyInput" placeholder="Nhập Key VIP PHẠM SƠN NEX..." maxlength="50"></td>
+                        <td><button onclick="checkKey()" class="activate-btn">🔥 KÍCH HOẠT CHỨC NĂNG VIP 🔥</button></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="admin-info">
+                <p>👨‍💼 <strong>Phạm Sơn🦦 </strong></p>
+                <p>📱 Zalo: <strong>0347320672</strong></p>
+                <p>💬 Discord: <a href="https://discord.gg/dXwPFcfEm" target="_blank">dXwPFcfEm</a></p>
+                <p>💝 <strong>MCHAU 💟 Chan Bố Mày Đi🙄</strong></p>
+            </div>
+            <div class="key-status" id="keyStatus">⏳ Sẵn sàng kích hoạt...</div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD - FEATURES  -->
+    <div id="dashboard">
+        <div class="header">
+            <h1>🚀 UltraLock SeNi - PHẠM SƠN NEX 🦦</h1>
+            <div class="status-bar">
+                <strong>🏧 KHA NGHĨ | PHẠM SƠN NEX | MCHAU 💟 | PHIÊN BẢN UTRAL PHẠM SƠN🪬</strong>
+            </div>
+        </div>
+
+        <div class="fps-display" id="fpsDisplay">FPS: 60.0</div>
+
+        <div class="controls-grid">
+            <!-- AIM FEATURES -->
+            <div class="control-card">
+                <h3>🎯 AIM & ESP UTRAL</h3>
+                <div class="toggle-group">
+                    <button class="toggle-btn active" onclick="toggleFeature('aimplus', this)">Aim+</button>
+                    <button class="toggle-btn" onclick="toggleFeature('aimbotnes', this)">Aimbot NES</button>
+                    <button class="toggle-btn" onclick="toggleFeature('fixlag', this)">Fix Lag</button>
+                    <button class="toggle-btn" onclick="toggleFeature('fpsboost', this)">FPS Boost</button>
+                    <button class="toggle-btn" onclick="toggleFeature('aimultra', this)">Aim Ultra</button>
+                    <button class="toggle-btn" onclick="toggleFeature('donram', this)">Dọn RAM</button>
+                    <button class="toggle-btn" onclick="toggleFeature('tangnhay', this)">Tăng Nhạy</button>
+                </div>
+            </div>
+
+            <!-- WALLHACK & VISUAL -->
+            <div class="control-card">
+                <h3>👁️ GIA THUY & KHA NGHĨ</h3>
+                <div class="toggle-group">
+                    <button class="toggle-btn" onclick="toggleFeature('wallhack', this)">Wallhack</button>
+                    <button class="toggle-btn" onclick="toggleFeature('esp', this)">ESP Box</button>
+                    <button class="toggle-btn" onclick="toggleFeature('chams', this)">Chams</button>
+                    <button class="toggle-btn" onclick="toggleFeature('glow', this)">Glow</button>
+                </div>
+            </div>
+
+            <!-- MASTER CONTROLS -->
+            <div class="control-card master-controls">
+                <h3>🖥️ DPi KHA NGHĨ👨‍❤️‍👨</h3>
+                <div class="slider-container">
+                    <label>FPS Limit: <span id="fpsValue">144</span></label>
+                    <input type="range" class="slider" id="fpsSlider" min="30" max="500" value="144" step="1" oninput="updateMaster('fps', this.value)">
+                    <span class="slider-value" id="fpsValueDisplay">144</span>
+                </div>
+                <div class="slider-container">
+                    <label>Aim Smoothness: <span id="smoothValue">65</span>%</label>
+                    <input type="range" class="slider" id="smoothSlider" min="0" max="100" value="65" oninput="updateMaster('smooth', this.value)">
+                    <span class="slider-value" id="smoothValueDisplay">65%</span>
+                </div>
+                <div class="slider-container">
+                    <label>Anti-Recoil: <span id="recoilValue">85</span>%</label>
+                    <input type="range" class="slider" id="recoilSlider" min="0" max="100" value="85" oninput="updateMaster('recoil', this.value)">
+                    <span class="slider-value" id="recoilValueDisplay">85%</span>
+                </div>
+                <div class="slider-container">
+                    <label>FOV Circle: <span id="fovValue">90</span>°</label>
+                    <input type="range" class="slider" id="fovSlider" min="30" max="180" value="90" oninput="updateMaster('fov', this.value)">
+                    <span class="slider-value" id="fovValueDisplay">90°</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATUS INFO -->
+        <div class="status-bar" style="text-align: center; font-size: 14px;">
+            <strong>📞 Zalo Support: 0347320672 | 💬 Discord:https://discord.gg/dXwPFcfEm| 💝 MCHAU x PHẠM SƠN</strong>
+        </div>
+    </div>
+
+    <script>
+        // 25 VIP KEYS FULL
+        const VIP_KEYS = [
+            'PHAMSONNEX-VIP2026', 'MCHAU-PHAMSOM-VIP', 'NEXULTRALOCK-001', 'PHAMSON-MCHAU-VIP',
+            'SONNEX-VIPFOREVER', 'MCHAU-LOVE-PHAMSOM', 'NEX-VIP-0347320672', 'PHAMSONNEX-MASTER',
+            'ULTRALOCK-VIP-MCHAU', 'PHAMSOM-NEX-2026', 'MCHAUHEART-VIP', 'SONNEX-ADMIN-VIP',
+            'PHAMSONNEX-GODMODE', 'MCHAU-PHAMSOM-LOVE', 'NEX-VIP-UNLIMITED', 'PHAMSON-VIPKING',
+            'MCHAU-NEX-VIP', 'SONNEX-MCHAU-VIP', 'PHAMSOM-ULTRALOCK', 'NEXVIP-2026-MCHAU',
+            'PHAMSONNEX-ETERNAL', 'MCHAU-VIP-034732', 'SONNEX-GOD-VIP', 'PHAMSOM-NEXLOVE',
+            'ULTRALOCK-MCHAU-VIP'
+        ];
+
+        // STATE
+        let features = {
+            aimplus: true, aimbotnes: false, fixlag: false, fpsboost: false,
+            aimultra: false, donram: false, tangnhay: false, wallhack: false,
+            esp: false, chams: false, glow: false
+        };
+        let masterSettings = { fps: 144, smooth: 65, recoil: 85, fov: 90 };
+
+        // KEY SCREEN EFFECTS
+        function initParticles() {
+            const layers = ['particles1', 'particles2', 'particles3'];
+            layers.forEach((id, index) => {
+                const container = document.getElementById(id);
+                for (let i = 0; i < 80; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = `particle layer${index + 1}`;
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.width = (Math.random() * 8 + 2) + 'px';
+                    particle.style.height = particle.style.width;
+                    particle.style.animationDuration = (Math.random() * 5 + 6 + index * 2) + 's';
+                    particle.style.animationDelay = Math.random() * 5 + 's';
+                    container.appendChild(particle);
+                }
+            });
+        }
+
+        function initLetters() {
+            const container = document.getElementById('letters');
+            const texts = ['M', 'C', 'H', 'A', 'U', '💟'];
+            for (let i = 0; i < 40; i++) {
+                const letter = document.createElement('span');
+                letter.className = 'letter';
+                letter.textContent = texts[Math.floor(Math.random() * texts.length)];
+                letter.style.left = Math.random() * 100 + '%';
+                letter.style.animationDuration = (Math.random() * 6 + 8) + 's';
+                letter.style.animationDelay = Math.random() * 3 + 's';
+                letter.style.fontSize = (Math.random() * 20 + 24) + 'px';
+                container.appendChild(letter);
+            }
+        }
+
+        function initHearts() {
+            const container = document.getElementById('hearts');
+            for (let i = 0; i < 25; i++) {
+                const heart = document.createElement('span');
+                heart.className = 'heart';
+                heart.innerHTML = '💟';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 10 + 12) + 's';
+                heart.style.animationDelay = Math.random() * 4 + 's';
+                heart.style.fontSize = (Math.random() * 15 + 20) + 'px';
+                container.appendChild(heart);
+            }
+        }
+
+        function checkKey() {
+            const keyInput = document.getElementById('keyInput');
+            const status = document.getElementById('keyStatus');
+            const key = keyInput.value.trim().toUpperCase().replace(/\s/g, '');
+            
+            if (!key) {
+                status.textContent = '⚠️ MUA KEY ĐI ĐỊT MẸ MÀY!';
+                status.style.color = '#ffaa00';
+                status.style.background = 'rgba(255,170,0,0.2)';
+                return;
+            }
+            
+            status.innerHTML = '🔍 <strong>Đang xác thực Key Kha Nghĩ...</strong>';
+            status.style.color = '#00ff88';
+            status.style.background = 'rgba(0,255,136,0.2)';
+            
+            // Shake effect
+            keyInput.style.animation = 'none';
+            setTimeout(() => keyInput.style.animation = 'shake 0.5s', 10);
+            
+            setTimeout(() => {
+                if (VIP_KEYS.includes(key)) {
+                    status.innerHTML = '✅ <strong>ĐỊT MẸ NHẬP KEY ĐÚNG,THẰNG CHÓ THUY!</strong>';
+                    status.style.color = '#00ff88';
+                    status.style.background = 'rgba(0,255,136,0.4)';
+                    localStorage.setItem('ultraLockVIP', 'activated');
+                    
+                    // Success effects
+                    document.querySelector('.key-content').style.borderColor = '#00ff88';
+                    document.querySelector('.key-content').style.boxShadow = '0 0 100px #00ff88';
+                    
+                    setTimeout(() => {
+                        document.getElementById('keyScreen').style.opacity = '0';
+                        document.getElementById('keyScreen').style.transform = 'scale(0.8)';
+                        setTimeout(initDashboard, 800);
+                    }, 1500);
+                } else {
+                    status.innerHTML = '❌ <strong>ĐỊT MẸ MÀY MUA KEY ! Liên hệ PhamSon</strong>';
+                    status.style.color = '#ff4444';
+                    status.style.background = 'rgba(255,68,68,0.3)';
+                    keyInput.value = '';
+                    keyInput.focus();
+                }
+            }, 1200);
+        }
+
+        // DASHBOARD FUNCTIONS
+        function initDashboard() {
+            document.getElementById('dashboard').style.display = 'block';
+            updateAllSliders();
+            updateFPS();
+            setInterval(updateFPS, 500);
+        }
+
+        function toggleFeature(feature, button) {
+            features[feature] = !features[feature];
+            button.classList.toggle('active');
+            console.log(`🎮 ${feature.toUpperCase()}: ${features[feature] ? '🟢 ON' : '🔴 OFF'}`);
+        }
+
+        function updateMaster(type, value) {
+            masterSettings[type] = parseFloat(value);
+            document.getElementById(type + 'Value').textContent = value;
+            document.getElementById(type + 'ValueDisplay').textContent = value + (type === 'fov' ? '°' : '%');
+        }
+
+        function updateAllSliders() {
+            updateMaster('fps', masterSettings.fps);
+            updateMaster('smooth', masterSettings.smooth);
+            updateMaster('recoil', masterSettings.recoil);
+            updateMaster('fov', masterSettings.fov);
+        }
+
+        function updateFPS() {
+            const fps = Math.floor(Math.random() * 60 + 120);
+            document.getElementById('fpsDisplay').textContent = `FPS: ${fps.toFixed(1)}`;
+        }
+
+        // INIT EVERYTHING
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create shake animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes shake {
+                    0%, 100% { transform: translateX(0); }
+                    25% { transform: translateX(-5px); }
+                    75% { transform: translateX(5px); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            initParticles();
+            initLetters();
+            initHearts();
+            
+            const keyInput = document.getElementById('keyInput');
+            keyInput.focus();
+            
+            keyInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') checkKey();
+            });
+            
+            // Auto-active check
+            if (localStorage.getItem('ultraLockVIP') === 'activated') {
+                document.getElementById('keyScreen').style.display = 'none';
+                initDashboard();
+            }
+        });
+    </script>
+</body>
+</html>
