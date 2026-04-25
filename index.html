@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UltraLock VIP - PHẠM SƠN x MCHAU💟</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(135deg, #0a0a23 0%, #1a0033 50%, #000 100%);
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Key Screen */
+        .key-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #ff00ff20 0%, #00ffff20 30%, #00000080 70%, #000 100%);
+            backdrop-filter: blur(20px);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: keyScreenPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes keyScreenPulse {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.02); filter: brightness(1.2); }
+        }
+
+        .logo {
+            font-size: 4.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: logoGlow 2s ease-in-out infinite;
+            text-shadow: 0 0 50px #ff00ff80, 0 0 100px #00ffff80;
+            margin-bottom: 2rem;
+            letter-spacing: 0.3em;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .key-input-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .key-input {
+            width: 450px;
+            height: 70px;
+            padding: 0 20px;
+            font-size: 1.5rem;
+            font-family: 'Orbitron', monospace;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid transparent;
+            border-radius: 25px;
+            color: #fff;
+            text-align: center;
+            letter-spacing: 5px;
+            backdrop-filter: blur(15px);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .key-input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 30px #00ffff80, 0 10px 40px rgba(0,0,0,0.7);
+            transform: scale(1.05);
+        }
+
+        .unlock-btn {
+            padding: 15px 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            border: none;
+            border-radius: 50px;
+            color: #000;
+            cursor: pointer;
+            font-family: 'Orbitron', monospace;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255,0,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .unlock-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,255,255,0.6);
+        }
+
+        .unlock-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Particles */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, #ff00ff, transparent);
+            border-radius: 50%;
+            animation: fall linear infinite;
+        }
+
+        .mchau-letter {
+            position: absolute;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff80;
+            animation: mchauFall linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes mchauFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Master Controls */
+        .master-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .master-btn {
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #00ff0080, #00ff80);
+            border: none;
+            border-radius: 25px;
+            color: #000;
+            font-weight: 700;
+            font-family: 'Orbitron', monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,255,0,0.4);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .master-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,255,0,0.6);
+        }
+
+        .master-btn.active-all {
+            background: linear-gradient(45deg, #ff000080, #ff8080);
+        }
+
+        /* Original Cards */
+        .card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(255,0,255,0.2);
+        }
+
+        .card h2 {
+            color: #00ffff;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .slider {
+            flex: 1;
+            height: 8px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.2);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255,0,255,0.5);
+        }
+
+        .value-display {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            min-width: 60px;
+            text-align: center;
+            color: #000;
+        }
+
+        /* Gaming Toggle Cards */
+        .gaming-card {
+            background: rgba(0,255,0,0.1);
+            border: 2px solid #00ff0080;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gaming-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0,255,0,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .toggle-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 70px;
+            height: 35px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .toggle-switch.active {
+            background: linear-gradient(45deg, #00ff00, #00ff80);
+            box-shadow: 0 0 30px #00ff0080;
+        }
+
+        .toggle-knob {
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            top: 3.5px;
+            left: 3.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+        }
+
+        .toggle-switch.active .toggle-knob {
+            left: 38px;
+            box-shadow: 0 0 20px #00ff0080;
+        }
+
+        /* Live Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(0,255,0,0.3);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff0080;
+        }
+
+        /* Console */
+        .console {
+            background: rgba(0,0,0,0.7);
+            border: 1px solid #00ffff;
+            height: 200px;
+            overflow-y: auto;
+            padding: 15px;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        .console-entry {
+            color: #00ff00;
+            margin: 5px 0;
+            animation: consoleFade 0.5s ease-in;
+        }
+
+        @keyframes consoleFade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* CS Sensitivity */
+        .cs-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .mouse-demo {
+            width: 200px;
+            height: 150px;
+            background: linear-gradient(45deg, #333, #555);
+            border-radius: 20px;
+            position: relative;
+            cursor: grab;
+        }
+
+        .mouse-demo:active {
+            cursor: grabbing;
+        }
+
+        .cs-inputs {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo { font-size: 3rem; }
+            .key-input { width: 90%; }
+            .cs-section { flex-direction: column; }
+            .mouse-demo { width: 100%; max-width: 300px; }
+        }
+
+        /* Dashboard particles */
+        .dashboard-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Key Screen -->
+    <div class="key-screen" id="keyScreen">
+        <div class="particles" id="keyParticles"></div>
+        <div class="particles" id="mchauParticles"></div>
+        
+        <div class="logo">PHẠM SƠN x MCHAU💟</div>
+        
+        <div class="key-input-container">
+            <input type="text" class="key-input" id="keyInput" placeholder="ENTER ULTRALOCK VIP KEY" maxlength="50">
+        </div>
+        
+        <button class="unlock-btn" id="unlockBtn">UNLOCK VIP</button>
+        
+        <div style="margin-top: 30px; font-size: 0.9rem; opacity: 0.7;">
+            25 PREMIUM KEYS AVAILABLE
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <!-- Master Controls -->
+        <div class="master-controls">
+            <button class="master-btn" id="activateAll">ACTIVATE ALL</button>
+            <button class="master-btn" id="deactivateAll">DEACTIVATE ALL</button>
+        </div>
+
+        <!-- Dashboard Particles -->
+        <div class="dashboard-particles" id="dashboardParticles"></div>
+
+        <!-- Original Cards -->
+        <div class="card">
+            <h2>🚀 Traffic Booster</h2>
+            <div class="slider-container">
+                <label>Speed:</label>
+                <input type="range" class="slider" id="trafficSlider" min="0" max="100" value="50">
+                <span class="value-display" id="trafficValue">50%</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🌐 Network Scan</h2>
+            <div class="slider-container">
+                <label>Range:</label>
+                <input type="range" class="slider" id="networkSlider" min="0" max="100" value="30">
+                <span class="value-display" id="networkValue">30%</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>⚡ FPS Booster</h2>
+            <div class="slider-container">
+                <label>Boost:</label>
+                <input type="range" class="slider" id="fpsSlider" min="0" max="100" value="70">
+                <span class="value-display" id="fpsValue">70%</span>
+            </div>
+        </div>
+
+        <!-- Gaming Toggle Cards -->
+        <div class="card gaming-card" data-feature="aimplus">
+            <h2>🎯 Aim Plus</h2>
+            <div class="toggle-section">
+                <span>Enable:</span>
+                <div class="toggle-switch" id="aimPlusToggle">
+                    <div class="toggle-knob"></div>
+                </div>
+                <span class="status" id="aimPlusStatus">OFF</span>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="aimAccuracy">92%</div>
+                    <div>Accuracy</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="aimFps">240</div>
+                    <div>FPS</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="aimPing">12ms</div>
+                    <div>Ping</div>
+                </div>
+            </div>
+            <div class="console" id="aimPlusConsole"></div>
+        </div>
+
+        <div class="card gaming-card" data-feature="aimbotnes">
+            <h2>🤖 Aim Botnes</h2>
+            <div class="toggle-section">
+                <span>Enable:</span>
+                <div class="toggle-switch" id="aimBotnesToggle">
+                    <div class="toggle-knob"></div>
+                </div>
+                <span class="status" id="aimBotnesStatus">OFF</span>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="botHeadshots">89%</div>
+                    <div>Headshots</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="botKdr">4.2</div>
+                    <div>K/D</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="botHits">98%</div>
+                    <div>Hit Rate</div>
+                </div>
+            </div>
+            <div class="console" id="aimBotnesConsole"></div>
+        </div>
+
+        <div class="card gaming-card" data-feature="fixlag">
+            <h2>🌪️ Fix Lag</h2>
+            <div class="toggle-section">
+                <span>Enable:</span>
+                <div class="toggle-switch" id="fixLagToggle">
+                    <div class="toggle-knob"></div>
+                </div>
+                <span class="status" id="fixLagStatus">OFF</span>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="lagLoss">0.2%</div>
+                    <div>Packet Loss</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="lagJitter">2ms</div>
+                    <div>Jitter</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="lagSpeed">∞ Mbps</div>
+                    <div>Speed</div>
+                </div>
+            </div>
+            <div class="console" id="fixLagConsole"></div>
+        </div>
+
+        <!-- Console -->
+        <div class="card">
+            <h2>📡 System Console</h2>
+            <div class="console" id="mainConsole"></div>
+        </div>
+
+        <!-- CS Sensitivity Creator -->
+        <div class="card">
+            <h2>🎮 CS Sensitivity Creator</h2>
+            <div class="cs-section">
+                <div class="mouse-demo" id="mouseDemo"></div>
+                <div class="cs-inputs">
+                    <div class="slider-container">
+                        <label>Sensitivity:</label>
+                        <input type="range" class="slider" id="csSensSlider" min="0.1" max="5" step="0.1" value="2.5">
+                        <span class="value-display" id="csSensValue">2.5</span>
+                    </div>
+                    <div class="slider-container">
+                        <label>DPI:</label>
+                        <input type="range" class="slider" id="csDpiSlider" min="400" max="3200" value="800">
+                        <span class="value-display" id="csDpiValue">800</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 25 VIP Keys
+        const validKeys = [
+            'PHAMSONNEX-ULTRA-2026-VIP',
+            'MCHAU-VIP-KEY-2026',
+            'ULTRALOCK-VIP-PHAMSOM',
+            'MCHAU-LOVE-2026-KEY',
+            'PHAMSON-MCHAU-VIP01',
+            'ULTRA-VIP-KEY-001',
+            'MCHAU-PHAMSOM-2026',
+            'VIP-ULTRALOCK-2026A',
+            'PHAMSOM-VIP-MCHAU',
+            'MCHAU-HEART-VIPKEY',
+            'ULTRALOCK-PREMIUM-01',
+            'PHAMSON-VIP-2026B',
+            'MCHAU-ULTRA-VIP',
+            'VIPKEY-PHAMSOM-001',
+            'MCHAU-LOVERS-VIP',
+            'ULTRA-PHAMSOM-KEY',
+            'MCHAU-VIP-PHAMSOM',
+            '2026-ULTRALOCK-VIP',
+            'PHAMSON-MCHAU-KEY',
+            'VIP-MCHAU-2026C',
+            'ULTRALOCK-LOVE-KEY',
+            'PHAMSOM-VIPKEY-02',
+            'MCHAU-PHAMSOM-VIP',
+            'ULTRA-VIP-MCHAU01',
+            'PHAMSON-ULTIMATE-VIP'
+        ];
+
+        // Key validation
+        function checkKey(key) {
+            return validKeys.includes(key.toUpperCase());
+        }
+
+        // Save/unlock state
+        function setUnlocked() {
+            localStorage.setItem('ultralock_vip_unlocked', 'true');
+            document.getElementById('keyScreen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            initDashboard();
+        }
+
+        function initKeyScreen() {
+            const isUnlocked = localStorage.getItem('ultralock_vip_unlocked');
+            if (isUnlocked) {
+                setUnlocked();
+                return;
+            }
+
+            const keyInput = document.getElementById('keyInput');
+            const unlockBtn = document.getElementById('unlockBtn');
+
+            unlockBtn.addEventListener('click', () => {
+                const key = keyInput.value.trim();
+                if (checkKey(key)) {
+                    setUnlocked();
+                } else {
+                    keyInput.style.borderColor = '#ff4444';
+                    keyInput.style.boxShadow = '0 0 20px #ff444480';
+                    setTimeout(() => {
+                        keyInput.style.borderColor = 'transparent';
+                        keyInput.style.boxShadow = '0 10px 40px rgba(0,0,0,0.5)';
+                    }, 1000);
+                    logToConsole('❌ Invalid VIP Key! Try again.', '#ff4444');
+                }
+            });
+
+            keyInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') unlockBtn.click();
+            });
+
+            keyInput.addEventListener('input', () => {
+                keyInput.value = keyInput.value.toUpperCase();
+            });
+
+            createParticles('keyParticles', 80, 'particle');
+            createMchauParticles('mchauParticles', 100);
+        }
+
+        // Particle systems
+        function createParticles(containerId, count, className) {
+            const container = document.getElementById(containerId);
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = className;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                particle.style.opacity = Math.random() * 0.5 + 0.3;
+                container.appendChild(particle);
+            }
+        }
+
+        function createMchauParticles(containerId, count) {
+            const container = document.getElementById(containerId);
+            const letters = 'MCHAU💟';
+            for (let i = 0; i < count; i++) {
+                const letter = document.createElement('div');
+                letter.className = 'mchau-letter';
+                letter.textContent = letters[Math.floor(Math.random() * letters.length)];
+                letter.style.left = Math.random() * 100 + '%';
+                letter.style.animationDuration = (Math.random() * 4 + 3) + 's';
+                letter.style.animationDelay = Math.random() * 2 + 's';
+                letter.style.fontSize = (Math.random() * 0.8 + 0.8) + 'rem';
+                container.appendChild(letter);
+            }
+        }
+
+        function createDashboardParticles() {
+            createParticles('dashboardParticles', 50, 'particle');
+        }
+
+        // Dashboard initialization
+        function initDashboard() {
+            // Original sliders
+            ['trafficSlider', 'networkSlider', 'fpsSlider', 'csSensSlider', 'csDpiSlider'].forEach(id => {
+                const slider = document.getElementById(id);
+                const valueDisplay = document.getElementById(id.replace('Slider', 'Value'));
+                slider.addEventListener('input', () => {
+                    valueDisplay.textContent = slider.value;
+                    logToConsole(`🔧 ${id.replace('Slider', '').replace(/([A-Z])/g, ' $1').trim()}: ${slider.value}`, '#00ffff');
+                });
+            });
+
+            // Gaming toggles
+            document.querySelectorAll('.toggle-switch').forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    toggle.classList.toggle('active');
+                    const feature = toggle.closest('.gaming-card').dataset.feature;
+                    updateFeatureStats(feature, toggle.classList.contains('active'));
+                });
+            });
+
+            // Master controls
+            document.getElementById('activateAll').addEventListener('click', () => {
+                document.querySelectorAll('.toggle-switch').forEach(t => t.classList.add('active'));
+                ['aimPlusToggle', 'aimBotnesToggle', 'fixLagToggle'].forEach(id => updateFeatureStats(id.replace('Toggle', ''), true));
+                document.getElementById('activateAll').classList.add('active-all');
+                logToConsole('🌟 ALL GAMING FEATURES ACTIVATED!', '#00ff00');
+            });
+
+            document.getElementById('deactivateAll').addEventListener('click', () => {
+                document.querySelectorAll('.toggle-switch').forEach(t => t.classList.remove('active'));
+                ['aimPlus', 'aimbotnes', 'fixlag'].forEach(feature => updateFeatureStats(feature, false));
+                document.getElementById('activateAll').classList.remove('active-all');
+                logToConsole('⏹️ ALL GAMING FEATURES DEACTIVATED', '#ff4444');
+            });
+
+            // Mouse demo
+            const mouseDemo = document.getElementById('mouseDemo');
+            mouseDemo.addEventListener('mousemove', (e) => {
+                const rect = mouseDemo.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                mouseDemo.style.background = `radial-gradient(circle at ${x}px ${y}px, #00ffff40, transparent 70%)`;
+            });
+
+            createDashboardParticles();
+            logToConsole('✅ UltraLock VIP Dashboard Loaded Successfully!', '#00ff00');
+        }
+
+        // Update gaming feature stats
+        function updateFeatureStats(feature, isActive) {
+            const statusEl = document.getElementById(feature + 'Status');
+            const consoleEl = document.getElementById(feature + 'Console');
+            
+            if (statusEl) statusEl.textContent = isActive ? 'ON' : 'OFF';
+            if (isActive) {
+                updateLiveStats(feature);
+                logToConsole(`🚀 ${feature.toUpperCase()} ACTIVATED - Live stats enabled`, '#00ff00', consoleEl);
+            } else {
+                logToConsole(`⏹️ ${feature.toUpperCase()} DEACTIVATED`, '#ff4444', consoleEl);
+            }
+        }
+
+        // Live stats simulation
+        function updateLiveStats(feature) {
+            const stats = {
+                aimplus: ['aimAccuracy', 'aimFps', 'aimPing'],
+                aimbotnes: ['botHeadshots', 'botKdr', 'botHits'],
+                fixlag: ['lagLoss', 'lagJitter', 'lagSpeed']
+            };
+
+            if (!stats[feature]) return;
+
+            const interval = setInterval(() => {
+                stats[feature].forEach(statId => {
+                    const el = document.getElementById(statId);
+                    if (el && document.querySelector(`#${feature}Toggle`).classList.contains('active')) {
+                        let value = parseFloat(el.textContent);
+                        if (statId.includes('Accuracy') || statId.includes('Hits') || statId.includes('Headshots')) {
+                            value = Math.min(100, value + (Math.random() - 0.5) * 2);
+                        } else if (statId.includes('Fps')) {
+                            value = Math.max(60, value + (Math.random() - 0.5) * 10);
+                        } else if (statId.includes('Ping') || statId.includes('Jitter')) {
+                            value = Math.max(0, value + (Math.random() - 0.5));
+                        } else if (statId.includes('Kdr')) {
+                            value = (value * 0.99 + (3 + Math.random() * 2)).toFixed(1);
+                        }
+                        el.textContent = statId.includes('Speed') ? '∞ Mbps' : 
+                                       statId.includes('Loss') ? (value * 100).toFixed(1) + '%' : 
+                                       value.toFixed(statId.includes('Kdr') ? 1 : 0);
+                    }
+                });
+            }, 1000);
+
+            // Clear interval when deactivated
+            const toggle = document.getElementById(feature + 'Toggle');
+            const observer = new MutationObserver(() => {
+                if (!toggle.classList.contains('active')) {
+                    clearInterval(interval);
+                }
+            });
+            observer.observe(toggle, { attributes: true, attributeFilter: ['class'] });
+        }
+
+        // Console logging
+        function logToConsole(message, color = '#00ffff', targetConsole = document.getElementById('mainConsole')) {
+            if (!targetConsole) targetConsole = document.getElementById('mainConsole');
+            const entry = document.createElement('div');
+            entry.className = 'console-entry';
+            entry.style.color = color;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            targetConsole.appendChild(entry);
+            targetConsole.scrollTop = targetConsole.scrollHeight;
+        }
+
+        // Initialize
+        window.addEventListener('load', initKeyScreen);
+
+        // Auto-log welcome every 10s
+        setInterval(() => {
+            if (document.getElementById('dashboard').style.display === 'block') {
+                logToConsole('💟 PHẠM SƠN x MCHAU - UltraLock VIP Active 💟', '#ff00ff');
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
