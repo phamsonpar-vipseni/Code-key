@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UltraLock VIP - PHẠM SƠN NEX</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #2d1b69 100%);
+            color: #fff; overflow-x: hidden; min-height: 100vh;
+        }
+
+        /* KEY SCREEN - PINK THEME */
+        .key-container {
+            position: fixed !important;
+            top: 0 !important; left: 0 !important;
+            width: 100vw !important; height: 100vh !important;
+            background: linear-gradient(135deg, #ff1493 0%, #ff69b4 30%, #ffc0cb 70%, #ffb6c1 100%);
+            display: flex !important;
+            align-items: center; justify-content: center;
+            z-index: 999999 !important; overflow: hidden;
+        }
+
+        /* 4 LAYER PARTICLES */
+        .particles { position: absolute; width: 100%; height: 100%; pointer-events: none; }
+        #particles1 { z-index: 1; }
+        #particles2 { z-index: 2; }
+        #particles3 { z-index: 3; }
+        #particles4 { z-index: 4; }
+
+        /* MCHAU LETTERS */
+        .letters { position: absolute; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+
+        /* HEARTS */
+        .hearts { position: absolute; width: 100%; height: 100%; pointer-events: none; z-index: 6; }
+
+        .key-content {
+            background: rgba(255,182,193,0.95);
+            backdrop-filter: blur(25px);
+            padding: 70px;
+            border-radius: 35px;
+            border: 5px solid #ff69b4;
+            box-shadow: 
+                0 0 100px rgba(255,105,180,0.8),
+                inset 0 0 50px rgba(255,255,255,0.2);
+            text-align: center;
+            z-index: 1000 !important;
+            max-width: 750px; width: 95%;
+            animation: pinkPulse 2s ease-in-out infinite;
+            color: #8b0000;
+        }
+
+        @keyframes pinkPulse {
+            0%, 100% { 
+                box-shadow: 0 0 100px rgba(255,105,180,0.8), inset 0 0 50px rgba(255,255,255,0.2);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 150px rgba(255,20,147,1), inset 0 0 70px rgba(255,255,255,0.4);
+                transform: scale(1.04);
+            }
+        }
+
+        .title {
+            font-size: 5em !important;
+            background: linear-gradient(45deg, #ff1493, #ff69b4, #ffc0cb, #ff1493);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 0 50px 0;
+            animation: titlePinkGlow 3s ease-in-out infinite;
+            font-weight: 900 !important;
+            letter-spacing: 10px;
+            text-shadow: 0 0 60px rgba(255,20,147,1);
+            color: #ff1493 !important;
+        }
+
+        @keyframes titlePinkGlow {
+            0%, 100% { filter: drop-shadow(0 0 40px #ff1493); }
+            33% { filter: drop-shadow(0 0 60px #ff69b4); }
+            66% { filter: drop-shadow(0 0 60px #ffc0cb); }
+        }
+
+        .key-table table {
+            background: linear-gradient(145deg, rgba(255,192,203,0.8), rgba(255,105,180,0.6));
+            border-radius: 30px;
+            overflow: hidden;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(255,20,147,0.5);
+            backdrop-filter: blur(15px);
+        }
+
+        #keyInput {
+            width: 100%; padding: 30px 35px; border: none; border-radius: 25px;
+            background: rgba(255,255,255,0.9);
+            color: #8b0000 !important; font-size: 22px; font-weight: 800;
+            text-align: center; text-transform: uppercase; letter-spacing: 4px;
+            backdrop-filter: blur(30px); transition: all 0.5s;
+            box-shadow: inset 0 0 30px rgba(255,105,180,0.3);
+        }
+
+        #keyInput:focus {
+            outline: none; 
+            box-shadow: 
+                0 0 60px rgba(255,20,147,1),
+                inset 0 0 40px rgba(255,255,255,0.5);
+            transform: scale(1.1);
+            background: rgba(255,255,255,1);
+        }
+
+        #keyInput::placeholder {
+            color: rgba(139,0,0,0.7) !important;
+            font-weight: 600; text-transform: uppercase; letter-spacing: 3px;
+        }
+
+        .activate-btn {
+            padding: 30px 60px; margin-top: 25px;
+            background: linear-gradient(45deg, #ff69b4, #ff1493, #ff69b4);
+            background-size: 300% 300%;
+            border: none; border-radius: 25px;
+            color: #fff !important; font-size: 22px; font-weight: 900;
+            cursor: pointer; transition: all 0.5s;
+            text-transform: uppercase; letter-spacing: 3px;
+            box-shadow: 0 20px 60px rgba(255,105,180,0.7);
+            width: 100%; animation: btnPinkShine 2s linear infinite;
+        }
+
+        @keyframes btnPinkShine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        .activate-btn:hover {
+            background: linear-gradient(45deg, #ffc0cb, #ff1493);
+            box-shadow: 0 25px 70px rgba(255,20,147,1);
+            transform: translateY(-10px) scale(1.08);
+        }
+
+        .admin-info {
+            margin: 50px 0; padding: 35px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 25px;
+            border: 3px solid rgba(255,105,180,0.6);
+            backdrop-filter: blur(20px);
+        }
+
+        .admin-info p { 
+            margin: 20px 0; font-size: 20px; font-weight: 700;
+            text-shadow: 0 0 10px rgba(255,20,147,0.5);
+        }
+
+        .admin-info strong { color: #ff1493 !important; }
+        .admin-info a { 
+            color: #ffc0cb !important; font-weight: 900; 
+            text-decoration: none; transition: all 0.3s;
+        }
+
+        .admin-info a:hover {
+            color: #ff1493 !important;
+            text-shadow: 0 0 20px #ff1493;
+            transform: scale(1.15);
+        }
+
+        .key-status {
+            margin-top: 40px; padding: 25px; border-radius: 20px;
+            font-size: 24px; font-weight: 900; min-height: 60px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,182,193,0.7) !important;
+            color: #8b0000 !important;
+            box-shadow: inset 0 0 30px rgba(255,105,180,0.4);
+            border: 2px solid #ff69b4;
+            text-shadow: 0 0 10px rgba(255,20,147,0.5);
+        }
+
+        /* ENHANCED FALLING EFFECTS */
+        @keyframes fallPink {
+            0% { 
+                transform: translateY(-150vh) rotate(0deg) scale(0.3); 
+                opacity: 1; 
+            }
+            50% { 
+                opacity: 0.8; 
+            }
+            100% { 
+                transform: translateY(150vh) rotate(1440deg) scale(1.2); 
+                opacity: 0; 
+            }
+        }
+
+        .particle {
+            position: absolute; border-radius: 50%; 
+            animation: fallPink linear infinite;
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        .letter { 
+            position: absolute; font-size: 40px; font-weight: 900; 
+            background: linear-gradient(45deg, #ff1493, #ffc0cb);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255,20,147,1);
+            animation: fallPink linear infinite;
+        }
+
+        .heart { 
+            position: absolute; font-size: 35px; 
+            text-shadow: 0 0 25px rgba(255,105,180,1);
+            animation: fallPink linear infinite;
+        }
+
+        /* DASHBOARD HIDE */
+        #dashboard { display: none !important; }
+    </style>
+</head>
+<body>
+    <!-- PINK KEY SCREEN -->
+    <div id="keyScreen" class="key-container" style="display: flex !important;">
+        <div class="particles" id="particles1"></div>
+        <div class="particles" id="particles2"></div>
+        <div class="particles" id="particles3"></div>
+        <div class="particles" id="particles4"></div>
+        <div class="letters" id="letters"></div>
+        <div class="hearts" id="hearts"></div>
+        
+        <div class="key-content">
+            <h1 class="title">PHẠM SƠN NEX</h1>
+            <div class="key-table">
+                <table>
+                    <tr><td><input type="text" id="keyInput" placeholder="💕 NHẬP KEY VIP PINK 💕" maxlength="50"></td></tr>
+                    <tr><td><button onclick="checkKey()" class="activate-btn">🌟 KÍCH HOẠT VIP PINK 🌟</button></td></tr>
+                </table>
+            </div>
+            <div class="admin-info">
+                <p>👑 <strong>PHẠM SƠN NEX</strong> 👑</p>
+                <p>📱 <strong>Zalo: 0347320672</strong></p>
+                <p>💬 <strong>Discord: dXwPFcfEm</strong></p>
+                <p>💖 <strong>MCHAU 💟 LOVE PHẠM SƠN</strong> 💖</p>
+            </div>
+            <div class="key-status" id="keyStatus">
+                ✨ <strong>NHẬP KEY ĐỂ MỞ VIP FEATURES!</strong> ✨
+            </div>
+        </div>
+    </div>
+
+    <!-- YOUR ORIGINAL DASHBOARD - 100% UNCHANGED -->
+    <div id="dashboard" style="display: none;">
+        <!-- PUT YOUR ORIGINAL DASHBOARD CODE HERE - KHÔNG THAY ĐỔI GÌ -->
+        <div style="padding: 50px; max-width: 1400px; margin: 0 auto;">
+            <h1 style="text-align: center; font-size: 3.5em; color: #00ff88; margin-bottom: 30px;">
+                🎮 ULTRALOCK VIP DASHBOARD ✅
+            </h1>
+            <div style="background: rgba(0,0,0,0.9); padding: 40px; border-radius: 25px; border: 3px solid #00ff88;">
+                <h3 style="color: #00ff88; margin-bottom: 20px;">🎯 Tất cả Features đã mở:</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <button style="padding: 20px; background: linear-gradient(45deg, #00ff88, #00cc66); border: none; border-radius: 15px; color: black; font-weight: bold; cursor: pointer;">✅ FPS Boost</button>
+                    <button style="padding: 20px; background: linear-gradient(45deg, #ff00ff, #cc00cc); border: none; border-radius: 15px; color: white; font-weight: bold; cursor: pointer;">✅ Aim Ultra</button>
+                    <button style="padding: 20px; background: linear-gradient(45deg, #00bfff, #0088cc); border: none; border-radius: 15px; color: white; font-weight: bold; cursor: pointer;">✅ Dọn RAM</button>
+                    <button style="padding: 20px; background: linear-gradient(45deg, #ffaa00, #cc8800); border: none; border-radius: 15px; color: black; font-weight: bold; cursor: pointer;">✅ Tăng Nhạy</button>
+                </div>
+                <div style="text-align: center; margin-top: 30px; font-size: 18px; color: #ccc;">
+                    💖 PHẠM SƠN NEX x MCHAU 💖 | Zalo: 0347320672
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 25 PINK VIP KEYS
+        const VIP_KEYS = [
+            'PHAMSONNEX-VIP2026','MCHAU-PHAMSOM-VIP','NEXULTRALOCK-001','PHAMSON-MCHAU-VIP',
+            'SONNEX-VIPFOREVER','MCHAU-LOVE-PHAMSOM','NEX-VIP-0347320672','PHAMSONNEX-MASTER',
+            'ULTRALOCK-VIP-MCHAU','PHAMSOM-NEX-2026','MCHAUHEART-VIP','SONNEX-ADMIN-VIP',
+            'PHAMSONNEX-GODMODE','MCHAU-PHAMSOM-LOVE','NEX-VIP-UNLIMITED','PHAMSON-VIPKING',
+            'MCHAU-NEX-VIP','SONNEX-MCHAU-VIP','PHAMSOM-ULTRALOCK','NEXVIP-2026-MCHAU',
+            'PHAMSONNEX-ETERNAL','MCHAU-VIP-034732','SONNEX-GOD-VIP','PHAMSOM-NEXLOVE',
+            'ULTRALOCK-MCHAU-VIP'
+        ];
+
+        // PINK EFFECTS
+        function initPinkEffects() {
+            // 4 Layers Particles
+            ['particles1','particles2','particles3','particles4'].forEach((id,i) => {
+                const cont = document.getElementById(id);
+                for(let j=0; j<120; j++) {
+                    const p = document.createElement('div');
+                    p.className = 'particle';
+                    p.style.left = Math.random()*100+'%';
+                    p.style.background = ['#ff1493','#ff69b4','#ffc0cb','#ffb6c1'][Math.floor(Math.random()*4)];
+                    p.style.width = p.style.height = (Math.random()*10+3)+'px';
+                    p.style.animationDuration = (Math.random()*6+8+i*1.5)+'s';
+                    p.style.animationDelay = Math.random()*4+'s';
+                    cont.appendChild(p);
+                }
+            });
+
+            // MCHAU Letters x60
+            const lettersCont = document.getElementById('letters');
+            const mchau = 'MCHAU💖💕💗💝💟'.split('');
+            for(let i=0; i<60; i++) {
+                const l = document.createElement('span');
+                l.className = 'letter';
+                l.textContent = mchau[Math.floor(Math.random()*mchau.length)];
+                l.style.left = Math.random()*100+'%';
+                l.style.animationDuration = (Math.random()*7+9)+'s';
+                l.style.animationDelay = Math.random()*5+'s';
+                l.style.fontSize = (Math.random()*25+30)+'px';
+                lettersCont.appendChild(l);
+            }
+
+            // Hearts x40
+            const heartsCont = document.getElementById('hearts');
+            const hearts = ['💖','💕','💗','💝','💟','🌸','✨'];
+            for(let i=0; i<40; i++) {
+                const h = document.createElement('span');
+                h.className = 'heart';
+                h.innerHTML = hearts[Math.floor(Math.random()*hearts.length)];
+                h.style.left = Math.random()*100+'%';
+                h.style.animationDuration = (Math.random()*10+12)+'s';
+                h.style.animationDelay = Math.random()*6+'s';
+                h.style.fontSize = (Math.random()*20+28)+'px';
+                heartsCont.appendChild(h);
+            }
+        }
+
+        function checkKey() {
+            const input = document.getElementById('keyInput');
+            const status = document.getElementById('keyStatus');
+            let key = input.value.trim().toUpperCase().replace(/[^A-Z0-9-]/g,'');
+            
+            if(!key) {
+                status.innerHTML = '⚠️ <strong>VUI LÒNG NHẬP KEY!</strong>';
+                status.style.background = 'rgba(255,192,203,0.8)';
+                status.style.color = '#ff69b4';
+                return;
+            }
+            
+            status.innerHTML = '🔍 <strong>KIỂM TRA PINK VIP KEY...</strong>';
+            status.style.background = 'rgba(255,182,193,0.9)';
+            status.style.color = '#ff1493';
+            
+            setTimeout(() => {
+                if(VIP_KEYS.includes(key)) {
+                    status.innerHTML = '✅ <strong>PINK VIP KÍCH HOẠT THÀNH CÔNG! CHUYỂN DASHBOARD...</strong>';
+                    status.style.background = 'rgba(255,105,180,0.9)';
+                    status.style.color = '#fff';
+                    
+                    // TRANSITION TO DASHBOARD
+                    document.getElementById('keyScreen').style.transition = 'all 1.5s ease-out';
+                    document.getElementById('keyScreen').style.opacity = '0';
+                    document.getElementById('keyScreen').style.transform = 'scale(0.7) rotate(10deg)';
+                    
+                    setTimeout(() => {
+                        document.getElementById('keyScreen').style.display = 'none';
+                        document.getElementById('dashboard').style.display = 'block';
+                    }, 1500);
+                    
+                } else {
+                    status.innerHTML = '❌ <strong>KEY KHÔNG HỢP LỆ! LIÊN HỆ ADMIN</strong>';
+                    status.style.background = 'rgba(255,20,147,0.8)';
+                    status.style.color = '#ffc0cb';
+                    input.value = ''; input.focus();
+                }
+            }, 1200);
+        }
+
+        // INIT
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('keyScreen').style.display = 'flex';
+            initPinkEffects();
+            
+            const input = document.getElementById('keyInput');
+            input.focus();
+            input.addEventListener('keypress', (e) => e.key === 'Enter' && checkKey());
+            
+            // CLEAR CACHE
+            localStorage.removeItem('ultraLockVIP');
+        });
+    </script>
+</body>
+</html>
