@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhamSonNex UltraLock Panel</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        *{margin:0;padding:0;box-sizing:border-box;}
+        
+        /* KEY SCREEN STYLES */
+        .key-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(-45deg,#ee7752,#e73c7e,#23a6d5,#23d5ab);background-size:400% 400%;animation:gradientShift 15s ease infinite;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1000;}
+        @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        .key-container{background:rgba(0,0,0,0.85);backdrop-filter:blur(25px);border:1px solid rgba(255,255,255,0.2);border-radius:25px;padding:50px 40px;box-shadow:0 25px 50px rgba(0,0,0,0.5);max-width:480px;width:95%;text-align:center;animation:containerGlow 2s ease-out;}
+        @keyframes containerGlow{0%{opacity:0;transform:scale(0.8);}100%{opacity:1;transform:scale(1);}}
+        .key-logo{font-size:3em;font-weight:900;background:linear-gradient(45deg,#00f5ff,#ff00ff,#00ff88);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:15px;text-shadow:0 0 20px rgba(0,255,255,0.8);animation:logoPulse 2s ease-in-out infinite alternate;}
+        @keyframes logoPulse{0%{transform:scale(1);}100%{transform:scale(1.05);}}
+        .key-subtitle{color:#00ff88;font-size:1.2em;margin-bottom:35px;font-weight:700;}
+        .key-input-group{position:relative;margin-bottom:30px;}
+        .key-input{width:100%;padding:22px 25px 22px 60px;font-size:1.3em;font-family:'Orbitron',monospace;font-weight:700;border:2px solid #00f5ff;border-radius:20px;background:rgba(0,255,255,0.1);color:#00f5ff;text-transform:uppercase;letter-spacing:2px;backdrop-filter:blur(10px);}
+        .key-input:focus{border-color:#ff00ff;box-shadow:0 0 30px rgba(0,255,255,0.6);transform:scale(1.03);}
+        .key-icon{position:absolute;left:22px;top:50%;transform:translateY(-50%);font-size:1.6em;color:#00f5ff;}
+        .verify-btn{width:100%;padding:22px;background:linear-gradient(45deg,#ff00ff,#00f5ff,#00ff88);color:#000;border:none;border-radius:20px;font-size:1.3em;font-weight:900;cursor:pointer;transition:all 0.4s ease;text-transform:uppercase;}
+        .verify-btn:hover{transform:translateY(-5px) scale(1.05);box-shadow:0 25px 50px rgba(255,0,255,0.6);}
+        .key-status{margin-top:30px;padding:20px;border-radius:15px;font-weight:700;font-size:1.1em;display:none;}
+        .key-status.success{background:linear-gradient(45deg,#00ff88,#00cc6a);color:#000;border:2px solid #00ff88;}
+        .key-status.error{background:linear-gradient(45deg,#ff4757,#ff3838);color:#fff;border:2px solid #ff4757;}
+        
+        /* PANEL STYLES */
+        .panel-screen{font-family:'Orbitron',monospace;background:linear-gradient(45deg,#0a0a0a,#1a0033,#0a0a0a);background-size:400% 400%;animation:gradientShift 8s ease infinite;color:#00ff88;overflow-x:hidden;min-height:100vh;display:none;}
+        @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        .container{max-width:1400px;margin:0 auto;padding:20px;}
+        .header{text-align:center;margin-bottom:40px;}
+        .logo{font-size:3.5rem;font-weight:900;background:linear-gradient(45deg,#00ff88,#00ccff,#ff00ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-shadow:0 0 30px rgba(0,255,136,0.5);animation:glow 2s ease-in-out infinite alternate;}
+        @keyframes glow{from{filter:drop-shadow(0 0 20px #00ff88);}to{filter:drop-shadow(0 0 40px #00ff88);}}
+        .subtitle{font-size:1.2rem;color:#888;text-transform:uppercase;letter-spacing:3px;}
+        .particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;}
+        .panel{background:rgba(10,10,20,0.95);border:2px solid #00ff88;border-radius:20px;padding:40px;box-shadow:0 0 60px rgba(0,255,136,0.3);backdrop-filter:blur(20px);animation:panelEnter 1s ease-out;}
+        @keyframes panelEnter{from{opacity:0;transform:translateY(50px);}to{opacity:1;transform:translateY(0);}}
+        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:30px;margin-top:30px;}
+        .card{background:rgba(20,20,40,0.8);border:1px solid #333;border-radius:15px;padding:25px;transition:all 0.3s ease;}
+        .card:hover{border-color:#00ff88;box-shadow:0 0 30px rgba(0,255,136,0.2);transform:translateY(-5px);}
+        .card-header{display:flex;align-items:center;margin-bottom:20px;}
+        .card-icon{width:50px;height:50px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-right:15px;font-size:1.5rem;}
+        .traffic{background:linear-gradient(135deg,#ff6b6b,#ff8e8e);} .scan{background:linear-gradient(135deg,#4ecdc4,#6be8d9);} .boost{background:linear-gradient(135deg,#45b7d1,#5ec9f0);} .monitor{background:linear-gradient(135deg,#f9ca24,#feca57);}
+        .card-title{font-size:1.3rem;font-weight:700;color:#00ff88;}
+        .toggle-group{margin:20px 0;}
+        .toggle{display:flex;align-items:center;margin-bottom:15px;cursor:pointer;}
+        .toggle-switch{position:relative;width:60px;height:30px;background:#333;border-radius:15px;margin-right:15px;transition:all 0.3s;}
+        .toggle-switch.active{background:linear-gradient(90deg,#00ff88,#00ccff);box-shadow:0 0 20px rgba(0,255,136,0.5);}
+        .toggle-knob{position:absolute;top:3px;left:3px;width:24px;height:24px;background:#fff;border-radius:50%;transition:all 0.3s;}
+        .toggle-switch.active .toggle-knob{transform:translateX(30px);}
+        .stats{display:flex;justify-content:space-between;margin-top:20px;}
+        .stat-value{font-size:1.5rem;font-weight:700;color:#00ff88;display:block;}
+        .chart{height:100px;background:rgba(0,0,0,0.3);border-radius:10px;margin-top:15px;position:relative;overflow:hidden;}
+        .chart-line{position:absolute;bottom:0;width:100%;height:60%;background:linear-gradient(90deg,#00ff88,#00ccff);border-radius:0 0 10px 10px;animation:chartPulse 2s ease-in-out infinite;}
+        @keyframes chartPulse{0%,100%{height:60%}50%{height:85%}}
+        .console{background:#000;border:1px solid #00ff88;border-radius:10px;padding:20px;font-family:monospace;font-size:0.85rem;height:200px;overflow-y:auto;margin-top:20px;}
+        .console-line{color:#00ff88;margin-bottom:5px;}
+        .btn{background:linear-gradient(45deg,#00ff88,#00ccff);border:none;padding:12px 30px;border-radius:25px;color:#000;font-weight:700;cursor:pointer;transition:all 0.3s;margin:10px 5px;}
+        .btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,255,136,0.4);}
+        .status{text-align:center;padding:20px;font-size:1.1rem;font-weight:500;}
+        .status.active{color:#00ff88;}
+        .particle{position:absolute;width:4px;height:4px;background:#00ff88;border-radius:50%;animation:float 6s linear infinite;}
+        @keyframes float{0%{transform:translateY(100vh) scale(0);opacity:0;}100%{transform:translateY(-100px) scale(1);opacity:0;}}
+        @media(max-width:768px){.grid{grid-template-columns:1fr;}.logo{font-size:2.5rem;}}
+    </style>
+</head>
+<body>
+    <!-- KEY SCREEN -->
+    <div class="key-screen" id="keyScreen">
+        <div class="key-container">
+            <div class="key-logo">𝑷𝒉𝒂𝒎𝑺𝒐𝒏𝑵𝒆𝒙</div>
+            <div class="key-subtitle">NHẬP KEY ĐỂ VÀO ULTRALOCK 🖥️</div>
+            
+            <div class="key-input-group">
+                <span class="key-icon">🔑</span>
+                <input type="text" class="key-input" id="keyInput" placeholder="PHAMSONNEX-XXXX-XXXX-XXXX" maxlength="50">
+            </div>
+            
+            <button class="verify-btn" onclick="verifyKey()">🔐 KIỂM TRA KEY</button>
+            <div class="key-status" id="keyStatus"></div>
+        </div>
+    </div>
+
+    <!-- PANEL SCREEN -->
+    <div class="panel-screen" id="panelScreen">
+        <div class="particles" id="particles"></div>
+        <div class="container">
+            <div class="header">
+                <h1 class="logo">ULTRALOCK PANEL</h1>
+                <p class="subtitle">PHẠM SƠN NEX - FULLY AUTHORIZED</p>
+            </div>
+
+            <div class="panel">
+                <div class="status active" id="statusText">✅ ĐÃ XÁC THỰC PHẠM SƠN NEX</div>
+                
+                <div class="grid">
+                    <!-- TRAFFIC -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon traffic">📈</div>
+                            <div><div class="card-title">Traffic Controller</div><div class="card-subtitle">Visitors</div></div>
+                        </div>
+                        <div class="toggle-group">
+                            <label class="toggle"><div class="toggle-switch active" data-target="traffic"><div class="toggle-knob"></div></div><span>Boost</span></label>
+                            <label class="toggle"><div class="toggle-switch" data-target="geo"><div class="toggle-knob"></div></div><span>Geo</span></label>
+                        </div>
+                        <div class="stats">
+                            <div class="stat"><span class="stat-value" id="visitors">1,247</span><span>Active</span></div>
+                            <div class="stat"><span class="stat-value" id="speed">2.4k/s</span><span>Rate</span></div>
+                        </div>
+                        <div class="chart"><div class="chart-line"></div></div>
+                    </div>
+
+                    <!-- SCAN -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon scan">🔍</div>
+                            <div><div class="card-title">Scan Monitor</div><div class="card-subtitle">Vulns</div></div>
+                        </div>
+                        <div class="toggle-group">
+                            <label class="toggle"><div class="toggle-switch active" data-target="ports"><div class="toggle-knob"></div></div><span>Ports</span></label>
+                            <label class="toggle"><div class="toggle-switch active" data-target="vulns"><div class="toggle-knob"></div></div><span>Vulns</span></label>
+                        </div>
+                        <div class="stats">
+                            <div class="stat"><span class="stat-value" id="ports">47</span><span>Open</span></div>
+                            <div class="stat"><span class="stat-value" id="vulns">3</span><span>Critical</span></div>
+                        </div>
+                        <div class="chart"><div class="chart-line" style="height:75%"></div></div>
+                    </div>
+
+                    <!-- BOOST -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon boost">🚀</div>
+                            <div><div class="card-title">Booster</div><div class="card-subtitle">Performance</div></div>
+                        </div>
+                        <div class="toggle-group">
+                            <label class="toggle"><div class="toggle-switch active" data-target="cpu"><div class="toggle-knob"></div></div><span>CPU</span></label>
+                            <label class="toggle"><div class="toggle-switch" data-target="ram"><div class="toggle-knob"></div></div><span>RAM</span></label>
+                        </div>
+                        <div class="stats">
+                            <div class="stat"><span class="stat-value" id="cpu">23%</span><span>Usage</span></div>
+                            <div class="stat"><span class="stat-value" id="ram">1.8GB</span><span>Used</span></div>
+                        </div>
+                        <div class="chart"><div class="chart-line" style="background:linear-gradient(90deg,#45b7d1,#5ec9f0)"></div></div>
+                    </div>
+
+                    <!-- CONSOLE -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon monitor">📊</div>
+                            <div><div class="card-title">PHẠM SƠN Console</div><div class="card-subtitle">Live</div></div>
+                        </div>
+                        <div class="console" id="console"></div>
+                        <button class="btn" onclick="clearConsole()">Clear</button>
+                        <button class="btn" onclick="exportLogs()">Export</button>
+                    </div>
+                </div>
+
+                <div style="text-align:center;margin-top:40px;">
+                    <button class="btn" style="font-size:1.2rem;padding:15px 40px;" onclick="fullScan()">🔍 FULL SCAN</button>
+                    <button class="btn" style="font-size:1.2rem;padding:15px 40px;background:linear-gradient(45deg,#ff6b6b,#ff8e8e);" onclick="emergencyStop()">🛑 STOP ALL</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === PHẠM SƠN NEX KEYS ===
+        const VALID_KEYS = [
+            'PHAMSONNEX-VIP-2026-HACKERAI',
+            'PHAMSONNEX-PRO-9999-VN',
+            'PHAMSONNEX-ULTIMATE-PENTEST',
+            'PHAMSONNEX-ADMIN-1337',
+            'PHAMSONNEX-GAMER-ELITE-VN'
+        ];
+
+        let currentKey = '';
+
+        // CHECK KEY
+        function verifyKey() {
+            const input = document.getElementById('keyInput');
+            const status = document.getElementById('keyStatus');
+            const key = input.value.trim().toUpperCase();
+
+            if(!key) {
+                status.innerHTML = '🚫 NHẬP KEY!';
+                status.className = 'key-status error';
+                status.style.display = 'block';
+                return;
+            }
+
+            if(VALID_KEYS.includes(key)) {
+                currentKey = key;
+                localStorage.setItem('phamsonnex_key', key);
+                
+                status.innerHTML = `
+                    <div style="font-size:2em;">✅</div>
+                    KEY ${key} HỢP LỆ!<br>
+                    <small>Chuyển sang UltraLock...</small>
+                `;
+                status.className = 'key-status success';
+                status.style.display = 'block';
+                
+                setTimeout(() => {
+                    document.getElementById('keyScreen').style.display = 'none';
+                    document.getElementById('panelScreen').style.display = 'block';
+                    initPanel();
+                }, 2000);
+            } else {
+                status.innerHTML = '❌ KEY SAI! Dùng: PHAMSONNEX-VIP-2026-HACKERAI';
+                status.className = 'key-status error';
+                status.style.display = 'block';
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        // INIT PANEL
+        function initPanel() {
+            document.getElementById('statusText').textContent = `✅ ${currentKey} - PHẠM SƠN NEX ACTIVE`;
+            createParticles();
+            startAnimations();
+            startStats();
+            addLog('✓ PHẠM SƠN NEX UltraLock loaded');
+            addLog(`✓ Key validated: ${currentKey}`);
+        }
+
+        // PARTICLES
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            setInterval(() => {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%';
+                particles.appendChild(p);
+                setTimeout(() => p.remove(), 6000);
+            }, 200);
+        }
+
+        // TOGGLES
+        document.addEventListener('click', e => {
+            if(e.target.closest('.toggle-switch')) {
+                e.target.closest('.toggle-switch').classList.toggle('active');
+            }
+        });
+
+        // STATS ANIMATION
+        function startStats() {
+            let visitors = 1247;
+            setInterval(() => {
+                visitors += Math.floor(Math.random() * 50) + 10;
+                document.getElementById('visitors').textContent = visitors.toLocaleString();
+                document.getElementById('speed').textContent = (2 + Math.random() * 4).toFixed(1) + 'k/s';
+            }, 1500);
+
+            setInterval(() => {
+                document.getElementById('cpu').textContent = (15 + Math.random() * 25).toFixed(0) + '%';
+            }, 2000);
+        }
+
+        // CHARTS
+        function startAnimations() {
+            const charts = document.querySelectorAll('.chart-line');
+            charts.forEach((chart, i) => {
+                setInterval(() => {
+                    chart.style.height = (50 + Math.random() * 40) + '%';
+                }, 1000 + i * 500);
+            });
+        }
+
+        // CONSOLE
+        function addLog(msg) {
+            const consoleEl = document.getElementById('console');
+            const line = document.createElement('div');
+            line.className = 'console-line';
+            line.textContent = `[PHAMS0NNEX] ${msg}`;
+            consoleEl.appendChild(line);
+            if(consoleEl.children.length > 12) consoleEl.removeChild(consoleEl.firstChild);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        function clearConsole() {
+            document.getElementById('console').innerHTML = '<div class="console-line">✓ PHẠM SƠN Console cleared</div>';
+        }
+
+        function exportLogs() {
+            addLog('📤 Exporting logs...');
+            setTimeout(() => addLog('✅ Exported!'), 1000);
+        }
+
+        function fullScan() {
+            addLog('🔍 Full system scan started...');
+            setTimeout(() => {
+                addLog('✅ Scan complete: 3 critical, 12 medium');
+                document.getElementById('vulns').textContent = '5';
+                document.getElementById('ports').textContent = '89';
+            }, 2500);
+        }
+
+        function emergencyStop() {
+            document.querySelectorAll('.toggle-switch').forEach(t => t.classList.remove('active'));
+            document.getElementById('statusText').innerHTML = '🛑 EMERGENCY STOP - PHẠM SƠN NEX';
+            document.getElementById('statusText').className = 'status inactive';
+            addLog('🛑 All systems halted');
+        }
+
+        // EVENTS
+        document.getElementById('keyInput').addEventListener('keypress', e => {
+            if(e.key === 'Enter') verifyKey();
+        });
+
+        document.getElementById('keyInput').addEventListener('input', function() {
+            document.getElementById('keyStatus').style.display = 'none';
+        });
+
+        // AUTO FOCUS
+        window.onload = () => {
+            document.getElementById('keyInput').focus();
+            document.getElementById('keyInput').select();
+        };
+
+        // BYPASS PROTECTION
+        window.phamsonnexAuthorized = true;
+        console.log('✅ PHẠM SƠN NEX UltraLock - SINGLE FILE DEPLOY');
+    </script>
+</body>
+</html>
