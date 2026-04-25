@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UltraLock VIP - PHẠM SƠN x MCHAU💟</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0033 50%, #000 100%);
+            color: #00ff88;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Key Screen */
+        .key-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+        }
+
+        .key-logo {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00ff88, #ff00ff, #00aaff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 30px #00ff88;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px #00ff88); }
+            to { filter: drop-shadow(0 0 40px #ff00ff); }
+        }
+
+        .key-input-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .key-input {
+            width: 400px;
+            height: 60px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            padding: 0 20px;
+            font-size: 1.2rem;
+            font-family: 'Orbitron', monospace;
+            color: #00ff88;
+            text-align: center;
+            letter-spacing: 5px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .key-input:focus {
+            outline: none;
+            border-color: #ff00ff;
+            box-shadow: 0 0 30px rgba(255,0,255,0.5);
+            transform: scale(1.05);
+        }
+
+        .key-btn {
+            padding: 15px 40px;
+            background: linear-gradient(45deg, #00ff88, #00cc66);
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .key-btn:hover {
+            background: linear-gradient(45deg, #ff00ff, #cc00cc);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255,0,255,0.4);
+        }
+
+        .error-msg {
+            color: #ff4444;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            display: none;
+        }
+
+        /* Main Dashboard */
+        .dashboard {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00ff88, #ff00ff, #00aaff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 50px #00ff88;
+        }
+
+        .status-bar {
+            background: rgba(0,255,136,0.1);
+            border: 1px solid #00ff88;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .status-item {
+            text-align: center;
+        }
+
+        .status-value {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #00ff88;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #00ff88;
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(15px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,255,136,0.3);
+            border-color: #ff00ff;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #00ff88;
+            text-align: center;
+        }
+
+        /* Original Cards (unchanged) */
+        .slider-container {
+            margin: 1rem 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.2);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #00ff88;
+            cursor: pointer;
+            box-shadow: 0 0 20px #00ff88;
+        }
+
+        /* Toggle Gaming Cards (NEW STYLE) */
+        .toggle-card {
+            background: linear-gradient(145deg, rgba(0,255,136,0.1), rgba(255,0,255,0.1));
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 34px;
+            margin: 1rem auto;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider-toggle {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        .slider-toggle:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background: white;
+            transition: 0.4s;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        input:checked + .slider-toggle {
+            background: linear-gradient(45deg, #00ff88, #ff00ff);
+            box-shadow: 0 0 20px rgba(0,255,136,0.5);
+        }
+
+        input:checked + .slider-toggle:before {
+            transform: translateX(26px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(0,255,136,0.3);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #00ff88;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #88ffaa;
+            margin-top: 0.2rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 200px;
+            margin-top: 1rem;
+        }
+
+        .console-output {
+            background: rgba(0,0,0,0.7);
+            border: 1px solid #00ff88;
+            border-radius: 10px;
+            height: 120px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            overflow-y: auto;
+            margin-top: 1rem;
+            color: #00ff88;
+        }
+
+        /* CS Sensitivity Section */
+        .cs-section {
+            grid-column: 1 / -1;
+            background: linear-gradient(145deg, rgba(0,255,136,0.15), rgba(255,0,255,0.15));
+        }
+
+        .mouse-demo {
+            width: 100%;
+            height: 200px;
+            background: rgba(0,0,0,0.5);
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            position: relative;
+            margin: 1rem 0;
+            cursor: crosshair;
+        }
+
+        .mouse-pos {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,255,136,0.2);
+            padding: 0.5rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        /* Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .key-input {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Key Screen -->
+    <div class="key-screen" id="keyScreen">
+        <div class="key-logo">UltraLock VIP</div>
+        <div style="font-size: 1.2rem; margin-bottom: 1rem; color: #ff00ff;">PHẠM SƠN x MCHAU💟</div>
+        <div class="key-input-container">
+            <input type="text" class="key-input" id="keyInput" placeholder="ENTER YOUR VIP KEY" maxlength="50">
+        </div>
+        <button class="key-btn" onclick="validateKey()">UNLOCK DASHBOARD</button>
+        <div class="error-msg" id="errorMsg">❌ Invalid Key! Try Again.</div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <!-- Particles Background -->
+        <div class="particles" id="particles"></div>
+
+        <div class="header">
+            <h1>ULTRA LOCK VIP</h1>
+            <p>PHẠM SƠN x MCHAU💟 • PREMIUM TOOLS ACTIVATED</p>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-grid">
+                <div class="status-item">
+                    <div class="status-value" id="uptime">00:05:23</div>
+                    <div>UPTIME</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-value" style="color: #ff00ff;">✓ ACTIVE</div>
+                    <div>STATUS</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-value" id="connections">1247</div>
+                    <div>CONNECTIONS</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-value" style="color: #00aaff;">99.8%</div>
+                    <div>PERFORMANCE</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cards Grid -->
+        <div class="cards-grid">
+            <!-- Traffic Booster (ORIGINAL) -->
+            <div class="card">
+                <h3>🚀 Traffic Booster</h3>
+                <div class="slider-container">
+                    <label>Speed: <span id="trafficSpeed">50</span> Mbps</label>
+                    <input type="range" class="slider" min="0" max="1000" value="500" id="trafficSlider" onchange="updateTraffic()">
+                </div>
+                <div style="margin-top: 1rem; color: #88ffaa;">
+                    Boosting network traffic by <span id="trafficBoost">500</span>%
+                </div>
+            </div>
+
+            <!-- Network Scan (ORIGINAL) -->
+            <div class="card">
+                <h3>🌐 Network Scan</h3>
+                <div class="slider-container">
+                    <label>Scan Range: <span id="scanRange">255</span></label>
+                    <input type="range" class="slider" min="0" max="255" value="128" id="scanSlider" onchange="updateScan()">
+                </div>
+                <div style="margin-top: 1rem; color: #88ffaa;">
+                    Scanned <span id="hostsFound">127</span> hosts • <span id="openPorts">23</span> ports
+                </div>
+            </div>
+
+            <!-- FPS Booster (ORIGINAL) -->
+            <div class="card">
+                <h3>🎮 FPS Booster</h3>
+                <div class="slider-container">
+                    <label>FPS Target: <span id="fpsTarget">240</span></label>
+                    <input type="range" class="slider" min="60" max="1000" value="240" id="fpsSlider" onchange="updateFPS()">
+                </div>
+                <div style="margin-top: 1rem; color: #88ffaa;">
+                    Current FPS: <span id="currentFPS">213</span> • Boost: <span id="fpsBoost">+47%</span>
+                </div>
+            </div>
+
+            <!-- Console (ORIGINAL) -->
+            <div class="card">
+                <h3>💻 Console</h3>
+                <div style="height: 200px; background: rgba(0,0,0,0.7); border-radius: 10px; padding: 1rem; overflow-y: auto; font-family: 'Courier New', monospace; font-size: 0.85rem; border: 1px solid #00ff88;">
+                    <div>[12:34:56] UltraLock VIP Initialized</div>
+                    <div>[12:34:57] All modules loaded successfully</div>
+                    <div>[12:34:58] Premium features activated</div>
+                    <div>[12:35:00] System optimized ✓</div>
+                </div>
+            </div>
+
+            <!-- Aim Plus (TOGGLE STYLE) -->
+            <div class="card toggle-card">
+                <h3>🎯 Aim Plus</h3>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="aimPlusToggle">
+                    <span class="slider-toggle"></span>
+                </label>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="aimAccuracy">87.4%</div>
+                        <div class="stat-label">ACCURACY</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="aimTracking">94.2</div>
+                        <div class="stat-label">TRACKING</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="aimChart"></canvas>
+                </div>
+                <div class="console-output" id="aimConsole">
+                    [SYSTEM] Aim Plus module ready...
+                </div>
+            </div>
+
+            <!-- Aim Botnes (TOGGLE STYLE) -->
+            <div class="card toggle-card">
+                <h3>🤖 Aim Botnes</h3>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="aimBotnesToggle">
+                    <span class="slider-toggle"></span>
+                </label>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="headshots">72.1%</div>
+                        <div class="stat-label">HEADSHOTS</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="kdRatio">4.82</div>
+                        <div class="stat-label">K/D RATIO</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="botnesChart"></canvas>
+                </div>
+                <div class="console-output" id="botnesConsole">
+                    [SYSTEM] Aim Botnes module ready...
+                </div>
+            </div>
+
+            <!-- Fix Lag (TOGGLE STYLE) -->
+            <div class="card toggle-card">
+                <h3>⚡ Fix Lag</h3>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="fixLagToggle">
+                    <span class="slider-toggle"></span>
+                </label>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="packetLoss">0.2%</div>
+                        <div class="stat-label">PACKET LOSS</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="jitter">12ms</div>
+                        <div class="stat-label">JITTER</div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="lagChart"></canvas>
+                </div>
+                <div class="console-output" id="lagConsole">
+                    [SYSTEM] Fix Lag module ready...
+                </div>
+            </div>
+
+            <!-- CS Sensitivity Creator (ORIGINAL - Full Width) -->
+            <div class="card cs-section">
+                <h3>🎮 CS Sensitivity Creator</h3>
+                <div class="slider-container">
+                    <label>Sensitivity: <span id="sensValue">2.5</span></label>
+                    <input type="range" class="slider" min="0.1" max="10" step="0.1" value="2.5" id="sensSlider">
+                </div>
+                <div class="slider-container">
+                    <label>DPI: <span id="dpiValue">800</span></label>
+                    <input type="range" class="slider" min="400" max="3200" value="800" id="dpiSlider">
+                </div>
+                <div class="slider-container">
+                    <label>eDPI: <span id="edpiValue">2000</span></label>
+                    <input type="range" class="slider" min="100" max="50000" value="2000" id="edpiSlider">
+                </div>
+                <div class="mouse-demo" id="mouseDemo">
+                    <div class="mouse-pos" id="mousePos">X: 0 Y: 0</div>
+                </div>
+                <div style="text-align: center; margin-top: 1rem; color: #88ffaa;">
+                    Perfect settings for PHẠM SƠN x MCHAU💟 pro gameplay
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 25 VIP Keys
+        const validKeys = [
+            'PHAMSON-VIP-2024-001',
+            'MCHAU-ULTRA-LOCK-001',
+            'PHAMSONNEX-VIP-001',
+            'ULTRALOCK-PREMIUM-001',
+            'VIP-2024-PHAMSOM',
+            'PHAMSONNEX-ULTRA-2026-VIP',
+            'MCHAU-VIP-KEY-2026',
+            'ULTRALOCK-VIP-001',
+            'PHAMSOM-2026-PREMIUM',
+            'MCHAU-ULTRA-VIP-001',
+            'PHAMSON-VIP-KEY-2026',
+            'ULTRALOCK-2026-VIP',
+            'MCHAU-PREMIUM-001',
+            'PHAMSOM-ULTRA-KEY',
+            'VIP-ULTRALOCK-2026',
+            'PHAMSONNEX-VIP-2026',
+            'MCHAU-VIP-2026-001',
+            'ULTRALOCK-PHAMSOM',
+            'PHAMSON-MCHAU-VIP',
+            'PREMIUM-ULTRALOCK-001',
+            'PHAMSOM-VIP-2026',
+            'MCHAU-ULTRA-2026',
+            'PHAMSONNEX-KEY-VIP',
+            'ULTRALOCK-VIP-2026',
+            'MCHAU-PHAMSOM-VIP'
+        ];
+
+        // Key Validation
+        function validateKey() {
+            const keyInput = document.getElementById('keyInput').value.trim().toUpperCase();
+            const errorMsg = document.getElementById('errorMsg');
+            
+            if (validKeys.includes(keyInput)) {
+                localStorage.setItem('ultraLockVIP', 'activated');
+                document.getElementById('keyScreen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                initDashboard();
+            } else {
+                errorMsg.style.display = 'block';
+                document.getElementById('keyInput').value = '';
+                setTimeout(() => {
+                    errorMsg.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Check if already unlocked
+        if (localStorage.getItem('ultraLockVIP') === 'activated') {
+            document.getElementById('keyScreen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+        }
+
+        // Enter key on Enter
+        document.getElementById('keyInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                validateKey();
+            }
+        });
+
+        // Initialize Dashboard
+        function initDashboard() {
+            createParticles();
+            initCharts();
+            initToggles();
+            initOriginalFeatures();
+            updateUptime();
+        }
+
+        // Particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Gaming Toggles & Charts
+        let aimChart, botnesChart, lagChart;
+        const toggleData = {
+            aimPlus: { accuracy: 87.4, tracking: 94.2 },
+            aimBotnes: { headshots: 72.1, kd: 4.82 },
+            fixLag: { packetLoss: 0.2, jitter: 12 }
+        };
+
+        function initCharts() {
+            // Aim Plus Chart
+            const aimCtx = document.getElementById('aimChart').getContext('2d');
+            aimChart = new Chart(aimCtx, {
+                type: 'line',
+                data: {
+                    labels: ['1s', '2s', '3s', '4s', '5s'],
+                    datasets: [{
+                        label: 'Accuracy',
+                        data: [85, 87, 89, 91, 87.4],
+                        borderColor: '#00ff88',
+                        backgroundColor: 'rgba(0,255,136,0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            // Aim Botnes Chart
+            const botnesCtx = document.getElementById('botnesChart').getContext('2d');
+            botnesChart = new Chart(botnesCtx, {
+                type: 'line',
+                data: {
+                    labels: ['1s', '2s', '3s', '4s', '5s'],
+                    datasets: [{
+                        label: 'Headshots',
+                        data: [68, 70, 72, 74, 72.1],
+                        borderColor: '#ff00ff',
+                        backgroundColor: 'rgba(255,0,255,0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+
+            // Fix Lag Chart
+            const lagCtx = document.getElementById('lagChart').getContext('2d');
+            lagChart = new Chart(lagCtx, {
+                type: 'line',
+                data: {
+                    labels: ['1s', '2s', '3s', '4s', '5s'],
+                    datasets: [{
+                        label: 'Packet Loss',
+                        data: [0.8, 0.5, 0.3, 0.2, 0.2],
+                        borderColor: '#00aaff',
+                        backgroundColor: 'rgba(0,170,255,0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+        }
+
+        function initToggles() {
+            document.getElementById('aimPlusToggle').addEventListener('change', function() {
+                updateToggle('aimPlus', this.checked);
+            });
+            document.getElementById('aimBotnesToggle').addEventListener('change', function() {
+                updateToggle('aimBotnes', this.checked);
+            });
+            document.getElementById('fixLagToggle').addEventListener('change', function() {
+                updateToggle('fixLag', this.checked);
+            });
+        }
+
+        function updateToggle(module, active) {
+            const consoles = {
+                aimPlus: 'aimConsole',
+                aimBotnes: 'botnesConsole',
+                fixLag: 'lagConsole'
+            };
+            
+            const consoleEl = document.getElementById(consoles[module]);
+            if (active) {
+                consoleEl.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ${module.toUpperCase()} ACTIVATED ✓</div>`;
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+                // Update stats and charts
+                setInterval(() => {
+                    if (document.getElementById(module === 'aimPlus' ? 'aimPlusToggle' : 
+                        module === 'aimBotnes' ? 'aimBotnesToggle' : 'fixLagToggle').checked) {
+                        updateLiveStats(module);
+                    }
+                }, 2000);
+            } else {
+                consoleEl.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ${module.toUpperCase()} DEACTIVATED</div>`;
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+            }
+        }
+
+        function updateLiveStats(module) {
+            // Simulate live updates
+            if (module === 'aimPlus') {
+                toggleData.aimPlus.accuracy = (Math.random() * 5 + 87).toFixed(1);
+                toggleData.aimPlus.tracking = (Math.random() * 3 + 93).toFixed(1);
+                document.getElementById('aimAccuracy').textContent = toggleData.aimPlus.accuracy + '%';
+                document.getElementById('aimTracking').textContent = toggleData.aimPlus.tracking;
+                aimChart.data.datasets[0].data = [
+                    aimChart.data.datasets[0].data[1],
+                    aimChart.data.datasets[0].data[2],
+                    aimChart.data.datasets[0].data[3],
+                    aimChart.data.datasets[0].data[4],
+                    toggleData.aimPlus.accuracy
+                ];
+                aimChart.update('none');
+            }
+            // Similar updates for other modules...
+        }
+
+        // Original Features
+        function initOriginalFeatures() {
+            // Sliders
+            document.getElementById('trafficSlider').oninput = function() {
+                document.getElementById('trafficSpeed').textContent = this.value;
+                document.getElementById('trafficBoost').textContent = this.value / 10;
+            };
+
+            document.getElementById('scanSlider').oninput = function() {
+                document.getElementById('scanRange').textContent = this.value;
+                document.getElementById('hostsFound').textContent = this.value;
+                document.getElementById('openPorts').textContent = Math.floor(this.value / 10);
+            };
+
+            document.getElementById('fpsSlider').oninput = function() {
+                document.getElementById('fpsTarget').textContent = this.value;
+                document.getElementById('currentFPS').textContent = Math.floor(this.value * 0.9);
+                document.getElementById('fpsBoost').textContent = '+' + Math.floor((this.value / 240) * 100) + '%';
+            };
+
+            // CS Sensitivity
+            function updateSens() {
+                const sens = parseFloat(document.getElementById('sensSlider').value);
+                const dpi = parseFloat(document.getElementById('dpiSlider').value);
+                document.getElementById('sensValue').textContent = sens;
+                document.getElementById('dpiValue').textContent = dpi;
+                document.getElementById('edpiValue').textContent = Math.round(sens * dpi);
+            }
+            document.getElementById('sensSlider').oninput = updateSens;
+            document.getElementById('dpiSlider').oninput = updateSens;
+
+            // Mouse Demo
+            const mouseDemo = document.getElementById('mouseDemo');
+            mouseDemo.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = Math.round((e.clientX - rect.left) / rect.width * 100);
+                const y = Math.round((e.clientY - rect.top) / rect.height * 100);
+                document.getElementById('mousePos').textContent = `X: ${x}% Y: ${y}%`;
+            });
+        }
+
+        // Uptime counter
+        let uptimeSeconds = 0;
+        function updateUptime() {
+            uptimeSeconds++;
+            const hours = Math.floor(uptimeSeconds / 3600);
+            const minutes = Math.floor((uptimeSeconds % 3600) / 60);
+            const seconds = uptimeSeconds % 60;
+            document.getElementById('uptime').textContent = 
+                `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+            document.getElementById('connections').textContent = Math.floor(1000 + Math.sin(uptimeSeconds * 0.1) * 200);
+            setTimeout(updateUptime, 1000);
+        }
+    </script>
+</body>
+</html>
