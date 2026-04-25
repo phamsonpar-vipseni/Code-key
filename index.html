@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHẠM SƠN - UltraLock VIP | MCHAU💟</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(45deg, #0a0a0a, #1a0033, #0a0a0a);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            color: #00ff88;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Key Screen Styles */
+        .key-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ff00ff, #00ff88, #ffaa00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px #ff00ff); }
+            to { filter: drop-shadow(0 0 40px #00ff88); }
+        }
+
+        .key-input-container {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .key-input {
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid rgba(255, 0, 255, 0.3);
+            border-radius: 15px;
+            padding: 20px 30px;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            color: #00ff88;
+            width: 450px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .key-input:focus {
+            outline: none;
+            border-color: #ff00ff;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        .unlock-btn {
+            background: linear-gradient(45deg, #ff00ff, #00ff88);
+            border: none;
+            padding: 15px 40px;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #000;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 0, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .unlock-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(255, 0, 255, 0.6);
+        }
+
+        .valid-keys {
+            position: absolute;
+            bottom: 2rem;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            text-align: center;
+            max-width: 600px;
+        }
+
+        /* Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00ff88;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 6s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Dashboard Styles */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .dashboard {
+            display: none;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .dashboard-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #00ff88, #00ccff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+            margin-bottom: 10px;
+        }
+
+        .dashboard-subtitle {
+            font-size: 1.2rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .panel {
+            background: rgba(10, 10, 20, 0.95);
+            border: 2px solid #00ff88;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 0 60px rgba(0, 255, 136, 0.3);
+            backdrop-filter: blur(20px);
+            position: relative;
+            z-index: 10;
+            animation: panelEnter 1s ease-out;
+        }
+
+        @keyframes panelEnter {
+            from { opacity: 0; transform: translateY(50px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .status {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+
+        .status.active {
+            color: #00ff88;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: rgba(20, 20, 40, 0.8);
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: #00ff88;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.5rem;
+        }
+
+        .aim-plus { background: linear-gradient(135deg, #ff6b6b, #ff8e8e); }
+        .botnes { background: linear-gradient(135deg, #4ecdc4, #6be8d9); }
+        .lagfix { background: linear-gradient(135deg, #45b7d1, #5ec9f0); }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00ff88;
+            margin-bottom: 5px;
+        }
+
+        .card-subtitle {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .toggle-group {
+            margin: 20px 0;
+        }
+
+        .toggle {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: #333;
+            border-radius: 15px;
+            margin-right: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .toggle-switch.active {
+            background: linear-gradient(90deg, #00ff88, #00ccff);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+        }
+
+        .toggle-knob {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: #fff;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active .toggle-knob {
+            transform: translateX(30px);
+        }
+
+        .toggle-label {
+            font-size: 1rem;
+            color: #ccc;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00ff88;
+            display: block;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        .chart {
+            height: 100px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-line {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60%;
+            background: linear-gradient(90deg, #00ff88, #00ccff);
+            border-radius: 0 0 10px 10px;
+            animation: chartPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes chartPulse {
+            0%, 100% { height: 60%; }
+            50% { height: 85%; }
+        }
+
+        .console {
+            background: #000;
+            border: 1px solid #00ff88;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .console-line {
+            color: #00ff88;
+            margin-bottom: 5px;
+            animation: type 0.5s ease-out;
+        }
+
+        @keyframes type {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            color: #000;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .logo {
+                font-size: 2.5rem;
+            }
+            .key-input {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Key Screen -->
+    <div class="key-screen" id="keyScreen">
+        <div class="logo">PHẠM SƠN</div>
+        <h2 style="font-size: 1.8rem; margin-bottom: 1rem; color: #ff69b4;">MCHAU💟 UltraLock VIP</h2>
+        <div class="key-input-container">
+            <input type="text" class="key-input" id="keyInput" placeholder="Nhập Key VIP (PHAMSONNEX-VIP-2026-HACKERAI)" maxlength="50">
+        </div>
+        <button class="unlock-btn" onclick="checkKey()">MỞ KHÓA ULTRA</button>
+        <div class="valid-keys">
+            Keys hợp lệ: PHAMSONNEX-VIP-2026-HACKERAI | PHAMSONNEX-PRO-9999-VN | PHAMSONNEX-ULTIMATE-PENTEST | PHAMSONNEX-ADMIN-1337 | PHAMSONNEX-GAMER-ELITE-VN (và 20 keys mới)
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <div class="container">
+            <div class="header">
+                <h1 class="dashboard-title">ULTRALOCK GAMING PANEL</h1>
+                <p class="dashboard-subtitle">PHẠM SƠN x MCHAU💟 - Advanced Gaming Suite</p>
+            </div>
+
+            <div class="panel">
+                <div class="status active" id="statusIndicator">
+                    ✅ GAMING SYSTEM ONLINE - FULL ACCESS GRANTED
+                </div>
+                
+                <div class="grid">
+                    <!-- AIM PLUS -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon aim-plus">🎯</div>
+                            <div>
+                                <div class="card-title">Aim Plus</div>
+                                <div class="card-subtitle">Advanced aim assistance</div>
+                            </div>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <label class="toggle">
+                                <div class="toggle-switch" data-target="aimAssist">
+                                    <div class="toggle-knob"></div>
+                                </div>
+                                <span class="toggle-label">Aim Assistance</span>
+                            </label>
+                            <label class="toggle">
+                                <div class="toggle-switch" data-target="smoothAim">
+                                    <div class="toggle-knob"></div>
+                                </div>
+                                <span class="toggle-label">Smooth Tracking</span>
+                            </label>
+                        </div>
+                        
+                        <div class="stats">
+                            <div class="stat">
+                                <span class="stat-value" id="aimAccuracy">98.7</span>
+                                <span class="stat-label">Accuracy %</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value" id="aimTracking">144</span>
+                                <span class="stat-label">Tracking Hz</span>
+                            </div>
+                        </div>
+                        
+                        <div class="chart">
+                            <div class="chart-line"></div>
+                        </div>
+                    </div>
+
+                    <!-- AIM BOTNES -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon botnes">🤖</div>
+                            <div>
+                                <div class="card-title">Aim Botnes</div>
+                                <div class="card-subtitle">AI-powered targeting</div>
+                            </div>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <label class="toggle">
+                                <div class="toggle-switch" data-target="headshotBot">
+                                    <div class="toggle-knob"></div>
+                                </div>
+                                <span class="toggle-label">Headshot Bot</span>
+                            </label>
+                            <label class="toggle">
+                                <div class="toggle-switch" data-target="autoAim">
+                                    <div class="toggle-knob"></div>
+                                </div>
+                                <span class="toggle-label">Auto-Aim</span>
+                            </label>
+                        </div>
+                        
+                        <div class="stats">
+                            <div class="stat">
+                                <span class="stat-value" id="botHeadshots">89</span>
+                                <span class="stat-label">Headshots</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value" id="botKdr">12.4</span>
+                                <span class="stat-label">K/D Ratio</span>
+                            </div>
+                        </div>
+                        
+                        <div class="chart">
+                            <div class="chart-line" style="height: 75%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- FIX LAG -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon lagfix">⏱️</div>
+                            <div>
+                                <div class="card-title">Fix Lag</div>
+                                <div class="card-subtitle">Network optimization</div>
+                            </div>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <label class="toggle">
+                                <div class="toggle-switch" data-target="packetFix">
+                                    <div class="toggle-knob"></div>
+                                </div>
+                                <span class="toggle-label">Packet Loss Fix</span>
+                            </label>
+                            <label class="toggle">
+                                <div class="toggle-switch" data-target="jitterFix">
+                                    <div class="toggle-knob"></div>
+                                </div>
+                                <span class="toggle-label">Jitter Reduction</span>
+                            </label>
+                        </div>
+                        
+                        <div class="stats">
+                            <div class="stat">
+                                <span class="stat-value" id="packetLoss">0.8</span>
+                                <span class="stat-label">Packet Loss</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value" id="jitterMs">2</span>
+                                <span class="stat-label">Jitter ms</span>
+                            </div>
+                        </div>
+                        
+                        <div class="chart">
+                            <div class="chart-line" style="background: linear-gradient(90deg, #45b7d1, #5ec9f0);"></div>
+                        </div>
+                    </div>
+
+                    <!-- SYSTEM CONSOLE -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon" style="background: linear-gradient(135deg, #f9ca24, #feca57);">📊</div>
+                            <div>
+                                <div class="card-title">Gaming Console</div>
+                                <div class="card-subtitle">Live system diagnostics</div>
+                            </div>
+                        </div>
+                        
+                        <div class="console" id="gamingConsole">
+                            <div class="console-line">✓ PHẠM SƠN UltraLock v2.7 initialized</div>
+                            <div class="console-line">✓ Gaming modules loaded successfully</div>
+                            <div class="console-line">✓ MCHAU💟 VIP License: VALID</div>
+                            <div class="console-line">✓ Aim systems: READY</div>
+                            <div class="console-line">✓ Network optimizer: ACTIVE</div>
+                            <div class="console-line">> Awaiting gaming commands...</div>
+                        </div>
+                        
+                        <button class="btn" onclick="clearConsole()">Clear Log</button>
+                        <button class="btn" onclick="exportLogs()">Export Logs</button>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 40px;">
+                    <button class="btn" style="font-size: 1.2rem; padding: 15px 40px;" onclick="optimizeGaming()">
+                        🎮 OPTIMIZE GAMING SUITE
+                    </button>
+                    <button class="btn" style="font-size: 1.2rem; padding: 15px 40px; background: linear-gradient(45deg, #ff6b6b, #ff8e8e);" onclick="emergencyStop()">
+                        🛑 EMERGENCY STOP
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 25 Valid Keys (5 cũ + 20 mới)
+        const validKeys = [
+            // Keys cũ
+            'PHAMSONNEX-VIP-2026-HACKERAI',
+            'PHAMSONNEX-PRO-9999-VN',
+            'PHAMSONNEX-ULTIMATE-PENTEST',
+            'PHAMSONNEX-ADMIN-1337',
+            'PHAMSONNEX-GAMER-ELITE-VN',
+            
+            // 20 keys mới
+            'PHAMSONNEX-ULTRA-2026-VIP',
+            'PHAMSONNEX-MCHAU-LOVE-999',
+            'PHAMSONNEX-HACKER-ELITE-01',
+            'PHAMSONNEX-GAMING-GOD-VN',
+            'PHAMSONNEX-PENTEST-KING-01',
+            'PHAMSONNEX-VIP-MASTER-2026',
+            'PHAMSONNEX-AIMBOT-PRO-VN',
+            'PHAMSONNEX-LAGFIX-ULTIMATE',
+            'PHAMSONNEX-1337-HACKER-VN',
+            'PHAMSONNEX-GAMER-LEGEND-01',
+            'PHAMSONNEX-MCHAU-HEART-VIP',
+            'PHAMSONNEX-ULTRALOCK-PRO',
+            'PHAMSONNEX-VN-GAMING-KING',
+            'PHAMSONNEX-HACKERAI-VIP-01',
+            'PHAMSONNEX-PHAMSON-9999',
+            'PHAMSONNEX-ELITE-GAMER-VN',
+            'PHAMSONNEX-BOTNES-MASTER',
+            'PHAMSONNEX-2026-ULTRA-VIP',
+            'PHAMSONNEX-MCHAU-FOREVER',
+            'PHAMSONNEX-ADMIN-GOD-VN'
+        ];
+
+        // Create Particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                particlesContainer.appendChild(particle);
+                setTimeout(() => particle.remove(), 8000);
+            }, 300);
+        }
+
+        // Key Check
+        function checkKey() {
+            const key = document.getElementById('keyInput').value.trim().toUpperCase();
+            if (validKeys.includes(key)) {
+                localStorage.setItem('ultralock_unlocked', 'true');
+                document.getElementById('keyScreen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                setTimeout(() => {
+                    initGamingSystems();
+                }, 500);
+            } else {
+                document.getElementById('keyInput').style.borderColor = '#ff4444';
+                setTimeout(() => {
+                    document.getElementById('keyInput').style.borderColor = 'rgba(255, 0, 255, 0.3)';
+                }, 1000);
+            }
+        }
+
+        // Check if already unlocked
+        if (localStorage.getItem('ultralock_unlocked') === 'true') {
+            document.getElementById('keyScreen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            initGamingSystems();
+        }
+
+        // Enter to unlock
+        document.getElementById('keyInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkKey();
+            }
+        });
+
+        // Gaming Systems Initialization
+        function initGamingSystems() {
+            createParticles();
+            setupToggles();
+            startAnimations();
+            updateLiveStats();
+            addConsoleLog('🎮 PHẠM SƠN Gaming Suite ACTIVATED');
+        }
+
+        // Toggle System (1:1 với code dưới)
+        function setupToggles() {
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.toggle-switch')) {
+                    const toggle = e.target.closest('.toggle-switch');
+                    toggle.classList.toggle('active');
+                    const target = toggle.dataset.target;
+                    updateGamingStats(target, toggle.classList.contains('active'));
+                }
+            });
+        }
+
+        function updateGamingStats(target, active) {
+            if (target.includes('aim')) {
+                document.getElementById('aimAccuracy').textContent = active ? '99.2' : '98.7';
+                document.getElementById('aimTracking').textContent = active ? '240' : '144';
+            } else if (target.includes('headshot') || target.includes('auto')) {
+                document.getElementById('botHeadshots').textContent = active ? '97' : '89';
+                document.getElementById('botKdr').textContent = active ? '15.2' : '12.4';
+            } else if (target.includes('packet') || target.includes('jitter')) {
+                document.getElementById('packetLoss').textContent = active ? '0.1' : '0.8';
+                document.getElementById('jitterMs').textContent = active ? '1' : '2';
+            }
+        }
+
+        // Live Stats Updates
+        function updateLiveStats() {
+            setInterval(() => {
+                // Aim accuracy fluctuation
+                const aimActive = document.querySelector('.toggle-switch[data-target="aimAssist"]')?.classList.contains('active');
+                document.getElementById('aimAccuracy').textContent = (98 + (aimActive ? Math.random() * 2 : 0)).toFixed(1);
+                
+                // Bot stats
+                const botActive = document.querySelector('.toggle-switch[data-target="headshotBot"]')?.classList.contains('active');
+                document.getElementById('botHeadshots').textContent = Math.floor(85 + (botActive ? Math.random() * 15 : 0));
+                
+                // Network stats
+                const netActive = document.querySelector('.toggle-switch[data-target="packetFix"]')?.classList.contains('active');
+                document.getElementById('packetLoss').textContent = (netActive ? 0.1 : 0.8 + Math.random() * 0.2).toFixed(1);
+            }, 2000);
+        }
+
+        // Chart Animations
+        function startAnimations() {
+            const charts = document.querySelectorAll('.chart-line');
+            charts.forEach((chart, index) => {
+                setInterval(() => {
+                    const height = 50 + Math.random() * 40;
+                    chart.style.height = height + '%';
+                }, 1500 + index * 500);
+            });
+        }
+
+        // Console Functions
+        function addConsoleLog(message) {
+            const consoleEl = document.getElementById('gamingConsole');
+            const line = document.createElement('div');
+            line.className = 'console-line';
+            line.textContent = message;
+            consoleEl.appendChild(line);
+            if (consoleEl.children.length > 12) {
+                consoleEl.removeChild(consoleEl.firstChild);
+            }
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        function clearConsole() {
+            const consoleEl = document.getElementById('gamingConsole');
+            consoleEl.innerHTML = '<div class="console-line">✓ Console cleared - PHẠM SƠN</div>';
+        }
+
+        function exportLogs() {
+            addConsoleLog('📤 Exporting gaming logs...');
+            setTimeout(() => {
+                addConsoleLog('✅ Gaming logs exported - MCHAU💟');
+            }, 1000);
+        }
+
+        function optimizeGaming() {
+            addConsoleLog('🎮 Optimizing complete gaming suite...');
+            document.querySelectorAll('.toggle-switch').forEach(t => t.classList.add('active'));
+            setTimeout(() => {
+                addConsoleLog('✅ Gaming suite fully optimized!');
+            }, 2000);
+        }
+
+        function emergencyStop() {
+            document.querySelectorAll('.toggle-switch').forEach(t => t.classList.remove('active'));
+            addConsoleLog('🛑 EMERGENCY STOP - All gaming modules halted');
+            document.getElementById('statusIndicator').textContent = '❌ GAMING SYSTEMS HALTED';
+            document.getElementById('statusIndicator').className = 'status';
+        }
+
+        // Auto console updates
+        setInterval(() => {
+            if (document.getElementById('dashboard').style.display !== 'block') return;
+            const messages = [
+                '[INFO] Aim Plus: 99.2% accuracy achieved',
+                '[SUCCESS] Botnes active: 15.2 K/D ratio',
+                '[INFO] Network stable: 0.1% packet loss',
+                '[SUCCESS] MCHAU💟 VIP modules: FULLY ACTIVE'
+            ];
+            addConsoleLog(messages[Math.floor(Math.random() * messages.length)]);
+        }, 5000);
+
+        // Initialize particles on key screen
+        createParticles();
+    </script>
+</body>
+</html>
