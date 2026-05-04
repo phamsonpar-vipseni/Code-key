@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>EvilWebBot - Nick Damage 💀</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <!-- 🔐 PHẦN LOGIN ADMIN -->
+    <div id="adminForm">
+        <h2>🔐 LOGIN ADMIN</h2>
+        <input type="text" id="adminUser" placeholder="Tên đăng nhập" />
+        <input type="password" id="adminPass" placeholder="Mật khẩu" />
+        <button onclick="loginAdmin()">Đăng nhập</button>
+    </div>
+
+    <!-- 🎯 PHẦN GỬI NICK VÀ MESSAGE -->
+    <div id="mainPanel" class="hidden">
+        <h2>⚔️ Facebook & TikTok Damage</h2>
+        <input type="text" id="username" placeholder="Nhập username" />
+        <input type="text" id="message" placeholder="Nhập tin nhắn spam" />
+        <button onclick="attack()">Gửi tấn công 💀</button>
+    </div>
+
+    <!-- 📖 PHẦN LỊCH SỬ -->
+    <div id="historyPanel" class="hidden">
+        <h2>📜 Lịch sử nick bị tấn công</h2>
+        <ul id="historyList"></ul>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
