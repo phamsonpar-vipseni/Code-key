@@ -1,0 +1,658 @@
+cat > /mnt/user-data/outputs/ketqua.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>⚙️ Admin Panel - SunWin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#f0c040;--gold2:#e8a020;--dark:#08050a;--dark2:#120e18;
+  --red:#c0392b;--green:#27ae60;--blue:#2980b9;
+  --panel:#160e20;--border:rgba(180,130,255,0.25);--text:#e8d8ff;--text2:#a888cc;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:radial-gradient(ellipse at top,#100818,#080510);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;padding:20px;}
+
+/* ADMIN AUTH */
+#adminAuth{
+  position:fixed;inset:0;z-index:9999;
+  background:radial-gradient(ellipse,#120818,#06030a);
+  display:flex;align-items:center;justify-content:center;
+}
+.admin-auth-box{
+  background:linear-gradient(145deg,#1a0e28,#120820);
+  border:2px solid rgba(180,130,255,0.4);border-radius:20px;
+  padding:40px;width:380px;max-width:95vw;
+  box-shadow:0 0 60px rgba(150,100,255,0.2);
+}
+.admin-logo{text-align:center;margin-bottom:24px;}
+.admin-logo .t{font-family:'Cinzel Decorative',serif;font-size:1.8rem;
+  background:linear-gradient(to bottom,#e0c0ff,#9060d0);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.admin-logo .s{color:var(--text2);font-size:.9rem;margin-top:4px;}
+.admin-auth-box input{
+  width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);
+  color:var(--text);padding:14px 16px;border-radius:10px;font-size:1rem;
+  font-family:'Rajdhani',sans-serif;margin-bottom:12px;outline:none;
+}
+.admin-auth-box input:focus{border-color:rgba(180,130,255,0.6);}
+.btn-admin-login{
+  width:100%;background:linear-gradient(135deg,#6030a0,#9060d0);
+  color:#fff;font-weight:700;padding:14px;border-radius:10px;border:none;
+  cursor:pointer;font-family:'Rajdhani',sans-serif;font-size:1.1rem;
+  transition:all .3s;text-transform:uppercase;letter-spacing:1px;
+}
+.btn-admin-login:hover{filter:brightness(1.2);}
+.admin-err{color:#ff8080;font-size:.9rem;text-align:center;margin-top:8px;display:none;}
+
+/* MAIN ADMIN */
+#adminMain{display:none;}
+.admin-header{
+  background:linear-gradient(90deg,#0a0614,#160a24,#0a0614);
+  border-bottom:2px solid rgba(180,130,255,0.3);
+  padding:14px 24px;display:flex;align-items:center;justify-content:space-between;
+  margin:-20px -20px 24px;position:sticky;top:-20px;z-index:50;
+}
+.admin-header .logo{font-family:'Cinzel Decorative',serif;font-size:1.2rem;
+  background:linear-gradient(to right,#c090ff,#9060d0);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.admin-header .badge{background:rgba(192,57,43,0.2);color:#ff8888;
+  border:1px solid rgba(192,57,43,0.4);padding:4px 12px;border-radius:20px;font-size:.8rem;font-weight:700;}
+.btn-logout-admin{background:rgba(192,57,43,0.15);border:1px solid rgba(192,57,43,0.3);
+  color:#ff8888;padding:8px 16px;border-radius:8px;cursor:pointer;
+  font-family:'Rajdhani',sans-serif;font-size:.9rem;font-weight:600;transition:all .3s;}
+.btn-logout-admin:hover{background:rgba(192,57,43,0.3);}
+
+.admin-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;
+  max-width:1200px;margin:0 auto;
+}
+
+.admin-card{
+  background:linear-gradient(145deg,#160e20,#0e0816);
+  border:1px solid var(--border);border-radius:16px;padding:20px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
+}
+.admin-card h2{
+  font-family:'Cinzel Decorative',serif;font-size:1rem;
+  margin-bottom:16px;padding-bottom:10px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;
+}
+.admin-card h2.tx-title{color:#ff8080;}
+.admin-card h2.cl-title{color:#80ff80;}
+.admin-card h2.acc-title{color:#80c0ff;}
+.admin-card h2.code-title{color:var(--gold);}
+.admin-card h2.stat-title{color:#c090ff;}
+
+/* OVERRIDE SECTION */
+.override-section{display:flex;flex-direction:column;gap:12px;}
+.override-label{font-size:.85rem;color:var(--text2);margin-bottom:4px;}
+.override-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.override-btn{
+  flex:1;padding:12px;border-radius:10px;border:2px solid transparent;
+  cursor:pointer;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.95rem;
+  transition:all .3s;text-transform:uppercase;letter-spacing:.5px;
+  background:rgba(255,255,255,0.05);color:var(--text2);
+}
+.override-btn:hover{filter:brightness(1.3);}
+.override-btn.tai-btn{border-color:rgba(192,57,43,0.3);}
+.override-btn.tai-btn.active{background:rgba(192,57,43,0.25);color:#ff8080;border-color:var(--red);}
+.override-btn.xiu-btn{border-color:rgba(52,152,219,0.3);}
+.override-btn.xiu-btn.active{background:rgba(52,152,219,0.25);color:#80b5ff;border-color:var(--blue);}
+.override-btn.chan-btn{border-color:rgba(39,174,96,0.3);}
+.override-btn.chan-btn.active{background:rgba(39,174,96,0.25);color:#80ff80;border-color:var(--green);}
+.override-btn.le-btn{border-color:rgba(155,89,182,0.3);}
+.override-btn.le-btn.active{background:rgba(155,89,182,0.25);color:#da8fff;border-color:#9b59b6;}
+.override-btn.reset-btn{flex:none;padding:12px 20px;}
+.override-btn.reset-btn.active{background:rgba(240,192,64,0.15);color:var(--gold);border-color:var(--gold2);}
+
+.override-status{
+  padding:10px 14px;border-radius:8px;font-size:.9rem;font-weight:600;
+  background:rgba(255,255,255,0.04);text-align:center;
+}
+
+/* ACCOUNT LOOKUP */
+.lookup-row{display:flex;gap:8px;margin-bottom:12px;}
+.lookup-row input{
+  flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--border);
+  color:var(--text);padding:10px 14px;border-radius:8px;font-family:'Rajdhani',sans-serif;
+  font-size:.95rem;outline:none;
+}
+.lookup-row input:focus{border-color:rgba(180,130,255,0.5);}
+.btn-sm{
+  padding:10px 16px;border-radius:8px;border:none;cursor:pointer;
+  font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.9rem;
+  transition:all .3s;white-space:nowrap;
+}
+.btn-purple{background:linear-gradient(135deg,#6030a0,#9060d0);color:#fff;}
+.btn-green{background:linear-gradient(135deg,var(--green),#2ecc71);color:#fff;}
+.btn-red{background:linear-gradient(135deg,var(--red),#e74c3c);color:#fff;}
+.btn-gold{background:linear-gradient(135deg,#b8860b,var(--gold2));color:#1a0800;}
+.btn-sm:hover{filter:brightness(1.2);}
+
+.account-result{
+  background:rgba(255,255,255,0.04);border:1px solid var(--border);
+  border-radius:10px;padding:14px;display:none;
+}
+.account-result .acc-name{font-size:1.1rem;font-weight:700;color:#c090ff;margin-bottom:6px;}
+.account-result .acc-bal{font-size:1.4rem;font-weight:700;color:var(--gold3);}
+.account-result .acc-info{font-size:.85rem;color:var(--text2);margin-top:4px;}
+
+.edit-balance-row{display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap;}
+.edit-balance-row input{
+  flex:1;min-width:120px;background:rgba(255,255,255,0.05);border:1px solid var(--border);
+  color:var(--text);padding:8px 12px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:.95rem;outline:none;
+}
+
+/* CODE GENERATOR */
+.code-gen-section{display:flex;flex-direction:column;gap:12px;}
+.code-amount-btns{display:flex;flex-wrap:wrap;gap:6px;}
+.code-amt-btn{
+  padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:700;
+  font-family:'Rajdhani',sans-serif;font-size:.85rem;
+  border:1px solid var(--border);color:var(--gold);
+  background:rgba(240,192,64,0.06);transition:all .3s;
+}
+.code-amt-btn:hover,.code-amt-btn.active{background:rgba(240,192,64,0.18);border-color:var(--gold);}
+
+.code-result-box{
+  background:rgba(255,255,255,0.04);border:1px solid rgba(240,192,64,0.3);
+  border-radius:10px;padding:14px;display:none;
+}
+.code-result-box .generated-code{
+  font-size:1.5rem;font-weight:700;letter-spacing:3px;color:var(--gold);
+  text-align:center;padding:10px;
+  background:rgba(240,192,64,0.08);border-radius:8px;margin-bottom:8px;
+}
+.code-result-box .code-info{font-size:.85rem;color:var(--text2);text-align:center;}
+
+/* CODE HISTORY */
+.codes-list{display:flex;flex-direction:column;gap:6px;max-height:200px;overflow-y:auto;}
+.code-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.03);font-size:.85rem;
+  border:1px solid rgba(255,255,255,0.05);
+}
+.code-row.used{opacity:.5;}
+.code-row .code-val{font-weight:700;letter-spacing:2px;color:var(--gold);}
+.code-row .code-amt{color:var(--green2);font-weight:700;}
+.code-row .code-status{font-size:.75rem;}
+.code-row.used .code-status{color:var(--text2);}
+.code-row:not(.used) .code-status{color:var(--green2);}
+
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.stat-item{
+  background:rgba(255,255,255,0.04);border:1px solid var(--border);
+  border-radius:10px;padding:12px;text-align:center;
+}
+.stat-item .stat-val{font-size:1.3rem;font-weight:700;color:#c090ff;}
+.stat-item .stat-lbl{font-size:.8rem;color:var(--text2);margin-top:2px;}
+
+/* ALL ACCOUNTS TABLE */
+.accounts-table{width:100%;border-collapse:collapse;font-size:.85rem;}
+.accounts-table th{color:var(--text2);padding:8px;border-bottom:1px solid var(--border);text-align:left;}
+.accounts-table td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.accounts-table tr:last-child td{border:none;}
+.acc-badge-admin{background:rgba(192,57,43,0.2);color:#ff8888;font-size:.7rem;padding:2px 6px;border-radius:4px;}
+
+.toast{
+  position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);
+  padding:12px 24px;border-radius:12px;font-weight:700;z-index:9999;
+  opacity:0;pointer-events:none;transition:all .3s;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{background:linear-gradient(135deg,rgba(39,174,96,.95),rgba(46,204,113,.95));color:#fff;}
+.toast.err{background:linear-gradient(135deg,rgba(192,57,43,.95),rgba(231,76,60,.95));color:#fff;}
+
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:rgba(255,255,255,0.02);}
+::-webkit-scrollbar-thumb{background:rgba(180,130,255,0.4);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- ADMIN AUTH -->
+<div id="adminAuth">
+  <div class="admin-auth-box">
+    <div class="admin-logo">
+      <div class="t">⚙️ Admin Panel</div>
+      <div class="s">SunWin — Quản Trị Hệ Thống</div>
+    </div>
+    <input type="text" id="adminUser" placeholder="Tên đăng nhập admin" autocomplete="off">
+    <input type="password" id="adminPass" placeholder="Mật khẩu admin">
+    <button class="btn-admin-login" onclick="adminLogin()">🔐 Đăng Nhập Admin</button>
+    <div class="admin-err" id="adminErr">❌ Sai thông tin đăng nhập!</div>
+    <div style="color:var(--text2);font-size:.8rem;text-align:center;margin-top:12px">Tài khoản mặc định: admin / admin123</div>
+  </div>
+</div>
+
+<!-- ADMIN MAIN -->
+<div id="adminMain">
+  <div class="admin-header">
+    <div class="logo">⚙️ SunWin Admin</div>
+    <div class="badge">🔴 ADMIN</div>
+    <button class="btn-logout-admin" onclick="adminLogout()">Đăng Xuất</button>
+  </div>
+
+  <div class="admin-grid">
+
+    <!-- TÀI XỈU OVERRIDE -->
+    <div class="admin-card">
+      <h2 class="tx-title">🎲 Điều Chỉnh Kết Quả Tài Xỉu</h2>
+      <div class="override-section">
+        <div class="override-label">Chọn kết quả cho phiên TÀI XỈU tiếp theo:</div>
+        <div class="override-btns">
+          <button class="override-btn tai-btn" id="txOvTai" onclick="setTXOverride('tai')">🔴 TÀI</button>
+          <button class="override-btn xiu-btn" id="txOvXiu" onclick="setTXOverride('xiu')">🔵 XỈU</button>
+          <button class="override-btn reset-btn" id="txOvReset" onclick="setTXOverride(null)">🎲 Random</button>
+        </div>
+        <div class="override-status" id="txOvStatus">Hiện tại: 🎲 Random (tự động)</div>
+        <div style="font-size:.8rem;color:var(--text2);margin-top:6px">
+          💡 Kết quả chỉ áp dụng cho 1 phiên tiếp theo rồi tự chuyển về random.
+        </div>
+      </div>
+      <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:14px;">
+        <div class="override-label">Lịch sử 10 phiên gần nhất:</div>
+        <div class="codes-list" id="txHistAdmin" style="max-height:150px;"></div>
+      </div>
+    </div>
+
+    <!-- CHẴN LẺ OVERRIDE -->
+    <div class="admin-card">
+      <h2 class="cl-title">🎯 Điều Chỉnh Kết Quả Chẵn Lẻ</h2>
+      <div class="override-section">
+        <div class="override-label">Chọn kết quả cho phiên CHẴN LẺ tiếp theo:</div>
+        <div class="override-btns">
+          <button class="override-btn chan-btn" id="clOvChan" onclick="setCLOverride('chan')">💚 CHẴN</button>
+          <button class="override-btn le-btn" id="clOvLe" onclick="setCLOverride('le')">💜 LẺ</button>
+          <button class="override-btn reset-btn" id="clOvReset" onclick="setCLOverride(null)">🎲 Random</button>
+        </div>
+        <div class="override-status" id="clOvStatus">Hiện tại: 🎲 Random (tự động)</div>
+        <div style="font-size:.8rem;color:var(--text2);margin-top:6px">
+          💡 Kết quả chỉ áp dụng cho 1 phiên tiếp theo rồi tự chuyển về random.
+        </div>
+      </div>
+      <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:14px;">
+        <div class="override-label">Lịch sử 10 phiên gần nhất:</div>
+        <div class="codes-list" id="clHistAdmin" style="max-height:150px;"></div>
+      </div>
+    </div>
+
+    <!-- ACCOUNT LOOKUP -->
+    <div class="admin-card">
+      <h2 class="acc-title">👤 Tra Cứu Tài Khoản</h2>
+      <div class="lookup-row">
+        <input type="text" id="lookupInput" placeholder="Nhập tên tài khoản...">
+        <button class="btn-sm btn-purple" onclick="lookupAccount()">🔍 Tra Cứu</button>
+      </div>
+      <div class="account-result" id="accountResult">
+        <div class="acc-name" id="accName"></div>
+        <div class="acc-bal" id="accBal"></div>
+        <div class="acc-info" id="accInfo"></div>
+        <div class="edit-balance-row">
+          <input type="number" id="editBalInput" placeholder="Số tiền mới hoặc cộng/trừ...">
+          <button class="btn-sm btn-green" onclick="setAccountBalance('set')">✏️ Đặt Số Dư</button>
+          <button class="btn-sm btn-gold" onclick="setAccountBalance('add')">➕ Cộng</button>
+          <button class="btn-sm btn-red" onclick="setAccountBalance('sub')">➖ Trừ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CODE GENERATOR -->
+    <div class="admin-card">
+      <h2 class="code-title">🎁 Tạo Code Thưởng</h2>
+      <div class="code-gen-section">
+        <div class="override-label">Chọn mệnh giá:</div>
+        <div class="code-amount-btns">
+          <div class="code-amt-btn" onclick="selectCodeAmt(10000)">10K</div>
+          <div class="code-amt-btn" onclick="selectCodeAmt(20000)">20K</div>
+          <div class="code-amt-btn" onclick="selectCodeAmt(50000)">50K</div>
+          <div class="code-amt-btn" onclick="selectCodeAmt(100000)">100K</div>
+          <div class="code-amt-btn" onclick="selectCodeAmt(200000)">200K</div>
+          <div class="code-amt-btn" onclick="selectCodeAmt(500000)">500K</div>
+          <div class="code-amt-btn" onclick="selectCodeAmt(1000000)">1M</div>
+          <div class="code-amt-btn" onclick="selectCodeAmt(5000000)">5M</div>
+        </div>
+        <div id="selectedAmt" style="color:var(--gold);font-weight:700;font-size:.95rem;">Mệnh giá: chưa chọn</div>
+        <button class="btn-sm btn-gold" style="width:100%;padding:12px;" onclick="generateCode()">⚡ TẠO CODE</button>
+        <div class="code-result-box" id="codeResultBox">
+          <div class="generated-code" id="generatedCode">-</div>
+          <div class="code-info" id="generatedInfo">-</div>
+          <button class="btn-sm btn-purple" style="width:100%;margin-top:8px;" onclick="copyCode()">📋 Sao Chép Code</button>
+        </div>
+      </div>
+      <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div class="override-label">Code đã tạo:</div>
+          <button class="btn-sm btn-red" style="padding:4px 10px;font-size:.75rem;" onclick="clearUsedCodes()">Xoá Đã Dùng</button>
+        </div>
+        <div class="codes-list" id="codesHistory"></div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="admin-card">
+      <h2 class="stat-title">📊 Thống Kê Hệ Thống</h2>
+      <div class="stat-grid" id="statsGrid"></div>
+      <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:14px;">
+        <div class="override-label" style="margin-bottom:10px;">Tất cả tài khoản:</div>
+        <div style="max-height:220px;overflow-y:auto;">
+          <table class="accounts-table" id="allAccountsTable">
+            <thead><tr><th>Tên</th><th>Số Dư</th><th>Tổng Thắng</th></tr></thead>
+            <tbody id="allAccountsTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="admin-card">
+      <h2 style="color:#ff9060;">⚡ Hành Động Nhanh</h2>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div>
+          <div class="override-label" style="margin-bottom:6px;">Cộng tiền tất cả tài khoản:</div>
+          <div style="display:flex;gap:8px;">
+            <input type="number" id="massAddInput" placeholder="Số tiền..." style="flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:.95rem;outline:none;">
+            <button class="btn-sm btn-green" onclick="massAddBalance()">✅ Cộng Hết</button>
+          </div>
+        </div>
+        <div>
+          <div class="override-label" style="margin-bottom:6px;">Reset tài khoản về 50K:</div>
+          <div style="display:flex;gap:8px;">
+            <input type="text" id="resetUserInput" placeholder="Tên tài khoản..." style="flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:.95rem;outline:none;">
+            <button class="btn-sm btn-red" onclick="resetUserBalance()">🔄 Reset</button>
+          </div>
+        </div>
+        <div>
+          <div class="override-label" style="margin-bottom:6px;">Xoá tài khoản:</div>
+          <div style="display:flex;gap:8px;">
+            <input type="text" id="deleteUserInput" placeholder="Tên tài khoản..." style="flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:.95rem;outline:none;">
+            <button class="btn-sm btn-red" onclick="deleteUser()">🗑️ Xoá</button>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-top:10px;">
+          <div class="override-label" style="margin-bottom:6px;">Link nhanh:</div>
+          <a href="taixiu.html" target="_blank" style="color:#80c0ff;text-decoration:none;font-size:.9rem;">🎮 Mở taixiu.html →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="game.js"></script>
+<script>
+// ADMIN AUTH
+const ADMIN_CREDS = { username: 'admin', password: 'admin123' };
+
+function adminLogin() {
+  const u = document.getElementById('adminUser').value.trim();
+  const p = document.getElementById('adminPass').value;
+  if (u === ADMIN_CREDS.username && p === ADMIN_CREDS.password) {
+    document.getElementById('adminAuth').style.display = 'none';
+    document.getElementById('adminMain').style.display = 'block';
+    loadAll();
+  } else {
+    document.getElementById('adminErr').style.display = 'block';
+  }
+}
+
+function adminLogout() {
+  document.getElementById('adminAuth').style.display = 'flex';
+  document.getElementById('adminMain').style.display = 'none';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') adminLogin(); });
+
+// TOAST
+function showToast(msg, type='ok') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast ' + type + ' show';
+  setTimeout(() => t.className = 'toast', 2800);
+}
+
+// LOAD ALL
+function loadAll() {
+  loadTXOverrideUI();
+  loadCLOverrideUI();
+  loadTXHistory();
+  loadCLHistory();
+  loadStats();
+  loadCodesHistory();
+}
+setInterval(loadAll, 3000);
+
+// TX OVERRIDE
+function setTXOverride(val) {
+  GameDB.setTXOverride(val);
+  loadTXOverrideUI();
+  showToast(val ? `✅ Kết quả TÀI XỈU tiếp theo: ${val.toUpperCase()}` : '🎲 TÀI XỈU: Về random');
+}
+
+function loadTXOverrideUI() {
+  const cur = GameDB.getTXOverride();
+  document.getElementById('txOvTai').classList.toggle('active', cur==='tai');
+  document.getElementById('txOvXiu').classList.toggle('active', cur==='xiu');
+  document.getElementById('txOvReset').classList.toggle('active', !cur);
+  document.getElementById('txOvStatus').textContent = cur
+    ? `Hiện tại: ${cur==='tai'?'🔴 TÀI':'🔵 XỈU'} (áp dụng phiên kế)`
+    : 'Hiện tại: 🎲 Random (tự động)';
+  document.getElementById('txOvStatus').style.color = cur ? (cur==='tai'?'#ff8080':'#80b5ff') : 'var(--text2)';
+}
+
+// CL OVERRIDE
+function setCLOverride(val) {
+  GameDB.setCLOverride(val);
+  loadCLOverrideUI();
+  showToast(val ? `✅ Kết quả CHẴN LẺ tiếp theo: ${val.toUpperCase()}` : '🎲 CHẴN LẺ: Về random');
+}
+
+function loadCLOverrideUI() {
+  const cur = GameDB.getCLOverride();
+  document.getElementById('clOvChan').classList.toggle('active', cur==='chan');
+  document.getElementById('clOvLe').classList.toggle('active', cur==='le');
+  document.getElementById('clOvReset').classList.toggle('active', !cur);
+  document.getElementById('clOvStatus').textContent = cur
+    ? `Hiện tại: ${cur==='chan'?'💚 CHẴN':'💜 LẺ'} (áp dụng phiên kế)`
+    : 'Hiện tại: 🎲 Random (tự động)';
+  document.getElementById('clOvStatus').style.color = cur ? (cur==='chan'?'#80ff80':'#da8fff') : 'var(--text2)';
+}
+
+// HISTORY
+function loadTXHistory() {
+  const hist = GameDB.getTXHistory().slice(0,10);
+  const el = document.getElementById('txHistAdmin');
+  if (!hist.length) { el.innerHTML = '<div style="color:var(--text2);font-size:.85rem;padding:6px">Chưa có phiên nào</div>'; return; }
+  el.innerHTML = hist.map(h => `
+    <div class="code-row">
+      <span style="color:var(--text2);font-size:.75rem">#${String(h.round).padStart(4,'0')}</span>
+      <span style="font-weight:700;color:${h.result==='tai'?'#ff8080':'#80b5ff'}">${h.result.toUpperCase()} (${h.sum})</span>
+      <span style="font-size:.75rem;color:var(--text2)">${h.dice?h.dice.join('-'):'-'}</span>
+    </div>`).join('');
+}
+
+function loadCLHistory() {
+  const hist = GameDB.getCLHistory().slice(0,10);
+  const el = document.getElementById('clHistAdmin');
+  if (!hist.length) { el.innerHTML = '<div style="color:var(--text2);font-size:.85rem;padding:6px">Chưa có phiên nào</div>'; return; }
+  el.innerHTML = hist.map(h => `
+    <div class="code-row">
+      <span style="color:var(--text2);font-size:.75rem">#${String(h.round).padStart(4,'0')}</span>
+      <span style="font-weight:700;color:${h.result==='chan'?'#80ff80':'#da8fff'}">${h.result.toUpperCase()} (${h.sum})</span>
+      <span style="font-size:.75rem;color:var(--text2)">${h.dice?h.dice.join('-'):'-'}</span>
+    </div>`).join('');
+}
+
+// ACCOUNT LOOKUP
+let currentLookupUser = null;
+
+function lookupAccount() {
+  const name = document.getElementById('lookupInput').value.trim();
+  if (!name) return;
+  const user = GameDB.getUser(name);
+  const result = document.getElementById('accountResult');
+  if (!user) {
+    showToast('❌ Không tìm thấy tài khoản!', 'err');
+    result.style.display = 'none';
+    return;
+  }
+  currentLookupUser = name;
+  document.getElementById('accName').textContent = '👤 ' + name;
+  document.getElementById('accBal').textContent = Utils.formatFull(user.balance);
+  document.getElementById('accInfo').textContent = `Tổng thắng: ${Utils.formatFull(user.totalWin||0)} | Tham gia: ${new Date(user.joinDate||Date.now()).toLocaleDateString('vi-VN')}`;
+  result.style.display = 'block';
+}
+
+function setAccountBalance(mode) {
+  if (!currentLookupUser) return;
+  const val = parseFloat(document.getElementById('editBalInput').value);
+  if (isNaN(val) || val < 0) return showToast('❌ Giá trị không hợp lệ!', 'err');
+  const user = GameDB.getUser(currentLookupUser);
+  if (!user) return;
+  if (mode === 'set') GameDB.setBalance(currentLookupUser, val);
+  else if (mode === 'add') GameDB.setBalance(currentLookupUser, user.balance + val);
+  else if (mode === 'sub') GameDB.setBalance(currentLookupUser, Math.max(0, user.balance - val));
+  lookupAccount();
+  loadStats();
+  showToast(`✅ Đã cập nhật số dư ${currentLookupUser}!`);
+}
+
+// CODE GENERATION
+let selectedCodeAmt = 0;
+
+function selectCodeAmt(amt) {
+  selectedCodeAmt = amt;
+  document.querySelectorAll('.code-amt-btn').forEach(b =>
+    b.classList.toggle('active', b.textContent === Utils.formatMoney(amt).replace('K','K'))
+  );
+  // simpler approach
+  document.querySelectorAll('.code-amt-btn').forEach(b => b.classList.remove('active'));
+  const labels = {10000:'10K',20000:'20K',50000:'50K',100000:'100K',200000:'200K',500000:'500K',1000000:'1M',5000000:'5M'};
+  document.querySelectorAll('.code-amt-btn').forEach(b => { if(b.textContent === labels[amt]) b.classList.add('active'); });
+  document.getElementById('selectedAmt').textContent = 'Mệnh giá: ' + Utils.formatFull(amt);
+}
+
+function generateCode() {
+  if (!selectedCodeAmt) return showToast('⚠️ Chọn mệnh giá trước!', 'err');
+  const code = Utils.genCode(10);
+  GameDB.createCode(code, selectedCodeAmt);
+  document.getElementById('generatedCode').textContent = code;
+  document.getElementById('generatedInfo').textContent = `Trị giá: ${Utils.formatFull(selectedCodeAmt)} — Sử dụng một lần`;
+  document.getElementById('codeResultBox').style.display = 'block';
+  loadCodesHistory();
+  showToast(`✅ Tạo code ${code} (${Utils.formatFull(selectedCodeAmt)})!`);
+}
+
+function copyCode() {
+  const code = document.getElementById('generatedCode').textContent;
+  navigator.clipboard.writeText(code).then(() => showToast('📋 Đã sao chép code!')).catch(() => {
+    const el = document.createElement('textarea');
+    el.value = code; document.body.appendChild(el); el.select();
+    document.execCommand('copy'); document.body.removeChild(el);
+    showToast('📋 Đã sao chép code!');
+  });
+}
+
+function loadCodesHistory() {
+  const codes = GameDB.getCodes();
+  const el = document.getElementById('codesHistory');
+  const entries = Object.entries(codes).sort((a,b) => b[1].createdAt - a[1].createdAt).slice(0,20);
+  if (!entries.length) { el.innerHTML = '<div style="color:var(--text2);font-size:.85rem;padding:6px">Chưa có code nào</div>'; return; }
+  el.innerHTML = entries.map(([code, data]) => `
+    <div class="code-row ${data.used?'used':''}">
+      <span class="code-val">${code}</span>
+      <span class="code-amt">${Utils.formatFull(data.amount)}</span>
+      <span class="code-status">${data.used ? '✓ '+data.usedBy : '✅ Còn'}</span>
+    </div>`).join('');
+}
+
+function clearUsedCodes() {
+  const codes = GameDB.getCodes();
+  const filtered = {};
+  Object.entries(codes).forEach(([k,v]) => { if(!v.used) filtered[k] = v; });
+  localStorage.setItem('tx_codes', JSON.stringify(filtered));
+  loadCodesHistory();
+  showToast('🗑️ Đã xoá code đã dùng!');
+}
+
+// STATS
+function loadStats() {
+  const users = GameDB.getUsers();
+  const entries = Object.entries(users);
+  const totalUsers = entries.length;
+  const totalBalance = entries.reduce((s,[,u]) => s+(u.balance||0), 0);
+  const totalWin = entries.reduce((s,[,u]) => s+(u.totalWin||0), 0);
+  const txRounds = GameDB.getTXHistory().length;
+  const clRounds = GameDB.getCLHistory().length;
+  const apRounds = GameDB.getAPHistory().length;
+  const codes = GameDB.getCodes();
+  const usedCodes = Object.values(codes).filter(c=>c.used).length;
+
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-item"><div class="stat-val">${totalUsers}</div><div class="stat-lbl">Tài Khoản</div></div>
+    <div class="stat-item"><div class="stat-val">${Utils.formatMoney(totalBalance)}</div><div class="stat-lbl">Tổng Số Dư</div></div>
+    <div class="stat-item"><div class="stat-val">${txRounds + clRounds + apRounds}</div><div class="stat-lbl">Tổng Phiên</div></div>
+    <div class="stat-item"><div class="stat-val">${usedCodes}</div><div class="stat-lbl">Code Đã Dùng</div></div>
+    <div class="stat-item"><div class="stat-val">${Utils.formatMoney(totalWin)}</div><div class="stat-lbl">Tổng Thắng</div></div>
+    <div class="stat-item"><div class="stat-val">${txRounds}</div><div class="stat-lbl">Phiên Tài Xỉu</div></div>
+  `;
+
+  // All accounts table
+  const tbody = document.getElementById('allAccountsTbody');
+  const sorted = entries.sort((a,b) => (b[1].balance||0)-(a[1].balance||0));
+  tbody.innerHTML = sorted.map(([name, u]) => `
+    <tr>
+      <td style="font-weight:600">${name}</td>
+      <td style="color:var(--gold3)">${Utils.formatFull(u.balance||0)}</td>
+      <td style="color:#c090ff">${Utils.formatMoney(u.totalWin||0)}</td>
+    </tr>`).join('');
+}
+
+// QUICK ACTIONS
+function massAddBalance() {
+  const val = parseFloat(document.getElementById('massAddInput').value);
+  if (isNaN(val) || val <= 0) return showToast('❌ Giá trị không hợp lệ!', 'err');
+  const users = GameDB.getUsers();
+  Object.keys(users).forEach(name => {
+    users[name].balance = (users[name].balance || 0) + val;
+  });
+  GameDB.saveUsers(users);
+  loadStats();
+  showToast(`✅ Đã cộng ${Utils.formatFull(val)} cho ${Object.keys(users).length} tài khoản!`);
+  document.getElementById('massAddInput').value = '';
+}
+
+function resetUserBalance() {
+  const name = document.getElementById('resetUserInput').value.trim();
+  if (!name) return;
+  const user = GameDB.getUser(name);
+  if (!user) return showToast('❌ Tài khoản không tồn tại!', 'err');
+  GameDB.setBalance(name, 50000);
+  loadStats();
+  showToast(`✅ Reset ${name} về 50.000đ!`);
+  document.getElementById('resetUserInput').value = '';
+}
+
+function deleteUser() {
+  const name = document.getElementById('deleteUserInput').value.trim();
+  if (!name) return;
+  if (!confirm(`Xoá tài khoản "${name}"?`)) return;
+  const users = GameDB.getUsers();
+  if (!users[name]) return showToast('❌ Không tìm thấy!', 'err');
+  delete users[name];
+  GameDB.saveUsers(users);
+  loadStats();
+  showToast(`🗑️ Đã xoá ${name}!`);
+  document.getElementById('deleteUserInput').value = '';
+}
+</script>
+</body>
+</html>
+HTMLEOF
+echo "ketqua.html written: $(wc -l < /mnt/user-data/outputs/ketqua.html) lines"
