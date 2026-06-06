@@ -1,0 +1,1549 @@
+cat > /mnt/user-data/outputs/taixiu.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎲 SunWin - Cổng Game Đỉnh Cao</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#f0c040;--gold2:#e8a020;--gold3:#ffd700;
+  --dark:#0a0506;--dark2:#150c0a;--dark3:#1e100e;
+  --red:#c0392b;--red2:#e74c3c;
+  --green:#27ae60;--green2:#2ecc71;
+  --panel:#1a0e0c;--panel2:#221410;
+  --border:rgba(240,192,64,0.4);
+  --text:#f5e6c8;--text2:#c9a96e;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--dark);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+/* ===== AUTH SCREENS ===== */
+#authScreen{
+  position:fixed;inset:0;z-index:9999;
+  background:radial-gradient(ellipse at center, #1a0a08 0%, #0a0304 60%, #000 100%);
+  display:flex;align-items:center;justify-content:center;
+}
+.auth-box{
+  background:linear-gradient(145deg,#1e1008,#120806);
+  border:2px solid var(--gold2);
+  border-radius:20px;padding:40px;width:420px;max-width:95vw;
+  box-shadow:0 0 60px rgba(240,160,32,0.3),inset 0 1px 0 rgba(255,255,255,0.05);
+  animation:fadeIn .5s ease;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+.auth-logo{text-align:center;margin-bottom:30px;}
+.auth-logo .logo-text{
+  font-family:'Cinzel Decorative',serif;font-size:2.2rem;font-weight:900;
+  background:linear-gradient(to bottom,#fff8c0,#f0c040,#b8860b);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-shadow:none;filter:drop-shadow(0 0 10px rgba(240,192,64,0.5));
+}
+.auth-logo .logo-sub{color:var(--text2);font-size:.9rem;margin-top:4px;}
+.auth-tabs{display:flex;gap:0;margin-bottom:25px;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+.auth-tab{
+  flex:1;padding:12px;text-align:center;cursor:pointer;
+  background:rgba(255,255,255,0.03);color:var(--text2);
+  font-family:'Rajdhani',sans-serif;font-weight:600;font-size:1rem;
+  transition:all .3s;border:none;
+}
+.auth-tab.active{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1a0a00;font-weight:700;}
+.auth-form{display:flex;flex-direction:column;gap:14px;}
+.auth-form input{
+  background:rgba(255,255,255,0.05);border:1px solid var(--border);
+  color:var(--text);padding:14px 16px;border-radius:10px;font-size:1rem;
+  font-family:'Rajdhani',sans-serif;font-weight:500;outline:none;
+  transition:border-color .3s;
+}
+.auth-form input:focus{border-color:var(--gold);}
+.auth-form input::placeholder{color:rgba(200,160,100,0.4);}
+.btn-primary{
+  background:linear-gradient(135deg,#b8860b,var(--gold),#b8860b);
+  color:#1a0800;font-weight:700;padding:14px;border-radius:10px;
+  border:none;cursor:pointer;font-size:1.1rem;font-family:'Rajdhani',sans-serif;
+  letter-spacing:1px;transition:all .3s;text-transform:uppercase;
+  box-shadow:0 4px 20px rgba(240,192,64,0.3);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(240,192,64,0.5);}
+.auth-msg{text-align:center;padding:8px;border-radius:8px;font-size:.9rem;display:none;}
+.auth-msg.err{background:rgba(192,57,43,0.2);border:1px solid var(--red2);color:#ff8080;}
+.auth-msg.ok{background:rgba(39,174,96,0.2);border:1px solid var(--green2);color:#80ff80;}
+
+/* ===== HEADER ===== */
+#mainApp{display:none;}
+.header{
+  background:linear-gradient(90deg,#0d0604,#1a0c08,#0d0604);
+  border-bottom:2px solid var(--gold2);
+  padding:10px 20px;display:flex;align-items:center;gap:16px;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 4px 20px rgba(0,0,0,0.5);
+}
+.header-logo{
+  font-family:'Cinzel Decorative',serif;font-size:1.3rem;font-weight:900;
+  background:linear-gradient(to bottom,#fffacc,#f0c040,#b8860b);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  white-space:nowrap;
+}
+.header-user{
+  display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);
+  border:1px solid var(--border);border-radius:20px;padding:6px 14px;
+}
+.header-user .avatar{
+  width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--gold2),var(--red));
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;color:#fff;
+}
+.header-balance{
+  display:flex;align-items:center;gap:8px;
+  background:linear-gradient(90deg,rgba(240,192,64,0.1),rgba(240,192,64,0.05));
+  border:1px solid var(--border);border-radius:20px;padding:6px 16px;
+  font-weight:700;font-size:1rem;color:var(--gold3);
+}
+.header-balance span.val{font-size:1.1rem;}
+.btn-logout{
+  margin-left:auto;background:rgba(192,57,43,0.2);border:1px solid rgba(192,57,43,0.4);
+  color:#ff8888;padding:8px 16px;border-radius:10px;cursor:pointer;font-family:'Rajdhani',sans-serif;
+  font-size:.9rem;font-weight:600;transition:all .3s;
+}
+.btn-logout:hover{background:rgba(192,57,43,0.4);}
+
+/* ===== HOME PAGE ===== */
+#homePage{}
+.home-marquee{
+  background:linear-gradient(90deg,var(--dark2),rgba(240,192,64,0.05),var(--dark2));
+  border-bottom:1px solid var(--border);padding:10px 0;overflow:hidden;
+}
+.marquee-inner{
+  display:inline-block;white-space:nowrap;
+  animation:marquee 18s linear infinite;
+  color:var(--gold3);font-size:.95rem;letter-spacing:.5px;
+}
+@keyframes marquee{from{transform:translateX(100vw)}to{transform:translateX(-100%)}}
+
+.home-games{padding:24px 20px;}
+.home-games h2{
+  font-family:'Cinzel Decorative',serif;font-size:1.4rem;
+  color:var(--gold);margin-bottom:20px;
+  text-shadow:0 0 20px rgba(240,192,64,0.3);
+}
+.games-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;
+}
+.game-card{
+  background:linear-gradient(145deg,#1e1008,#150c06);
+  border:1px solid var(--border);border-radius:16px;
+  overflow:hidden;cursor:pointer;transition:all .3s;
+  position:relative;
+}
+.game-card:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 12px 40px rgba(240,192,64,0.2);}
+.game-card-img{
+  height:180px;display:flex;align-items:center;justify-content:center;
+  font-size:5rem;position:relative;overflow:hidden;
+  background:linear-gradient(145deg,rgba(240,192,64,0.05),rgba(192,57,43,0.08));
+}
+.game-card-img .glow{
+  position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(240,192,64,0.08),transparent 70%);
+}
+.game-card-info{padding:14px;}
+.game-card-info .name{font-weight:700;font-size:1.1rem;color:var(--gold3);letter-spacing:.5px;}
+.game-card-info .jackpot{color:var(--text2);font-size:.85rem;margin-top:4px;}
+.game-card-info .jackpot span{color:var(--red2);font-weight:700;}
+.game-card-badge{
+  position:absolute;top:10px;right:10px;
+  background:linear-gradient(135deg,var(--red),var(--red2));
+  color:#fff;font-size:.7rem;font-weight:700;padding:3px 8px;border-radius:10px;
+  text-transform:uppercase;letter-spacing:.5px;
+}
+
+/* CODE REDEEM */
+.code-section{
+  margin:0 20px 30px;
+  background:linear-gradient(145deg,#1a0e0c,#120a08);
+  border:1px solid var(--border);border-radius:16px;padding:20px;
+}
+.code-section h3{color:var(--gold);font-size:1.1rem;margin-bottom:14px;font-family:'Cinzel Decorative',serif;}
+.code-input-row{display:flex;gap:10px;}
+.code-input-row input{
+  flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--border);
+  color:var(--text);padding:12px 16px;border-radius:10px;font-family:'Rajdhani',sans-serif;
+  font-size:1rem;outline:none;letter-spacing:2px;text-transform:uppercase;
+}
+.code-input-row input:focus{border-color:var(--gold);}
+.btn-redeem{
+  background:linear-gradient(135deg,var(--green),var(--green2));
+  color:#fff;font-weight:700;padding:12px 24px;border-radius:10px;
+  border:none;cursor:pointer;font-family:'Rajdhani',sans-serif;font-size:1rem;
+  white-space:nowrap;transition:all .3s;
+}
+.btn-redeem:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(39,174,96,0.4);}
+.code-msg{margin-top:10px;font-size:.9rem;display:none;}
+.code-msg.ok{color:var(--green2);}
+.code-msg.err{color:var(--red2);}
+
+/* ===== GAME PAGES ===== */
+.game-page{display:none;position:fixed;inset:0;z-index:200;overflow-y:auto;}
+.game-page.active{display:block;}
+
+/* TAIXIU & CHAN LE */
+.tx-bg{
+  min-height:100vh;
+  background:radial-gradient(ellipse at top,#1a0c08 0%,#0a0403 50%,#060202 100%);
+  padding:20px;
+}
+.tx-header{
+  display:flex;align-items:center;gap:16px;margin-bottom:24px;
+}
+.btn-back{
+  background:rgba(255,255,255,0.08);border:1px solid var(--border);
+  color:var(--gold);padding:10px 18px;border-radius:10px;cursor:pointer;
+  font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:600;
+  transition:all .3s;
+}
+.btn-back:hover{background:rgba(240,192,64,0.15);}
+.game-title{
+  font-family:'Cinzel Decorative',serif;font-size:1.8rem;font-weight:900;
+  background:linear-gradient(to bottom,#fffacc,#f0c040,#b8860b);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 15px rgba(240,192,64,0.5));
+  display:flex;align-items:center;gap:10px;
+}
+
+.tx-main{display:grid;grid-template-columns:1fr 340px;gap:20px;max-width:1100px;margin:0 auto;}
+@media(max-width:900px){.tx-main{grid-template-columns:1fr;}}
+
+/* BOARD */
+.tx-board{
+  background:linear-gradient(145deg,#1e1008,#150b06);
+  border:2px solid var(--gold2);border-radius:20px;padding:24px;
+  box-shadow:0 0 40px rgba(240,192,64,0.1);
+}
+.round-info{text-align:center;margin-bottom:20px;}
+.round-id{color:var(--text2);font-size:.9rem;}
+.round-id span{color:var(--gold);font-weight:700;}
+
+/* TIMER RING */
+.timer-wrap{display:flex;justify-content:center;margin:20px 0;}
+.timer-ring{
+  position:relative;width:130px;height:130px;
+}
+.timer-ring svg{transform:rotate(-90deg);width:130px;height:130px;}
+.timer-ring .bg-ring{fill:none;stroke:rgba(240,192,64,0.1);stroke-width:8;}
+.timer-ring .prog-ring{fill:none;stroke:url(#timerGrad);stroke-width:8;stroke-linecap:round;
+  stroke-dasharray:351;stroke-dashoffset:0;transition:stroke-dashoffset .5s linear;}
+.timer-num{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Cinzel Decorative',serif;font-size:2rem;font-weight:900;
+  color:var(--gold3);
+}
+
+/* BETTING SIDES */
+.tx-sides{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;}
+.tx-side{
+  border-radius:16px;padding:18px;text-align:center;cursor:pointer;
+  border:2px solid transparent;transition:all .3s;position:relative;overflow:hidden;
+}
+.tx-side:before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;border-radius:14px;}
+.tx-side.tai{background:linear-gradient(145deg,#1a0e18,#0e0810);}
+.tx-side.tai:before{background:radial-gradient(circle,rgba(192,57,43,0.2),transparent);}
+.tx-side.xiu{background:linear-gradient(145deg,#0e1418,#080c10);}
+.tx-side.xiu:before{background:radial-gradient(circle,rgba(52,152,219,0.2),transparent);}
+.tx-side.selected,.tx-side:hover{border-color:var(--gold);}
+.tx-side.selected:before{opacity:1;}
+.tx-side .side-label{
+  font-family:'Cinzel Decorative',serif;font-size:2rem;font-weight:900;
+  margin-bottom:8px;
+}
+.tx-side.tai .side-label{color:#ff6b6b;}
+.tx-side.xiu .side-label{color:#6bb5ff;}
+.tx-side .side-total{
+  color:var(--text2);font-size:.8rem;margin-bottom:10px;
+}
+.tx-side .side-total span{color:var(--gold);font-weight:700;}
+.btn-dat{
+  background:linear-gradient(135deg,#8b6914,var(--gold2));
+  color:#1a0800;font-weight:700;padding:8px 16px;border-radius:8px;
+  border:none;cursor:pointer;font-family:'Rajdhani',sans-serif;font-size:.95rem;
+  width:100%;transition:all .3s;
+}
+.btn-dat:hover{filter:brightness(1.2);}
+.btn-dat:disabled{opacity:.4;cursor:not-allowed;}
+
+/* CHIPS */
+.chips-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:16px 0;}
+.chip{
+  padding:7px 14px;border-radius:20px;cursor:pointer;font-weight:700;
+  font-family:'Rajdhani',sans-serif;font-size:.9rem;
+  border:1px solid var(--border);color:var(--gold);
+  background:rgba(240,192,64,0.08);transition:all .3s;
+}
+.chip:hover,.chip.active{background:linear-gradient(135deg,rgba(240,192,64,0.25),rgba(240,192,64,0.1));border-color:var(--gold);}
+.bet-display{
+  text-align:center;color:var(--text2);font-size:.9rem;
+  padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;margin:8px 0;
+}
+.bet-display span{color:var(--gold3);font-weight:700;font-size:1.1rem;}
+
+/* BOWL / DICE */
+.bowl-area{
+  position:relative;height:180px;display:flex;align-items:center;justify-content:center;
+  margin:20px 0;
+}
+.bowl-wrap{
+  position:relative;width:200px;height:140px;cursor:grab;
+}
+.bowl-svg{position:absolute;inset:0;width:100%;height:100%;transition:transform .6s ease;}
+.bowl-wrap.lifted .bowl-svg{transform:translateY(-100px) scale(0.8);opacity:0;}
+.dice-area{
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  display:flex;gap:12px;opacity:0;transition:opacity .5s .4s;
+  pointer-events:none;
+}
+.bowl-wrap.lifted .dice-area{opacity:1;}
+.die{
+  width:52px;height:52px;background:linear-gradient(145deg,#fff9ee,#f0d080);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;box-shadow:0 4px 12px rgba(0,0,0,0.4),inset 0 1px 2px rgba(255,255,255,0.6);
+  color:#1a0800;font-weight:900;border:2px solid rgba(240,192,64,0.5);
+  animation:dieIn .4s ease both;
+}
+.die:nth-child(2){animation-delay:.1s}
+.die:nth-child(3){animation-delay:.2s}
+@keyframes dieIn{from{transform:scale(0) rotate(-30deg)}to{transform:scale(1) rotate(0)}}
+
+.result-badge{
+  text-align:center;margin:10px 0;padding:12px;border-radius:12px;
+  font-family:'Cinzel Decorative',serif;font-size:1.4rem;font-weight:900;
+  display:none;animation:fadeIn .4s ease;
+}
+.result-badge.tai{background:rgba(192,57,43,0.2);color:#ff6b6b;border:1px solid rgba(192,57,43,0.4);}
+.result-badge.xiu{background:rgba(52,152,219,0.2);color:#6bb5ff;border:1px solid rgba(52,152,219,0.4);}
+.result-badge.chan{background:rgba(39,174,96,0.2);color:#80ff80;border:1px solid rgba(39,174,96,0.4);}
+.result-badge.le{background:rgba(155,89,182,0.2);color:#da8fff;border:1px solid rgba(155,89,182,0.4);}
+
+.game-status-msg{
+  text-align:center;padding:8px;font-size:.9rem;color:var(--text2);
+  background:rgba(255,255,255,0.03);border-radius:8px;margin:8px 0;
+}
+
+/* RIGHT PANEL */
+.tx-panel{display:flex;flex-direction:column;gap:16px;}
+.panel-box{
+  background:linear-gradient(145deg,#1a0e0c,#120a08);
+  border:1px solid var(--border);border-radius:16px;padding:16px;
+}
+.panel-box h3{
+  font-family:'Cinzel Decorative',serif;font-size:.95rem;color:var(--gold);
+  margin-bottom:12px;display:flex;align-items:center;gap:8px;
+  padding-bottom:8px;border-bottom:1px solid var(--border);
+}
+
+/* HISTORY DOTS */
+.hist-dots{display:flex;flex-wrap:wrap;gap:6px;}
+.hist-dot{
+  width:36px;height:36px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;font-weight:700;
+}
+.hist-dot.tai{background:rgba(192,57,43,0.25);color:#ff8080;border:1px solid rgba(192,57,43,0.3);}
+.hist-dot.xiu{background:rgba(52,152,219,0.25);color:#80b5ff;border:1px solid rgba(52,152,219,0.3);}
+.hist-dot.chan{background:rgba(39,174,96,0.25);color:#80ff80;border:1px solid rgba(39,174,96,0.3);}
+.hist-dot.le{background:rgba(155,89,182,0.25);color:#da8fff;border:1px solid rgba(155,89,182,0.3);}
+
+/* MY BETS */
+.my-bets{display:flex;flex-direction:column;gap:6px;max-height:200px;overflow-y:auto;}
+.my-bet-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.03);font-size:.85rem;
+}
+.my-bet-row.win{background:rgba(39,174,96,0.1);}
+.my-bet-row.lose{background:rgba(192,57,43,0.1);}
+.my-bet-row .bet-choice{font-weight:700;}
+.my-bet-row .bet-win{color:var(--green2);font-weight:700;}
+.my-bet-row .bet-lose{color:var(--red2);font-weight:700;}
+
+/* LEADERBOARD */
+.lb-table{width:100%;border-collapse:collapse;}
+.lb-table th{color:var(--gold2);font-size:.8rem;padding:6px 8px;border-bottom:1px solid var(--border);text-align:left;}
+.lb-table td{padding:8px;font-size:.85rem;border-bottom:1px solid rgba(240,192,64,0.05);}
+.lb-table tr:last-child td{border:none;}
+.lb-rank{font-weight:700;color:var(--gold);}
+.lb-rank.r1{color:#ffd700;font-size:1.1rem;}
+.lb-rank.r2{color:#c0c0c0;}
+.lb-rank.r3{color:#cd7f32;}
+.lb-name{font-weight:600;}
+.lb-win{color:var(--red2);font-weight:700;text-align:right;}
+
+/* ===== AIRPLANE GAME ===== */
+.ap-bg{
+  min-height:100vh;
+  background:linear-gradient(180deg,#020b18 0%,#041525 30%,#03101e 60%,#020a14 100%);
+  padding:20px;position:relative;overflow:hidden;
+}
+.ap-sky{position:fixed;inset:0;pointer-events:none;z-index:0;}
+.ap-sky .star{
+  position:absolute;background:#fff;border-radius:50%;animation:twinkle 3s infinite alternate;
+}
+@keyframes twinkle{from{opacity:.3}to{opacity:1}}
+.ap-content{position:relative;z-index:1;}
+
+.ap-main{display:grid;grid-template-columns:1fr 300px;gap:20px;max-width:1100px;margin:20px auto 0;}
+@media(max-width:900px){.ap-main{grid-template-columns:1fr;}}
+
+.ap-board{
+  background:rgba(4,21,37,0.8);border:1px solid rgba(52,152,219,0.3);
+  border-radius:20px;padding:20px;backdrop-filter:blur(10px);
+  min-height:400px;position:relative;overflow:hidden;
+}
+
+.ap-flight-area{
+  height:300px;position:relative;
+  background:linear-gradient(180deg,rgba(52,152,219,0.03),rgba(52,152,219,0.01));
+  border-radius:12px;margin-bottom:20px;overflow:hidden;
+}
+.ap-ground{
+  position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,rgba(52,152,219,0.3),transparent);
+}
+.ap-plane{
+  position:absolute;bottom:40px;left:50px;font-size:2.5rem;
+  transition:all .3s ease;
+  filter:drop-shadow(0 0 10px rgba(52,152,219,0.6));
+}
+.ap-plane.flying{animation:planeFly 1s ease-in-out infinite alternate;}
+@keyframes planeFly{from{transform:translateY(0) rotate(-5deg)}to{transform:translateY(-15px) rotate(5deg)}}
+.ap-plane.exploded{animation:explode .5s ease forwards;font-size:3rem;}
+@keyframes explode{0%{transform:scale(1)}50%{transform:scale(2);filter:drop-shadow(0 0 30px #ff6600);}100%{transform:scale(0);opacity:0;}}
+
+.ap-multiplier{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:'Cinzel Decorative',serif;font-size:3rem;font-weight:900;
+  color:var(--gold3);text-shadow:0 0 30px rgba(240,192,64,0.6);
+  transition:all .2s;
+}
+.ap-multiplier.danger{color:#ff4444;text-shadow:0 0 30px rgba(255,68,68,0.6);}
+
+.ap-trail{position:absolute;bottom:60px;left:50px;right:0;height:2px;
+  background:linear-gradient(90deg,rgba(52,152,219,0.6),transparent);
+  transform-origin:left;transition:width .3s;}
+
+.ap-timer-bar{
+  height:6px;background:rgba(255,255,255,0.1);border-radius:3px;margin-bottom:16px;overflow:hidden;
+}
+.ap-timer-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--gold3),var(--red2));
+  transition:width .5s linear;border-radius:3px;}
+
+.ap-bet-section{display:flex;flex-direction:column;gap:12px;}
+.chips-row-sm{display:flex;flex-wrap:wrap;gap:6px;}
+.ap-bet-amount{
+  text-align:center;font-size:1.1rem;color:var(--gold3);font-weight:700;
+  padding:8px;background:rgba(255,255,255,0.04);border-radius:8px;
+}
+
+.btn-bet-ap{
+  background:linear-gradient(135deg,var(--green),var(--green2));
+  color:#fff;font-weight:700;padding:12px;border-radius:12px;border:none;
+  cursor:pointer;font-family:'Rajdhani',sans-serif;font-size:1.1rem;
+  transition:all .3s;text-transform:uppercase;letter-spacing:1px;
+  box-shadow:0 4px 20px rgba(39,174,96,0.3);
+}
+.btn-bet-ap:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 30px rgba(39,174,96,0.5);}
+.btn-bet-ap:disabled{opacity:.4;cursor:not-allowed;}
+
+.btn-land{
+  background:linear-gradient(135deg,#ff6600,#ff8c00);
+  color:#fff;font-weight:700;padding:12px;border-radius:12px;border:none;
+  cursor:pointer;font-family:'Rajdhani',sans-serif;font-size:1.1rem;
+  transition:all .3s;text-transform:uppercase;letter-spacing:1px;
+  box-shadow:0 4px 20px rgba(255,102,0,0.3);
+  display:none;
+}
+.btn-land.visible{display:block;}
+.btn-land:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(255,102,0,0.5);}
+
+.ap-win-msg{
+  position:absolute;top:20px;left:50%;transform:translateX(-50%);
+  background:rgba(39,174,96,0.9);color:#fff;padding:12px 24px;border-radius:12px;
+  font-weight:700;font-size:1.2rem;white-space:nowrap;display:none;
+  animation:popIn .3s ease;z-index:10;
+}
+.ap-lose-msg{
+  position:absolute;top:20px;left:50%;transform:translateX(-50%);
+  background:rgba(192,57,43,0.9);color:#fff;padding:12px 24px;border-radius:12px;
+  font-weight:700;font-size:1.2rem;white-space:nowrap;display:none;
+  animation:popIn .3s ease;z-index:10;
+}
+@keyframes popIn{from{transform:translateX(-50%) scale(0)}to{transform:translateX(-50%) scale(1)}}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:rgba(255,255,255,0.02);}
+::-webkit-scrollbar-thumb{background:var(--gold2);border-radius:2px;}
+
+/* CHAT BOX */
+.chat-box{
+  position:fixed;bottom:20px;right:20px;z-index:500;
+  background:linear-gradient(145deg,#1e1008,#150b06);
+  border:1px solid var(--border);border-radius:16px;
+  width:300px;overflow:hidden;
+  box-shadow:0 8px 40px rgba(0,0,0,0.5);
+  transition:all .3s;
+}
+.chat-box.collapsed .chat-body{display:none;}
+.chat-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;background:rgba(240,192,64,0.1);cursor:pointer;
+  border-bottom:1px solid var(--border);
+}
+.chat-header span{font-weight:700;color:var(--gold);}
+.chat-messages{height:200px;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:6px;}
+.chat-msg{font-size:.8rem;padding:4px 0;}
+.chat-msg .chat-user{color:var(--gold2);font-weight:700;}
+.chat-msg .chat-text{color:var(--text2);}
+.chat-input-row{display:flex;gap:6px;padding:10px;border-top:1px solid var(--border);}
+.chat-input-row input{
+  flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--border);
+  color:var(--text);padding:8px 10px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:.85rem;outline:none;
+}
+.chat-input-row button{
+  background:var(--gold2);color:#1a0800;border:none;padding:8px 12px;border-radius:8px;
+  cursor:pointer;font-weight:700;font-family:'Rajdhani',sans-serif;
+}
+
+/* TOAST */
+.toast{
+  position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);
+  background:linear-gradient(135deg,rgba(39,174,96,0.95),rgba(46,204,113,0.95));
+  color:#fff;padding:12px 24px;border-radius:12px;font-weight:700;
+  z-index:9999;opacity:0;pointer-events:none;transition:all .3s;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.err{background:linear-gradient(135deg,rgba(192,57,43,0.95),rgba(231,76,60,0.95));}
+
+/* NAV BOTTOM */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:linear-gradient(90deg,#0d0604,#1a0c08);
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-around;padding:8px 0;
+}
+.nav-btn{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  background:none;border:none;cursor:pointer;padding:6px 12px;
+  color:var(--text2);font-family:'Rajdhani',sans-serif;font-size:.75rem;font-weight:600;
+  transition:all .3s;border-radius:10px;
+}
+.nav-btn.active,.nav-btn:hover{color:var(--gold);}
+.nav-btn .nav-icon{font-size:1.4rem;}
+</style>
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="authScreen">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <div class="logo-text">☀ SunWin</div>
+      <div class="logo-sub">🎲 Cổng Game Đỉnh Cao 2025 🎲</div>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Đăng Nhập</button>
+      <button class="auth-tab" onclick="switchTab('register')">Đăng Ký</button>
+    </div>
+    <div class="auth-form" id="loginForm">
+      <input type="text" id="loginUser" placeholder="Tên tài khoản" autocomplete="off">
+      <input type="password" id="loginPass" placeholder="Mật khẩu">
+      <button class="btn-primary" onclick="doLogin()">🔓 Đăng Nhập</button>
+      <div class="auth-msg" id="loginMsg"></div>
+    </div>
+    <div class="auth-form" id="registerForm" style="display:none">
+      <input type="text" id="regUser" placeholder="Tên tài khoản (4-20 ký tự)">
+      <input type="password" id="regPass" placeholder="Mật khẩu">
+      <input type="password" id="regPass2" placeholder="Nhập lại mật khẩu">
+      <button class="btn-primary" onclick="doRegister()">✨ Tạo Tài Khoản</button>
+      <div class="auth-msg" id="registerMsg"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- MAIN APP -->
+<div id="mainApp">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-logo">☀ SunWin</div>
+    <div class="header-user">
+      <div class="avatar" id="headerAvatar">?</div>
+      <span id="headerName" style="font-weight:600;color:var(--gold)">-</span>
+    </div>
+    <div class="header-balance">
+      💰 <span class="val" id="headerBalance">0</span>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">Đăng Xuất</button>
+  </div>
+
+  <!-- HOME PAGE -->
+  <div id="homePage">
+    <div class="home-marquee">
+      <span class="marquee-inner">🎉 Chào mừng đến SunWin! Đăng nhập mỗi ngày nhận thưởng! 💰 Jackpot tài xỉu đang ở mức cao! 🎲 Hãy thử vận may ngay hôm nay! ✈️ Máy Bay - Nhân x100 chờ bạn! 🍀 Chơi trách nhiệm - Thắng thật!</span>
+    </div>
+    <div class="home-games">
+      <h2>🎮 Trò Chơi</h2>
+      <div class="games-grid">
+        <div class="game-card" onclick="openGame('taixiu')">
+          <div class="game-card-img">🎲<div class="glow"></div></div>
+          <div class="game-card-info">
+            <div class="name">🎲 TÀI XỈU</div>
+            <div class="jackpot">Cược từ <span>10K</span></div>
+          </div>
+          <div class="game-card-badge">HOT</div>
+        </div>
+        <div class="game-card" onclick="openGame('airplane')">
+          <div class="game-card-img">✈️<div class="glow"></div></div>
+          <div class="game-card-info">
+            <div class="name">✈️ MÁY BAY</div>
+            <div class="jackpot">Nhân đến <span>x∞</span></div>
+          </div>
+          <div class="game-card-badge">NEW</div>
+        </div>
+        <div class="game-card" onclick="openGame('chanle')">
+          <div class="game-card-img">🎯<div class="glow"></div></div>
+          <div class="game-card-info">
+            <div class="name">🎯 CHẴN LẺ</div>
+            <div class="jackpot">Cược từ <span>10K</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="code-section">
+      <h3>🎁 Nhập Code Nhận Thưởng</h3>
+      <div class="code-input-row">
+        <input type="text" id="codeInput" placeholder="NHẬP CODE TẠI ĐÂY..." maxlength="12">
+        <button class="btn-redeem" onclick="redeemCode()">Nhận Thưởng</button>
+      </div>
+      <div class="code-msg" id="codeMsg"></div>
+    </div>
+  </div>
+
+  <!-- ===== TÀI XỈU GAME ===== -->
+  <div class="game-page" id="txPage">
+    <div class="tx-bg">
+      <div class="tx-header">
+        <button class="btn-back" onclick="closeGame('txPage')">← Quay Lại</button>
+        <div class="game-title">🎲 TÀI XỈU</div>
+      </div>
+      <div class="tx-main">
+        <!-- BOARD -->
+        <div class="tx-board">
+          <div class="round-info">
+            <div class="round-id">Phiên: <span id="txRoundId">#000001</span></div>
+          </div>
+          <!-- SVG gradient defs -->
+          <svg width="0" height="0" style="position:absolute">
+            <defs>
+              <linearGradient id="timerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#f0c040"/>
+                <stop offset="100%" style="stop-color:#e8a020"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <!-- TIMER -->
+          <div class="timer-wrap">
+            <div class="timer-ring">
+              <svg viewBox="0 0 130 130">
+                <circle class="bg-ring" cx="65" cy="65" r="56"/>
+                <circle class="prog-ring" id="txTimerRing" cx="65" cy="65" r="56"/>
+              </svg>
+              <div class="timer-num" id="txTimerNum">35</div>
+            </div>
+          </div>
+          <!-- BOWL & DICE -->
+          <div class="bowl-area">
+            <div class="bowl-wrap" id="txBowlWrap" onclick="liftBowl('tx')">
+              <svg class="bowl-svg" viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="bowlGrad" cx="50%" cy="40%">
+                    <stop offset="0%" stop-color="#5a3e1a"/>
+                    <stop offset="60%" stop-color="#2c1a08"/>
+                    <stop offset="100%" stop-color="#1a0e04"/>
+                  </radialGradient>
+                  <radialGradient id="bowlShine" cx="35%" cy="30%">
+                    <stop offset="0%" stop-color="rgba(255,220,80,0.3)"/>
+                    <stop offset="100%" stop-color="transparent"/>
+                  </radialGradient>
+                </defs>
+                <ellipse cx="100" cy="30" rx="88" ry="18" fill="url(#bowlGrad)" stroke="#f0c040" stroke-width="2"/>
+                <path d="M12,30 Q12,130 100,130 Q188,130 188,30" fill="url(#bowlGrad)" stroke="#f0c040" stroke-width="2"/>
+                <ellipse cx="100" cy="30" rx="88" ry="18" fill="url(#bowlShine)"/>
+                <ellipse cx="100" cy="30" rx="70" ry="12" fill="none" stroke="rgba(240,192,64,0.3)" stroke-width="1"/>
+                <text x="100" y="95" text-anchor="middle" fill="rgba(240,192,64,0.15)" font-size="40" font-family="serif">🎲</text>
+              </svg>
+              <div class="dice-area" id="txDiceArea">
+                <div class="die" id="txD1">?</div>
+                <div class="die" id="txD2">?</div>
+                <div class="die" id="txD3">?</div>
+              </div>
+            </div>
+          </div>
+          <div class="result-badge" id="txResultBadge"></div>
+          <div class="game-status-msg" id="txStatusMsg">🎲 Đặt cược vào TÀI hoặc XỈU</div>
+          <!-- CHIPS -->
+          <div class="chips-row">
+            <div class="chip" onclick="selectChip(10000,'tx')">10K</div>
+            <div class="chip" onclick="selectChip(20000,'tx')">20K</div>
+            <div class="chip" onclick="selectChip(50000,'tx')">50K</div>
+            <div class="chip" onclick="selectChip(100000,'tx')">100K</div>
+            <div class="chip" onclick="selectChip(200000,'tx')">200K</div>
+            <div class="chip" onclick="selectChip(500000,'tx')">500K</div>
+          </div>
+          <div class="bet-display">Đặt cược: <span id="txBetAmt">0 đ</span></div>
+          <!-- SIDES -->
+          <div class="tx-sides">
+            <div class="tx-side tai" id="txSideTai" onclick="placeBet('tx','tai')">
+              <div class="side-label">TÀI</div>
+              <div class="side-total">Tổng cược: <span id="txTotalTai">0</span></div>
+              <button class="btn-dat" id="txBtnTai">ĐẶT CƯỢC</button>
+            </div>
+            <div class="tx-side xiu" id="txSideXiu" onclick="placeBet('tx','xiu')">
+              <div class="side-label">XỈU</div>
+              <div class="side-total">Tổng cược: <span id="txTotalXiu">0</span></div>
+              <button class="btn-dat" id="txBtnXiu">ĐẶT CƯỢC</button>
+            </div>
+          </div>
+        </div>
+        <!-- RIGHT PANEL -->
+        <div class="tx-panel">
+          <div class="panel-box">
+            <h3>📊 Lịch Sử Phiên</h3>
+            <div class="hist-dots" id="txHistDots"></div>
+          </div>
+          <div class="panel-box">
+            <h3>💰 Lịch Sử Thắng</h3>
+            <div class="my-bets" id="txMyBets"></div>
+          </div>
+          <div class="panel-box">
+            <h3>🏆 Bảng Xếp Hạng</h3>
+            <table class="lb-table">
+              <thead><tr><th>Hạng</th><th>Tên</th><th style="text-align:right">Thắng</th></tr></thead>
+              <tbody id="txLeaderboard"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHẴN LẺ GAME ===== -->
+  <div class="game-page" id="clPage">
+    <div class="tx-bg">
+      <div class="tx-header">
+        <button class="btn-back" onclick="closeGame('clPage')">← Quay Lại</button>
+        <div class="game-title">🎯 CHẴN LẺ</div>
+      </div>
+      <div class="tx-main">
+        <div class="tx-board">
+          <div class="round-info">
+            <div class="round-id">Phiên: <span id="clRoundId">#000001</span></div>
+          </div>
+          <div class="timer-wrap">
+            <div class="timer-ring">
+              <svg viewBox="0 0 130 130">
+                <circle class="bg-ring" cx="65" cy="65" r="56"/>
+                <circle class="prog-ring" id="clTimerRing" cx="65" cy="65" r="56"/>
+              </svg>
+              <div class="timer-num" id="clTimerNum">35</div>
+            </div>
+          </div>
+          <div class="bowl-area">
+            <div class="bowl-wrap" id="clBowlWrap" onclick="liftBowl('cl')">
+              <svg class="bowl-svg" viewBox="0 0 200 140">
+                <defs>
+                  <radialGradient id="bowlGrad2" cx="50%" cy="40%">
+                    <stop offset="0%" stop-color="#1a3a5a"/>
+                    <stop offset="60%" stop-color="#0a1a2c"/>
+                    <stop offset="100%" stop-color="#04101e"/>
+                  </radialGradient>
+                </defs>
+                <ellipse cx="100" cy="30" rx="88" ry="18" fill="url(#bowlGrad2)" stroke="#4a9ede" stroke-width="2"/>
+                <path d="M12,30 Q12,130 100,130 Q188,130 188,30" fill="url(#bowlGrad2)" stroke="#4a9ede" stroke-width="2"/>
+                <text x="100" y="95" text-anchor="middle" fill="rgba(74,158,222,0.15)" font-size="40" font-family="serif">🎯</text>
+              </svg>
+              <div class="dice-area" id="clDiceArea">
+                <div class="die" id="clD1">?</div>
+                <div class="die" id="clD2">?</div>
+                <div class="die" id="clD3">?</div>
+              </div>
+            </div>
+          </div>
+          <div class="result-badge" id="clResultBadge"></div>
+          <div class="game-status-msg" id="clStatusMsg">🎯 Đặt cược CHẴN hoặc LẺ</div>
+          <div class="chips-row">
+            <div class="chip" onclick="selectChip(10000,'cl')">10K</div>
+            <div class="chip" onclick="selectChip(20000,'cl')">20K</div>
+            <div class="chip" onclick="selectChip(50000,'cl')">50K</div>
+            <div class="chip" onclick="selectChip(100000,'cl')">100K</div>
+            <div class="chip" onclick="selectChip(200000,'cl')">200K</div>
+            <div class="chip" onclick="selectChip(500000,'cl')">500K</div>
+          </div>
+          <div class="bet-display">Đặt cược: <span id="clBetAmt">0 đ</span></div>
+          <div class="tx-sides">
+            <div class="tx-side tai" id="clSideChan" onclick="placeBet('cl','chan')">
+              <div class="side-label" style="color:#80ff80">CHẴN</div>
+              <div class="side-total">Tổng cược: <span id="clTotalChan">0</span></div>
+              <button class="btn-dat" id="clBtnChan">ĐẶT CƯỢC</button>
+            </div>
+            <div class="tx-side xiu" id="clSideLe" onclick="placeBet('cl','le')">
+              <div class="side-label" style="color:#da8fff">LẺ</div>
+              <div class="side-total">Tổng cược: <span id="clTotalLe">0</span></div>
+              <button class="btn-dat" id="clBtnLe">ĐẶT CƯỢC</button>
+            </div>
+          </div>
+        </div>
+        <div class="tx-panel">
+          <div class="panel-box">
+            <h3>📊 Lịch Sử Phiên</h3>
+            <div class="hist-dots" id="clHistDots"></div>
+          </div>
+          <div class="panel-box">
+            <h3>💰 Lịch Sử Thắng</h3>
+            <div class="my-bets" id="clMyBets"></div>
+          </div>
+          <div class="panel-box">
+            <h3>🏆 Bảng Xếp Hạng</h3>
+            <table class="lb-table">
+              <thead><tr><th>Hạng</th><th>Tên</th><th style="text-align:right">Thắng</th></tr></thead>
+              <tbody id="clLeaderboard"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MÁY BAY GAME ===== -->
+  <div class="game-page" id="apPage">
+    <div class="ap-bg">
+      <div class="ap-sky" id="apSky"></div>
+      <div class="ap-content">
+        <div class="tx-header">
+          <button class="btn-back" onclick="closeGame('apPage')">← Quay Lại</button>
+          <div class="game-title" style="filter:drop-shadow(0 0 15px rgba(52,152,219,0.6))">✈️ MÁY BAY</div>
+        </div>
+        <div class="ap-main">
+          <div class="ap-board">
+            <div class="ap-win-msg" id="apWinMsg">🎉 Hạ Cánh Thành Công!</div>
+            <div class="ap-lose-msg" id="apLoseMsg">💥 Máy Bay Nổ! Mất Hết!</div>
+            <div class="ap-timer-bar"><div class="ap-timer-fill" id="apTimerFill" style="width:100%"></div></div>
+            <div class="ap-flight-area" id="apFlightArea">
+              <div class="ap-ground"></div>
+              <div class="ap-trail" id="apTrail" style="width:0"></div>
+              <div class="ap-plane" id="apPlane">✈️</div>
+              <div class="ap-multiplier" id="apMultiplier">x1.00</div>
+            </div>
+            <div class="ap-bet-section">
+              <div class="chips-row-sm">
+                <div class="chip" onclick="selectChip(10000,'ap')">10K</div>
+                <div class="chip" onclick="selectChip(20000,'ap')">20K</div>
+                <div class="chip" onclick="selectChip(50000,'ap')">50K</div>
+                <div class="chip" onclick="selectChip(100000,'ap')">100K</div>
+                <div class="chip" onclick="selectChip(200000,'ap')">200K</div>
+                <div class="chip" onclick="selectChip(500000,'ap')">500K</div>
+              </div>
+              <div class="ap-bet-amount" id="apBetDisplay">Chưa đặt cược</div>
+              <button class="btn-bet-ap" id="apBtnBet" onclick="apPlaceBet()">✈️ ĐẶT CƯỢC & CHƠI</button>
+              <button class="btn-land" id="apBtnLand" onclick="apLand()">🛬 HẠ CÁNH (Lấy Thưởng)</button>
+              <div class="game-status-msg" id="apStatusMsg">Đặt tiền rồi chờ máy bay cất cánh!</div>
+            </div>
+          </div>
+          <div class="tx-panel">
+            <div class="panel-box">
+              <h3>📊 Lịch Sử Phiên</h3>
+              <div id="apHistList" style="display:flex;flex-direction:column;gap:6px;max-height:200px;overflow-y:auto;"></div>
+            </div>
+            <div class="panel-box">
+              <h3>🏆 Bảng Xếp Hạng</h3>
+              <table class="lb-table">
+                <thead><tr><th>Hạng</th><th>Tên</th><th style="text-align:right">Thắng</th></tr></thead>
+                <tbody id="apLeaderboard"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end mainApp -->
+
+<!-- CHAT (shown inside games) -->
+<div class="chat-box collapsed" id="chatBox">
+  <div class="chat-header" onclick="toggleChat()">
+    <span>💬 Chat</span>
+    <span id="chatToggleIcon">▲</span>
+  </div>
+  <div class="chat-body">
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input-row">
+      <input type="text" id="chatInput" placeholder="Nhập tin nhắn..." maxlength="80" onkeydown="if(event.key==='Enter')sendChat()">
+      <button onclick="sendChat()">Gửi</button>
+    </div>
+  </div>
+</div>
+
+<script src="game.js"></script>
+<script>
+// ============================
+// INIT
+// ============================
+const DICE_EMOJI = ['', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+let currentUser = null;
+
+function init() {
+  const u = GameDB.getCurrentUser();
+  if (u && GameDB.getUser(u)) {
+    currentUser = u;
+    showMain();
+  }
+  generateStars();
+}
+
+function generateStars() {
+  const sky = document.getElementById('apSky');
+  if (!sky) return;
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const sz = Math.random() * 2.5 + 0.5;
+    s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-delay:${Math.random()*3}s;animation-duration:${2+Math.random()*3}s`;
+    sky.appendChild(s);
+  }
+}
+
+// ============================
+// AUTH
+// ============================
+function switchTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register')));
+  document.getElementById('loginForm').style.display = tab==='login' ? 'flex' : 'none';
+  document.getElementById('registerForm').style.display = tab==='register' ? 'flex' : 'none';
+}
+
+function showAuthMsg(id, msg, type) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.className = 'auth-msg ' + type; el.style.display = 'block';
+}
+
+function doLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  if (!u || !p) return showAuthMsg('loginMsg', '⚠️ Vui lòng điền đầy đủ thông tin!', 'err');
+  const user = GameDB.getUser(u);
+  if (!user || user.password !== p) return showAuthMsg('loginMsg', '❌ Sai tên hoặc mật khẩu!', 'err');
+  GameDB.setCurrentUser(u);
+  currentUser = u;
+  showMain();
+}
+
+function doRegister() {
+  const u = document.getElementById('regUser').value.trim();
+  const p = document.getElementById('regPass').value;
+  const p2 = document.getElementById('regPass2').value;
+  if (!u || !p) return showAuthMsg('registerMsg', '⚠️ Vui lòng điền đầy đủ!', 'err');
+  if (u.length < 4) return showAuthMsg('registerMsg', '⚠️ Tên tối thiểu 4 ký tự!', 'err');
+  if (p !== p2) return showAuthMsg('registerMsg', '❌ Mật khẩu không khớp!', 'err');
+  if (!GameDB.createUser(u, p)) return showAuthMsg('registerMsg', '❌ Tên đã tồn tại!', 'err');
+  showAuthMsg('registerMsg', '✅ Tạo tài khoản thành công! Nhận 50.000đ khởi đầu!', 'ok');
+  setTimeout(() => { GameDB.setCurrentUser(u); currentUser = u; showMain(); }, 1200);
+}
+
+function doLogout() {
+  GameDB.logout(); currentUser = null;
+  document.getElementById('mainApp').style.display = 'none';
+  document.getElementById('authScreen').style.display = 'flex';
+  document.getElementById('chatBox').style.display = 'none';
+}
+
+function showMain() {
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  document.getElementById('chatBox').style.display = 'block';
+  updateHeader();
+}
+
+// ============================
+// HEADER
+// ============================
+function updateHeader() {
+  if (!currentUser) return;
+  const user = GameDB.getUser(currentUser);
+  if (!user) return;
+  document.getElementById('headerName').textContent = currentUser;
+  document.getElementById('headerAvatar').textContent = currentUser[0].toUpperCase();
+  document.getElementById('headerBalance').textContent = Utils.formatFull(user.balance);
+}
+
+// ============================
+// GAME NAVIGATION
+// ============================
+function openGame(game) {
+  document.getElementById('homePage').style.display = 'none';
+  if (game === 'taixiu') { document.getElementById('txPage').classList.add('active'); startTXGame(); }
+  else if (game === 'airplane') { document.getElementById('apPage').classList.add('active'); startAPGame(); }
+  else if (game === 'chanle') { document.getElementById('clPage').classList.add('active'); startCLGame(); }
+}
+
+function closeGame(pageId) {
+  document.getElementById(pageId).classList.remove('active');
+  document.getElementById('homePage').style.display = 'block';
+  if (pageId === 'txPage') stopTXGame();
+  if (pageId === 'clPage') stopCLGame();
+  if (pageId === 'apPage') stopAPGame();
+  updateHeader();
+}
+
+// ============================
+// CODE REDEEM
+// ============================
+function redeemCode() {
+  const code = document.getElementById('codeInput').value.trim().toUpperCase();
+  if (!code) return;
+  const amount = GameDB.useCode(code, currentUser);
+  const msg = document.getElementById('codeMsg');
+  if (!amount) {
+    msg.textContent = '❌ Code không hợp lệ hoặc đã được sử dụng!';
+    msg.className = 'code-msg err'; msg.style.display = 'block';
+  } else {
+    GameDB.updateBalance(currentUser, amount);
+    msg.textContent = `✅ Nhận thành công ${Utils.formatFull(amount)}!`;
+    msg.className = 'code-msg ok'; msg.style.display = 'block';
+    updateHeader();
+    showToast(`🎁 Nhận ${Utils.formatFull(amount)} thành công!`);
+  }
+  document.getElementById('codeInput').value = '';
+  setTimeout(() => msg.style.display = 'none', 3000);
+}
+
+// ============================
+// TOAST
+// ============================
+function showToast(msg, isErr=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isErr?' err':'') + ' show';
+  setTimeout(() => t.className = 'toast' + (isErr?' err':''), 2800);
+}
+
+// ============================
+// CHIPS
+// ============================
+let txBet = 0, clBet = 0, apBet = 0;
+
+function selectChip(amt, game) {
+  const user = GameDB.getUser(currentUser);
+  if (!user || user.balance < amt) return showToast('❌ Không đủ số dư!', true);
+  if (game === 'tx') { txBet = amt; document.getElementById('txBetAmt').textContent = Utils.formatFull(amt); }
+  else if (game === 'cl') { clBet = amt; document.getElementById('clBetAmt').textContent = Utils.formatFull(amt); }
+  else if (game === 'ap') { apBet = amt; document.getElementById('apBetDisplay').textContent = 'Cược: ' + Utils.formatFull(amt); }
+  // highlight chip
+  const rows = document.querySelectorAll(`#${game==='tx'?'txPage':game==='cl'?'clPage':'apPage'} .chip`);
+  const labels = {10000:'10K',20000:'20K',50000:'50K',100000:'100K',200000:'200K',500000:'500K'};
+  rows.forEach(c => c.classList.toggle('active', c.textContent === labels[amt]));
+}
+
+// ============================
+// TAIXIU GAME
+// ============================
+let txTimer = null, txRound = 1, txTimeLeft = 35, txPhase = 'betting';
+let txUserBet = null, txUserBetAmt = 0;
+let txTai = 0, txXiu = 0;
+
+function startTXGame() {
+  txRound = parseInt(localStorage.getItem('tx_round')||'1');
+  renderTXLeaderboard(); renderTXHistory(); renderTXMyBets();
+  newTXRound();
+}
+
+function stopTXGame() { clearInterval(txTimer); }
+
+function newTXRound() {
+  txPhase = 'betting'; txTimeLeft = 35; txUserBet = null; txUserBetAmt = 0;
+  txTai = 0; txXiu = 0;
+  document.getElementById('txRoundId').textContent = '#' + String(txRound).padStart(6,'0');
+  document.getElementById('txResultBadge').style.display = 'none';
+  document.getElementById('txStatusMsg').textContent = '🎲 Đặt cược vào TÀI hoặc XỈU';
+  document.getElementById('txBtnTai').disabled = false;
+  document.getElementById('txBtnXiu').disabled = false;
+  document.getElementById('txTotalTai').textContent = '0';
+  document.getElementById('txTotalXiu').textContent = '0';
+  // reset bowl
+  const bowl = document.getElementById('txBowlWrap');
+  bowl.classList.remove('lifted');
+  [1,2,3].forEach(i => document.getElementById('txD'+i).textContent='?');
+  updateTXTimer();
+  clearInterval(txTimer);
+  txTimer = setInterval(() => {
+    txTimeLeft--;
+    updateTXTimer();
+    if (txTimeLeft <= 0) { clearInterval(txTimer); endTXRound(); }
+  }, 1000);
+}
+
+function updateTXTimer() {
+  document.getElementById('txTimerNum').textContent = String(txTimeLeft).padStart(2,'0');
+  const circ = 2 * Math.PI * 56;
+  const offset = circ * (1 - txTimeLeft/35);
+  document.getElementById('txTimerRing').style.strokeDashoffset = offset;
+  if (txTimeLeft <= 10) document.getElementById('txTimerNum').style.color = '#ff6b6b';
+  else document.getElementById('txTimerNum').style.color = '';
+}
+
+function placeBet(game, choice) {
+  if (game !== 'tx') return;
+  if (txPhase !== 'betting') return showToast('⏱️ Đã hết thời gian đặt cược!', true);
+  if (txBet === 0) return showToast('⚠️ Hãy chọn mệnh giá trước!', true);
+  const user = GameDB.getUser(currentUser);
+  if (!user || user.balance < txBet) return showToast('❌ Không đủ số dư!', true);
+  if (txUserBet) return showToast('⚠️ Bạn đã đặt cược rồi!', true);
+  txUserBet = choice; txUserBetAmt = txBet;
+  GameDB.updateBalance(currentUser, -txBet);
+  updateHeader();
+  if (choice==='tai') { txTai += txBet; document.getElementById('txTotalTai').textContent = Utils.formatFull(txTai); }
+  else { txXiu += txBet; document.getElementById('txTotalXiu').textContent = Utils.formatFull(txXiu); }
+  document.getElementById('txSide'+choice.charAt(0).toUpperCase()+choice.slice(1)).classList.add('selected');
+  document.getElementById('txStatusMsg').textContent = `✅ Đã đặt ${Utils.formatFull(txBet)} vào ${choice.toUpperCase()}!`;
+  document.getElementById('txBtnTai').disabled = true;
+  document.getElementById('txBtnXiu').disabled = true;
+}
+
+function endTXRound() {
+  txPhase = 'result';
+  document.getElementById('txBtnTai').disabled = true;
+  document.getElementById('txBtnXiu').disabled = true;
+  document.getElementById('txStatusMsg').textContent = '🎲 Đang lắc xúc sắc...';
+  const override = GameDB.getTXOverride();
+  const {dice, sum, result} = DiceLogic.rollWithOverride(override, 'taixiu');
+  GameDB.setTXOverride(null);
+  // Show dice
+  setTimeout(() => {
+    [0,1,2].forEach(i => document.getElementById('txD'+(i+1)).textContent = DICE_EMOJI[dice[i]]);
+  }, 500);
+  // Show result
+  const badge = document.getElementById('txResultBadge');
+  badge.textContent = `${result==='tai'?'🔴 TÀI':'🔵 XỈU'} — Tổng: ${sum}`;
+  badge.className = 'result-badge ' + result;
+  badge.style.display = 'block';
+  // Process win/loss
+  let winAmt = 0;
+  if (txUserBet === result) {
+    winAmt = txUserBetAmt * 2;
+    GameDB.updateBalance(currentUser, winAmt);
+    document.getElementById('txStatusMsg').textContent = `🎉 THẮNG! +${Utils.formatFull(winAmt)}`;
+    showToast(`🎉 THẮNG ${Utils.formatFull(winAmt)}!`);
+  } else if (txUserBet) {
+    document.getElementById('txStatusMsg').textContent = `😢 Thua ${Utils.formatFull(txUserBetAmt)}`;
+    showToast(`😢 Thua rồi!`, true);
+  }
+  // Save history
+  GameDB.addTXHistory({
+    round: txRound, dice, sum, result,
+    userBet: txUserBet, userAmt: txUserBetAmt, win: txUserBet===result?winAmt:0,
+    ts: Date.now()
+  });
+  updateHeader(); renderTXHistory(); renderTXMyBets(); renderTXLeaderboard();
+  txRound++;
+  localStorage.setItem('tx_round', txRound);
+  // Next round after 8s
+  setTimeout(() => newTXRound(), 8000);
+}
+
+function liftBowl(game) {
+  if (game === 'tx') {
+    const bowl = document.getElementById('txBowlWrap');
+    if (txPhase === 'result') bowl.classList.toggle('lifted');
+  } else if (game === 'cl') {
+    const bowl = document.getElementById('clBowlWrap');
+    if (clPhase === 'result') bowl.classList.toggle('lifted');
+  }
+}
+
+function renderTXHistory() {
+  const hist = GameDB.getTXHistory().slice(0,20);
+  const el = document.getElementById('txHistDots');
+  el.innerHTML = hist.map(h =>
+    `<div class="hist-dot ${h.result}" title="Phiên #${h.round}: ${h.sum}">${h.result==='tai'?'T':'X'}</div>`
+  ).join('');
+}
+
+function renderTXMyBets() {
+  const hist = GameDB.getTXHistory().filter(h=>h.userBet).slice(0,10);
+  const el = document.getElementById('txMyBets');
+  if (!hist.length) { el.innerHTML = '<div style="color:var(--text2);font-size:.85rem;text-align:center;padding:10px">Chưa có lịch sử</div>'; return; }
+  el.innerHTML = hist.map(h => `
+    <div class="my-bet-row ${h.win>0?'win':'lose'}">
+      <span class="bet-choice">${h.userBet.toUpperCase()}</span>
+      <span>${Utils.formatFull(h.userAmt)}</span>
+      <span class="${h.win>0?'bet-win':'bet-lose'}">${h.win>0?'+'+Utils.formatFull(h.win):'-'+Utils.formatFull(h.userAmt)}</span>
+    </div>`).join('');
+}
+
+function renderTXLeaderboard() {
+  const lb = GameDB.getLeaderboard();
+  const rankIcons = ['🥇','🥈','🥉'];
+  document.getElementById('txLeaderboard').innerHTML = lb.map((u,i) => `
+    <tr>
+      <td class="lb-rank ${i<3?'r'+(i+1):''}">${rankIcons[i]||i+1}</td>
+      <td class="lb-name">${u.name}</td>
+      <td class="lb-win">${Utils.formatMoney(u.totalWin)}</td>
+    </tr>`).join('');
+}
+
+// ============================
+// CHAN LE GAME
+// ============================
+let clTimer = null, clRound = 1, clTimeLeft = 35, clPhase = 'betting';
+let clUserBet = null, clUserBetAmt = 0;
+let clChan = 0, clLe = 0;
+
+function startCLGame() {
+  clRound = parseInt(localStorage.getItem('cl_round')||'1');
+  renderCLLeaderboard(); renderCLHistory(); renderCLMyBets();
+  newCLRound();
+}
+
+function stopCLGame() { clearInterval(clTimer); }
+
+function newCLRound() {
+  clPhase = 'betting'; clTimeLeft = 35; clUserBet = null; clUserBetAmt = 0;
+  clChan = 0; clLe = 0;
+  document.getElementById('clRoundId').textContent = '#' + String(clRound).padStart(6,'0');
+  document.getElementById('clResultBadge').style.display = 'none';
+  document.getElementById('clStatusMsg').textContent = '🎯 Đặt cược CHẴN hoặc LẺ';
+  document.getElementById('clBtnChan').disabled = false;
+  document.getElementById('clBtnLe').disabled = false;
+  document.getElementById('clTotalChan').textContent = '0';
+  document.getElementById('clTotalLe').textContent = '0';
+  const bowl = document.getElementById('clBowlWrap');
+  bowl.classList.remove('lifted');
+  [1,2,3].forEach(i => document.getElementById('clD'+i).textContent='?');
+  updateCLTimer();
+  clearInterval(clTimer);
+  clTimer = setInterval(() => {
+    clTimeLeft--;
+    updateCLTimer();
+    if (clTimeLeft <= 0) { clearInterval(clTimer); endCLRound(); }
+  }, 1000);
+}
+
+function updateCLTimer() {
+  document.getElementById('clTimerNum').textContent = String(clTimeLeft).padStart(2,'0');
+  const circ = 2 * Math.PI * 56;
+  const offset = circ * (1 - clTimeLeft/35);
+  document.getElementById('clTimerRing').style.strokeDashoffset = offset;
+  if (clTimeLeft <= 10) document.getElementById('clTimerNum').style.color = '#ff6b6b';
+  else document.getElementById('clTimerNum').style.color = '';
+}
+
+function placeBet(game, choice) {
+  if (game === 'cl') {
+    if (clPhase !== 'betting') return showToast('⏱️ Đã hết thời gian đặt cược!', true);
+    if (clBet === 0) return showToast('⚠️ Hãy chọn mệnh giá trước!', true);
+    const user = GameDB.getUser(currentUser);
+    if (!user || user.balance < clBet) return showToast('❌ Không đủ số dư!', true);
+    if (clUserBet) return showToast('⚠️ Bạn đã đặt cược rồi!', true);
+    clUserBet = choice; clUserBetAmt = clBet;
+    GameDB.updateBalance(currentUser, -clBet);
+    updateHeader();
+    if (choice==='chan') { clChan += clBet; document.getElementById('clTotalChan').textContent = Utils.formatFull(clChan); }
+    else { clLe += clBet; document.getElementById('clTotalLe').textContent = Utils.formatFull(clLe); }
+    document.getElementById(choice==='chan'?'clSideChan':'clSideLe').classList.add('selected');
+    document.getElementById('clStatusMsg').textContent = `✅ Đã đặt ${Utils.formatFull(clBet)} vào ${choice.toUpperCase()}!`;
+    document.getElementById('clBtnChan').disabled = true;
+    document.getElementById('clBtnLe').disabled = true;
+  } else if (game === 'tx') {
+    // handled by TX section
+    if (txPhase !== 'betting') return showToast('⏱️ Đã hết thời gian đặt cược!', true);
+    if (txBet === 0) return showToast('⚠️ Hãy chọn mệnh giá trước!', true);
+    const user = GameDB.getUser(currentUser);
+    if (!user || user.balance < txBet) return showToast('❌ Không đủ số dư!', true);
+    if (txUserBet) return showToast('⚠️ Bạn đã đặt cược rồi!', true);
+    txUserBet = choice; txUserBetAmt = txBet;
+    GameDB.updateBalance(currentUser, -txBet);
+    updateHeader();
+    if (choice==='tai') { txTai += txBet; document.getElementById('txTotalTai').textContent = Utils.formatFull(txTai); }
+    else { txXiu += txBet; document.getElementById('txTotalXiu').textContent = Utils.formatFull(txXiu); }
+    document.getElementById('txSide'+choice.charAt(0).toUpperCase()+choice.slice(1)).classList.add('selected');
+    document.getElementById('txStatusMsg').textContent = `✅ Đã đặt ${Utils.formatFull(txBet)} vào ${choice.toUpperCase()}!`;
+    document.getElementById('txBtnTai').disabled = true;
+    document.getElementById('txBtnXiu').disabled = true;
+  }
+}
+
+function endCLRound() {
+  clPhase = 'result';
+  document.getElementById('clBtnChan').disabled = true;
+  document.getElementById('clBtnLe').disabled = true;
+  document.getElementById('clStatusMsg').textContent = '🎯 Đang lắc xúc sắc...';
+  const override = GameDB.getCLOverride();
+  const {dice, sum, result} = DiceLogic.rollWithOverride(override, 'chanle');
+  GameDB.setCLOverride(null);
+  setTimeout(() => {
+    [0,1,2].forEach(i => document.getElementById('clD'+(i+1)).textContent = DICE_EMOJI[dice[i]]);
+  }, 500);
+  const badge = document.getElementById('clResultBadge');
+  badge.textContent = `${result==='chan'?'💚 CHẴN':'💜 LẺ'} — Tổng: ${sum}`;
+  badge.className = 'result-badge ' + result;
+  badge.style.display = 'block';
+  let winAmt = 0;
+  if (clUserBet === result) {
+    winAmt = clUserBetAmt * 2;
+    GameDB.updateBalance(currentUser, winAmt);
+    document.getElementById('clStatusMsg').textContent = `🎉 THẮNG! +${Utils.formatFull(winAmt)}`;
+    showToast(`🎉 THẮNG ${Utils.formatFull(winAmt)}!`);
+  } else if (clUserBet) {
+    document.getElementById('clStatusMsg').textContent = `😢 Thua ${Utils.formatFull(clUserBetAmt)}`;
+    showToast(`😢 Thua rồi!`, true);
+  }
+  GameDB.addCLHistory({ round:clRound, dice, sum, result, userBet:clUserBet, userAmt:clUserBetAmt, win:clUserBet===result?winAmt:0, ts:Date.now() });
+  updateHeader(); renderCLHistory(); renderCLMyBets(); renderCLLeaderboard();
+  clRound++;
+  localStorage.setItem('cl_round', clRound);
+  setTimeout(() => newCLRound(), 8000);
+}
+
+function renderCLHistory() {
+  const hist = GameDB.getCLHistory().slice(0,20);
+  document.getElementById('clHistDots').innerHTML = hist.map(h =>
+    `<div class="hist-dot ${h.result}" title="Phiên #${h.round}: ${h.sum}">${h.result==='chan'?'C':'L'}</div>`
+  ).join('');
+}
+
+function renderCLMyBets() {
+  const hist = GameDB.getCLHistory().filter(h=>h.userBet).slice(0,10);
+  const el = document.getElementById('clMyBets');
+  if (!hist.length) { el.innerHTML = '<div style="color:var(--text2);font-size:.85rem;text-align:center;padding:10px">Chưa có lịch sử</div>'; return; }
+  el.innerHTML = hist.map(h => `
+    <div class="my-bet-row ${h.win>0?'win':'lose'}">
+      <span class="bet-choice">${h.userBet.toUpperCase()}</span>
+      <span>${Utils.formatFull(h.userAmt)}</span>
+      <span class="${h.win>0?'bet-win':'bet-lose'}">${h.win>0?'+'+Utils.formatFull(h.win):'-'+Utils.formatFull(h.userAmt)}</span>
+    </div>`).join('');
+}
+
+function renderCLLeaderboard() {
+  const lb = GameDB.getLeaderboard();
+  const rankIcons = ['🥇','🥈','🥉'];
+  document.getElementById('clLeaderboard').innerHTML = lb.map((u,i) => `
+    <tr>
+      <td class="lb-rank ${i<3?'r'+(i+1):''}">${rankIcons[i]||i+1}</td>
+      <td class="lb-name">${u.name}</td>
+      <td class="lb-win">${Utils.formatMoney(u.totalWin)}</td>
+    </tr>`).join('');
+}
+
+// ============================
+// AIRPLANE GAME
+// ============================
+let apTimer = null, apFlyTimer = null, apPhase = 'waiting'; // waiting|betting|flying|exploded
+let apTimeLeft = 15, apBetPlaced = false, apBetAmount = 0;
+let apMultiplier = 1.0, apExplodeAt = 1.0, apUserCashedOut = false;
+let apPlaneX = 50, apPlaneY = 40;
+
+function startAPGame() {
+  renderAPLeaderboard(); renderAPHistory();
+  newAPRound();
+}
+
+function stopAPGame() { clearInterval(apTimer); clearInterval(apFlyTimer); }
+
+function newAPRound() {
+  apPhase = 'betting'; apTimeLeft = 15; apBetPlaced = false; apBetAmount = 0;
+  apMultiplier = 1.0; apUserCashedOut = false; apPlaneX = 50; apPlaneY = 40;
+  // Random explode point: weighted toward low values
+  const r = Math.random();
+  if (r < 0.3) apExplodeAt = 1.0 + Math.random() * 0.8;        // 30% explode 1.0-1.8x
+  else if (r < 0.6) apExplodeAt = 1.8 + Math.random() * 2.2;   // 30% explode 1.8-4x
+  else if (r < 0.85) apExplodeAt = 4 + Math.random() * 6;       // 25% explode 4-10x
+  else apExplodeAt = 10 + Math.random() * 20;                    // 15% explode 10-30x
+
+  const plane = document.getElementById('apPlane');
+  const multi = document.getElementById('apMultiplier');
+  plane.className = 'ap-plane'; plane.textContent = '✈️';
+  plane.style.cssText = 'bottom:40px;left:50px;transform:none;';
+  multi.textContent = 'x1.00'; multi.className = 'ap-multiplier';
+  document.getElementById('apTrail').style.width = '0';
+  document.getElementById('apWinMsg').style.display='none';
+  document.getElementById('apLoseMsg').style.display='none';
+  document.getElementById('apBtnBet').disabled = false;
+  document.getElementById('apBtnBet').textContent = '✈️ ĐẶT CƯỢC & CHƠI';
+  document.getElementById('apBtnLand').className = 'btn-land';
+  document.getElementById('apStatusMsg').textContent = `⏳ Chuẩn bị bay... (${apTimeLeft}s)`;
+  document.getElementById('apTimerFill').style.width = '100%';
+
+  clearInterval(apTimer);
+  apTimer = setInterval(() => {
+    apTimeLeft--;
+    const pct = apTimeLeft / 15 * 100;
+    document.getElementById('apTimerFill').style.width = pct + '%';
+    document.getElementById('apStatusMsg').textContent = apBetPlaced
+      ? `✅ Đã đặt ${Utils.formatFull(apBetAmount)} — Bay sau ${apTimeLeft}s!`
+      : `⏳ Chuẩn bị bay... (${apTimeLeft}s còn lại để đặt cược)`;
+    if (apTimeLeft <= 0) { clearInterval(apTimer); launchPlane(); }
+  }, 1000);
+}
+
+function apPlaceBet() {
+  if (apPhase !== 'betting') return showToast('⏱️ Không thể đặt lúc này!', true);
+  if (apBet === 0) return showToast('⚠️ Hãy chọn mệnh giá!', true);
+  const user = GameDB.getUser(currentUser);
+  if (!user || user.balance < apBet) return showToast('❌ Không đủ số dư!', true);
+  if (apBetPlaced) return showToast('⚠️ Đã đặt rồi!', true);
+  apBetPlaced = true; apBetAmount = apBet;
+  GameDB.updateBalance(currentUser, -apBet);
+  updateHeader();
+  document.getElementById('apBtnBet').disabled = true;
+  document.getElementById('apBtnBet').textContent = '✅ Đã đặt cược!';
+  showToast(`✅ Đặt ${Utils.formatFull(apBet)} thành công!`);
+}
+
+function launchPlane() {
+  apPhase = 'flying';
+  document.getElementById('apBtnLand').className = apBetPlaced ? 'btn-land visible' : 'btn-land';
+  document.getElementById('apStatusMsg').textContent = apBetPlaced ? '🛬 Nhấn HẠ CÁNH để lấy thưởng!' : '✈️ Máy bay đang bay...';
+  const plane = document.getElementById('apPlane');
+  plane.className = 'ap-plane flying';
+  let elapsed = 0;
+  clearInterval(apFlyTimer);
+  apFlyTimer = setInterval(() => {
+    elapsed += 0.1;
+    apMultiplier = Math.pow(1.06, elapsed * 10) * (1 + elapsed * 0.03);
+    apMultiplier = Math.max(1.0, +apMultiplier.toFixed(2));
+    // Update plane position
+    const pct = Math.min(elapsed / 8, 0.9);
+    const px = 50 + pct * 300;
+    const py = 40 + pct * 200;
+    plane.style.left = px + 'px';
+    plane.style.bottom = py + 'px';
+    plane.style.transform = 'rotate(-' + (15 + pct*20) + 'deg)';
+    document.getElementById('apTrail').style.width = (px - 50) + 'px';
+    // Update multiplier display
+    const multi = document.getElementById('apMultiplier');
+    multi.textContent = 'x' + apMultiplier.toFixed(2);
+    if (apMultiplier > 5) multi.className = 'ap-multiplier danger';
+    // Update land button text
+    if (apBetPlaced && !apUserCashedOut) {
+      document.getElementById('apBtnLand').textContent = `🛬 HẠ CÁNH — ${Utils.formatFull(Math.floor(apBetAmount * apMultiplier))}`;
+    }
+    // Check explode
+    if (apMultiplier >= apExplodeAt) {
+      clearInterval(apFlyTimer);
+      explodePlane();
+    }
+  }, 100);
+}
+
+function apLand() {
+  if (apPhase !== 'flying' || !apBetPlaced || apUserCashedOut) return;
+  apUserCashedOut = true;
+  clearInterval(apFlyTimer);
+  apPhase = 'landed';
+  const winAmt = Math.floor(apBetAmount * apMultiplier);
+  GameDB.updateBalance(currentUser, winAmt);
+  updateHeader();
+  document.getElementById('apBtnLand').className = 'btn-land';
+  const msg = document.getElementById('apWinMsg');
+  msg.textContent = `🎉 HẠ CÁNH x${apMultiplier.toFixed(2)} — Thắng ${Utils.formatFull(winAmt)}!`;
+  msg.style.display = 'block';
+  document.getElementById('apStatusMsg').textContent = `🎉 Hạ cánh thành công! Thắng ${Utils.formatFull(winAmt)}!`;
+  showToast(`🎉 HẠ CÁNH x${apMultiplier.toFixed(2)}! +${Utils.formatFull(winAmt)}`);
+  GameDB.addAPHistory({ multiplier: apMultiplier.toFixed(2), landed: true, amt: winAmt, ts: Date.now() });
+  renderAPHistory(); renderAPLeaderboard();
+  setTimeout(() => { msg.style.display='none'; newAPRound(); }, 4000);
+}
+
+function explodePlane() {
+  apPhase = 'exploded';
+  const plane = document.getElementById('apPlane');
+  plane.className = 'ap-plane exploded'; plane.textContent = '💥';
+  document.getElementById('apBtnLand').className = 'btn-land';
+  if (apBetPlaced && !apUserCashedOut) {
+    const msg = document.getElementById('apLoseMsg');
+    msg.textContent = `💥 Nổ tại x${apMultiplier.toFixed(2)}! Mất ${Utils.formatFull(apBetAmount)}!`;
+    msg.style.display = 'block';
+    document.getElementById('apStatusMsg').textContent = `💥 Nổ tại x${apExplodeAt.toFixed(2)}!`;
+    showToast(`💥 Máy bay nổ! Mất hết!`, true);
+  }
+  GameDB.addAPHistory({ multiplier: apExplodeAt.toFixed(2), landed: false, amt: 0, ts: Date.now() });
+  renderAPHistory(); renderAPLeaderboard();
+  setTimeout(() => { document.getElementById('apLoseMsg').style.display='none'; newAPRound(); }, 4000);
+}
+
+function renderAPHistory() {
+  const hist = GameDB.getAPHistory().slice(0,15);
+  const el = document.getElementById('apHistList');
+  el.innerHTML = hist.map(h => `
+    <div class="my-bet-row ${h.landed?'win':'lose'}" style="justify-content:space-between">
+      <span style="font-weight:700;color:${h.landed?'var(--green2)':'var(--red2)'}">${h.landed?'🛬':'💥'} x${h.multiplier}</span>
+      <span style="font-size:.75rem;color:var(--text2)">${new Date(h.ts).toLocaleTimeString('vi-VN')}</span>
+    </div>`).join('');
+}
+
+function renderAPLeaderboard() {
+  const lb = GameDB.getLeaderboard();
+  const rankIcons = ['🥇','🥈','🥉'];
+  document.getElementById('apLeaderboard').innerHTML = lb.map((u,i) => `
+    <tr>
+      <td class="lb-rank ${i<3?'r'+(i+1):''}">${rankIcons[i]||i+1}</td>
+      <td class="lb-name">${u.name}</td>
+      <td class="lb-win">${Utils.formatMoney(u.totalWin)}</td>
+    </tr>`).join('');
+}
+
+// ============================
+// CHAT
+// ============================
+const chatMessages = [
+  {user:'canvat990',msg:'Tài đỉnh quá! thắng 10 phiên liên tiếp 🔥'},
+  {user:'tgtgt123',msg:'Chẵn đi anh em ơi!!!'},
+  {user:'hokxinkk',msg:'Máy bay x8.5 hạ cánh đẹp quá 😍'},
+  {user:'xiisnun500k0',msg:'xỉu chuẩn không cần chỉnh'},
+];
+
+function toggleChat() {
+  const box = document.getElementById('chatBox');
+  box.classList.toggle('collapsed');
+  document.getElementById('chatToggleIcon').textContent = box.classList.contains('collapsed') ? '▲' : '▼';
+}
+
+function renderChat() {
+  const el = document.getElementById('chatMessages');
+  el.innerHTML = chatMessages.slice(-30).map(m =>
+    `<div class="chat-msg"><span class="chat-user">${m.user}:</span> <span class="chat-text">${m.msg}</span></div>`
+  ).join('');
+  el.scrollTop = el.scrollHeight;
+}
+
+function sendChat() {
+  const inp = document.getElementById('chatInput');
+  const msg = inp.value.trim();
+  if (!msg) return;
+  chatMessages.push({user: currentUser || 'Guest', msg});
+  inp.value = '';
+  renderChat();
+}
+
+// Auto chat simulation
+setInterval(() => {
+  const fakeUsers = ['ansach589','go312','hitclubuytin1','klossss799','boembuti','xinlai234m'];
+  const fakeMsgs = ['Tài đi!','Xỉu ngon!','x3 máy bay thắng rồi 🎉','Chẵn chuẩn','Lẻ nào anh em','Ai đặt tài với?'];
+  chatMessages.push({user: fakeUsers[Math.floor(Math.random()*fakeUsers.length)], msg: fakeMsgs[Math.floor(Math.random()*fakeMsgs.length)]});
+  renderChat();
+}, 7000);
+
+renderChat();
+init();
+</script>
+</body>
+</html>
+HTMLEOF
+echo "taixiu.html written: $(wc -l < /mnt/user-data/outputs/taixiu.html) lines"
