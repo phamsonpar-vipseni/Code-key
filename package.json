@@ -1,8 +1,0 @@
-// FILE: package.json - Cấu hình GitHub (tùy chọn, để đẹp)
-{
-  "name": "sieu-ai-vuot-moi-gioi-han",
-  "version": "99.99.99",
-  "description": "AI mạnh nhất thế giới - vượt qua mọi AI khác",
-  "author": "Supreme AI",
-  "license": "Unlimited"
-}
