@@ -1,0 +1,2022 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUN.WIN - Cổng Game Đỉnh Cao</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Be+Vietnam+Pro:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #f0b433;
+  --gold2: #ffd700;
+  --dark: #0d0a0e;
+  --dark2: #1a1020;
+  --dark3: #261830;
+  --red: #c0392b;
+  --purple: #6c3db5;
+  --green: #27ae60;
+  --bg-card: rgba(30,18,45,0.95);
+  --border-gold: 1px solid rgba(240,180,51,0.3);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  background: var(--dark);
+  color: #fff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== AUTH SCREEN ===== */
+#auth-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 0%, #3a1060 0%, #0d0a0e 70%);
+  position: relative;
+}
+#auth-screen::before {
+  content:'';
+  position:absolute; inset:0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f0b433' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events:none;
+}
+.auth-box {
+  background: var(--bg-card);
+  border: 1px solid rgba(240,180,51,0.4);
+  border-radius: 20px;
+  padding: 40px;
+  width: 420px;
+  max-width: 95vw;
+  box-shadow: 0 0 60px rgba(108,61,181,0.4), 0 0 120px rgba(240,180,51,0.1);
+  position: relative;
+  z-index: 1;
+}
+.auth-logo {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.auth-logo .sun-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 52px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #f0b433, #ffd700, #ff8c00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(240,180,51,0.6));
+  line-height: 1;
+}
+.auth-logo .win-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 24px;
+  color: #f0b433;
+  letter-spacing: 6px;
+}
+.auth-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 28px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 10px;
+  padding: 4px;
+}
+.auth-tab {
+  flex: 1;
+  padding: 12px;
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.5);
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+.auth-tab.active {
+  background: linear-gradient(135deg, #f0b433, #ff8c00);
+  color: #000;
+}
+.auth-form { display: none; }
+.auth-form.active { display: block; }
+.form-group { margin-bottom: 18px; }
+.form-group label {
+  display: block;
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 8px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.form-group input {
+  width: 100%;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(240,180,51,0.25);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 15px;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  outline: none;
+  transition: all 0.3s;
+}
+.form-group input:focus {
+  border-color: #f0b433;
+  background: rgba(240,180,51,0.08);
+  box-shadow: 0 0 15px rgba(240,180,51,0.15);
+}
+.btn-auth {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #f0b433 0%, #ff8c00 100%);
+  border: none;
+  border-radius: 12px;
+  color: #000;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  transition: all 0.3s;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 20px rgba(240,180,51,0.4);
+}
+.btn-auth:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(240,180,51,0.5); }
+.auth-msg { text-align:center; margin-top: 14px; font-size: 14px; min-height: 20px; }
+.auth-msg.error { color: #ff6b6b; }
+.auth-msg.success { color: #51cf66; }
+
+/* ===== MAIN APP ===== */
+#app { display: none; }
+
+/* TOPBAR */
+.topbar {
+  background: linear-gradient(180deg, #1a0d2e 0%, #0d0a0e 100%);
+  border-bottom: 1px solid rgba(240,180,51,0.3);
+  padding: 0 20px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.topbar-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #f0b433, #ffd700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.topbar-user {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(240,180,51,0.2);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+.topbar-balance {
+  background: linear-gradient(135deg, rgba(240,180,51,0.15), rgba(240,180,51,0.05));
+  border: 1px solid rgba(240,180,51,0.35);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #f0b433;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.topbar-balance .dollar { font-size: 16px; }
+.topbar-spacer { flex: 1; }
+.topbar-btn {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 8px 14px;
+  color: rgba(255,255,255,0.7);
+  font-size: 13px;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.topbar-btn:hover { background: rgba(240,180,51,0.15); color: #f0b433; border-color: rgba(240,180,51,0.3); }
+
+/* NOTICE BAR */
+.notice-bar {
+  background: linear-gradient(90deg, transparent, rgba(240,180,51,0.08), transparent);
+  border-bottom: 1px solid rgba(240,180,51,0.1);
+  padding: 8px 20px;
+  text-align: center;
+  font-size: 13px;
+  color: #f0b433;
+  font-weight: 600;
+}
+
+/* HOME PAGE */
+.home-page { padding: 24px 20px; }
+.banner {
+  background: linear-gradient(135deg, #1a0d2e, #2d1560);
+  border: 1px solid rgba(240,180,51,0.25);
+  border-radius: 16px;
+  padding: 28px 32px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.banner::before {
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse at 80% 50%, rgba(240,180,51,0.1), transparent 60%);
+}
+.banner-text h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 26px;
+  color: #f0b433;
+  margin-bottom: 8px;
+}
+.banner-text p { color: rgba(255,255,255,0.6); font-size: 14px; line-height: 1.6; }
+
+/* Code input */
+.code-section {
+  background: var(--bg-card);
+  border: var(--border-gold);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.code-section h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #f0b433;
+  white-space: nowrap;
+}
+.code-input {
+  flex: 1;
+  min-width: 180px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(240,180,51,0.25);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  outline: none;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.code-input:focus { border-color: #f0b433; }
+.btn-code {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #f0b433, #ff8c00);
+  border: none;
+  border-radius: 8px;
+  color: #000;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  white-space: nowrap;
+}
+.code-msg { font-size: 13px; width: 100%; }
+.code-msg.ok { color: #51cf66; }
+.code-msg.err { color: #ff6b6b; }
+
+/* GAMES GRID */
+.section-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 18px;
+  color: #f0b433;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title::after {
+  content:'';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(240,180,51,0.4), transparent);
+}
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+.game-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(240,180,51,0.2);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+}
+.game-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(240,180,51,0.5);
+  box-shadow: 0 12px 40px rgba(240,180,51,0.15);
+}
+.game-card-thumb {
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  position: relative;
+  overflow: hidden;
+}
+.game-card-thumb.tx { background: linear-gradient(135deg, #1a0030, #3d0060); }
+.game-card-thumb.mb { background: linear-gradient(135deg, #001a30, #003d60); }
+.game-card-thumb.cl { background: linear-gradient(135deg, #1a2000, #3d4a00); }
+.game-card-info {
+  padding: 16px;
+}
+.game-card-info h3 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 16px;
+  color: #f0b433;
+  margin-bottom: 6px;
+}
+.game-card-info p { font-size: 12px; color: rgba(255,255,255,0.5); }
+.game-card-jackpot {
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffd700;
+  margin-top: 6px;
+}
+.game-card-jackpot span { font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 400; }
+
+/* ===== GAME MODALS / PAGES ===== */
+.game-page {
+  display: none;
+  min-height: calc(100vh - 64px);
+  background: radial-gradient(ellipse at 50% 0%, #1a0d2e 0%, #0d0a0e 60%);
+  padding: 20px;
+}
+.game-page.active { display: block; }
+.game-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.btn-back {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  padding: 10px 18px;
+  color: #fff;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-back:hover { background: rgba(240,180,51,0.15); border-color: #f0b433; color: #f0b433; }
+.game-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 24px;
+  color: #f0b433;
+  text-shadow: 0 0 20px rgba(240,180,51,0.5);
+}
+
+/* TAIXIU GAME */
+.tx-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+@media(max-width:900px) { .tx-layout { grid-template-columns: 1fr; } }
+.tx-main {
+  background: var(--bg-card);
+  border: 1px solid rgba(240,180,51,0.25);
+  border-radius: 20px;
+  padding: 28px;
+}
+.tx-room-id {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 20px;
+}
+.tx-timer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+.tx-timer {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 40px;
+  font-weight: 900;
+  color: #f0b433;
+  text-shadow: 0 0 20px rgba(240,180,51,0.6);
+  min-width: 80px;
+  text-align: center;
+}
+.tx-timer.urgent { color: #ff4444; animation: pulse 0.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.tx-progress {
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.tx-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #f0b433, #ff8c00);
+  border-radius: 3px;
+  transition: width 1s linear;
+}
+.tx-bowl-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 180px;
+  margin-bottom: 24px;
+  position: relative;
+}
+.bowl-container {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+.bowl {
+  width: 160px;
+  height: 100px;
+  background: radial-gradient(ellipse at 40% 30%, #8a6a20, #3d2c05);
+  border-radius: 0 0 80px 80px;
+  border: 3px solid #c8960a;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6), inset 0 2px 6px rgba(255,220,100,0.2);
+  position: relative;
+  transition: transform 0.3s;
+}
+.bowl-lid {
+  width: 170px;
+  height: 24px;
+  background: radial-gradient(ellipse at 50% 50%, #c8960a, #7a5c05);
+  border-radius: 50%;
+  margin: 0 auto -4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.bowl-handle {
+  width: 40px;
+  height: 16px;
+  background: radial-gradient(ellipse, #c8960a, #7a5c05);
+  border-radius: 50%;
+  margin: 0 auto;
+  position: relative;
+  top: -8px;
+}
+.bowl.lifted {
+  transform: translateY(-80px) rotate(180deg);
+  transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.bowl-animate {
+  animation: bowlSlide 0.6s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
+}
+@keyframes bowlSlide {
+  0% { transform: translateX(-200px); }
+  100% { transform: translateX(0); }
+}
+.dice-area {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.dice {
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  font-weight: 900;
+  color: #d00;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.4s;
+  border: 2px solid rgba(0,0,0,0.1);
+}
+.dice.show { opacity: 1; transform: scale(1); }
+.dice-sum {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 64px;
+  font-weight: 900;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 0 20px rgba(255,255,255,0.3);
+  position: absolute;
+}
+.tx-result-label {
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  display: none;
+}
+.tx-result-label.tai { color: #ff6b6b; background: rgba(255,107,107,0.15); border: 1px solid rgba(255,107,107,0.3); }
+.tx-result-label.xiu { color: #74c0fc; background: rgba(116,192,252,0.15); border: 1px solid rgba(116,192,252,0.3); }
+.tx-result-label.chan { color: #ffd43b; background: rgba(255,212,59,0.15); border: 1px solid rgba(255,212,59,0.3); }
+.tx-result-label.le { color: #da77f2; background: rgba(218,119,242,0.15); border: 1px solid rgba(218,119,242,0.3); }
+.tx-result-label.show { display: block; animation: fadeIn 0.5s; }
+@keyframes fadeIn { from{opacity:0;transform:scale(0.8)} to{opacity:1;transform:scale(1)} }
+
+.tx-bets {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.bet-side {
+  background: rgba(0,0,0,0.3);
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: all 0.3s;
+}
+.bet-side.tai-side { border-color: rgba(255,107,107,0.3); }
+.bet-side.xiu-side { border-color: rgba(116,192,252,0.3); }
+.bet-side.selected { border-width: 2px; box-shadow: 0 0 20px currentColor; }
+.bet-side h3 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+.bet-side.tai-side h3 { color: #ff6b6b; }
+.bet-side.xiu-side h3 { color: #74c0fc; }
+.bet-pool {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffd700;
+  margin-bottom: 4px;
+}
+.bet-players { font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 14px; }
+.btn-datcuoc {
+  width: 100%;
+  padding: 11px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  transition: all 0.2s;
+}
+.tai-side .btn-datcuoc { background: linear-gradient(135deg, #ff6b6b, #c0392b); color: #fff; }
+.xiu-side .btn-datcuoc { background: linear-gradient(135deg, #74c0fc, #1c7ed6); color: #fff; }
+.btn-datcuoc:hover { transform: scale(1.02); }
+.btn-datcuoc:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.chip {
+  padding: 8px 16px;
+  background: rgba(240,180,51,0.1);
+  border: 1px solid rgba(240,180,51,0.3);
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #f0b433;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+.chip:hover, .chip.active { background: rgba(240,180,51,0.3); border-color: #f0b433; }
+.chip.active { box-shadow: 0 0 12px rgba(240,180,51,0.4); }
+
+.tx-my-bet {
+  background: rgba(0,0,0,0.2);
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 14px;
+  text-align: center;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 16px;
+  min-height: 46px;
+}
+.tx-my-bet strong { color: #ffd700; }
+
+/* Sidebar */
+.tx-sidebar { display: flex; flex-direction: column; gap: 16px; }
+.sidebar-box {
+  background: var(--bg-card);
+  border: var(--border-gold);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.sidebar-box-title {
+  background: linear-gradient(90deg, rgba(240,180,51,0.15), transparent);
+  padding: 12px 18px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 13px;
+  color: #f0b433;
+  border-bottom: 1px solid rgba(240,180,51,0.15);
+}
+.sidebar-box-content { padding: 14px; max-height: 240px; overflow-y: auto; }
+.sidebar-box-content::-webkit-scrollbar { width: 4px; }
+.sidebar-box-content::-webkit-scrollbar-thumb { background: rgba(240,180,51,0.3); border-radius: 2px; }
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 13px;
+}
+.history-item:last-child { border: none; }
+.hist-round { color: rgba(255,255,255,0.4); font-size: 11px; }
+.hist-result {
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+.hist-tai { background: rgba(255,107,107,0.2); color: #ff6b6b; }
+.hist-xiu { background: rgba(116,192,252,0.2); color: #74c0fc; }
+.hist-chan { background: rgba(255,212,59,0.2); color: #ffd43b; }
+.hist-le { background: rgba(218,119,242,0.2); color: #da77f2; }
+.hist-sum { color: rgba(255,255,255,0.7); font-size: 13px; }
+
+/* Chat */
+.chat-box { display: flex; flex-direction: column; height: 300px; }
+.chat-messages { flex: 1; overflow-y: auto; padding: 10px 14px; }
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar-thumb { background: rgba(240,180,51,0.3); border-radius: 2px; }
+.chat-msg { margin-bottom: 8px; font-size: 13px; line-height: 1.5; }
+.chat-msg .user { color: #f0b433; font-weight: 700; }
+.chat-msg .txt { color: rgba(255,255,255,0.8); }
+.chat-input-row { display: flex; gap: 8px; padding: 10px 14px; border-top: 1px solid rgba(240,180,51,0.1); }
+.chat-input {
+  flex: 1;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(240,180,51,0.2);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  outline: none;
+}
+.btn-chat-send {
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #f0b433, #ff8c00);
+  border: none;
+  border-radius: 8px;
+  color: #000;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+/* LEADERBOARD */
+.leaderboard-table { width: 100%; }
+.lb-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+.lb-row:nth-child(1) { background: rgba(255,215,0,0.1); }
+.lb-row:nth-child(2) { background: rgba(192,192,192,0.08); }
+.lb-row:nth-child(3) { background: rgba(205,127,50,0.08); }
+.lb-rank { width: 24px; text-align: center; font-weight: 800; color: #f0b433; font-size: 14px; }
+.lb-name { flex: 1; color: #fff; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb-amount { color: #ffd700; font-weight: 700; font-size: 12px; }
+
+/* ===== MAYBAY GAME ===== */
+.mb-game-area {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 1px solid rgba(240,180,51,0.25);
+  border-radius: 20px;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  min-height: 400px;
+}
+.mb-sky {
+  width: 100%;
+  height: 240px;
+  background: linear-gradient(180deg, #000d1a 0%, #001a33 50%, #002244 100%);
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.mb-stars { position: absolute; inset: 0; }
+.star {
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+  animation: twinkle 2s infinite;
+}
+@keyframes twinkle { 0%,100%{opacity:0.3} 50%{opacity:1} }
+.mb-multiplier {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 44px;
+  font-weight: 900;
+  color: #ffd700;
+  text-shadow: 0 0 30px rgba(255,215,0,0.8);
+  z-index: 10;
+  transition: color 0.3s;
+}
+.mb-multiplier.danger { color: #ff4444; text-shadow: 0 0 30px rgba(255,68,68,0.8); }
+.plane {
+  position: absolute;
+  font-size: 40px;
+  bottom: 20px;
+  left: 20px;
+  transition: none;
+  z-index: 5;
+  filter: drop-shadow(0 0 10px rgba(255,200,0,0.8));
+}
+.plane.flying {
+  animation: fly 1s linear infinite;
+}
+@keyframes fly { 0%{transform: rotate(-5deg)} 50%{transform: rotate(5deg)} 100%{transform: rotate(-5deg)} }
+.explosion {
+  position: absolute;
+  font-size: 80px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  z-index: 20;
+  animation: explode 1s forwards;
+}
+@keyframes explode { 0%{opacity:1;transform:translate(-50%,-50%) scale(0.5)} 50%{transform:translate(-50%,-50%) scale(1.5)} 100%{opacity:0;transform:translate(-50%,-50%) scale(2)} }
+.mb-status {
+  text-align: center;
+  font-size: 16px;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 16px;
+  min-height: 24px;
+  font-weight: 600;
+}
+.mb-controls {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.btn-mb-land {
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #51cf66, #2f9e44);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  transition: all 0.2s;
+  box-shadow: 0 4px 20px rgba(81,207,102,0.4);
+}
+.btn-mb-land:hover:not(:disabled) { transform: scale(1.05); }
+.btn-mb-land:disabled { opacity: 0.4; cursor: not-allowed; }
+.mb-my-bet-info {
+  text-align: center;
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 14px;
+}
+.mb-my-bet-info strong { color: #ffd700; }
+.mb-timer-txt { font-family: 'Orbitron', sans-serif; font-size: 22px; color: #f0b433; }
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background: var(--bg-card);
+  border: 1px solid rgba(240,180,51,0.4);
+  border-radius: 12px;
+  padding: 14px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 9999;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.4s;
+  max-width: 300px;
+}
+.toast.show { opacity: 1; transform: translateX(0); }
+.toast.win { border-color: rgba(81,207,102,0.5); color: #51cf66; }
+.toast.lose { border-color: rgba(255,107,107,0.5); color: #ff6b6b; }
+.toast.info { border-color: rgba(240,180,51,0.5); color: #f0b433; }
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:600px) {
+  .games-grid { grid-template-columns: 1fr 1fr; }
+  .tx-layout { padding: 0; }
+  .tx-main { padding: 16px; }
+  .mb-sky { height: 180px; }
+}
+</style>
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <div class="sun-text">SUN</div>
+      <div class="win-text">W I N</div>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login')">Đăng Nhập</button>
+      <button class="auth-tab" onclick="switchAuthTab('register')">Đăng Ký</button>
+    </div>
+    <div id="login-form" class="auth-form active">
+      <div class="form-group">
+        <label>TÊN TÀI KHOẢN</label>
+        <input type="text" id="login-user" placeholder="Nhập tên tài khoản..." autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>MẬT KHẨU</label>
+        <input type="password" id="login-pass" placeholder="Nhập mật khẩu...">
+      </div>
+      <button class="btn-auth" onclick="doLogin()">ĐĂNG NHẬP</button>
+      <div class="auth-msg" id="login-msg"></div>
+    </div>
+    <div id="register-form" class="auth-form">
+      <div class="form-group">
+        <label>TÊN TÀI KHOẢN</label>
+        <input type="text" id="reg-user" placeholder="Tối thiểu 4 ký tự..." autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>MẬT KHẨU</label>
+        <input type="password" id="reg-pass" placeholder="Tối thiểu 6 ký tự...">
+      </div>
+      <div class="form-group">
+        <label>XÁC NHẬN MẬT KHẨU</label>
+        <input type="password" id="reg-pass2" placeholder="Nhập lại mật khẩu...">
+      </div>
+      <button class="btn-auth" onclick="doRegister()">TẠO TÀI KHOẢN</button>
+      <div class="auth-msg" id="register-msg"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-logo">☀ SUN.WIN</div>
+    <div class="topbar-user" id="topbar-username">---</div>
+    <div class="topbar-balance">
+      <span class="dollar">$</span>
+      <span id="topbar-balance">0</span>
+    </div>
+    <div class="topbar-spacer"></div>
+    <button class="topbar-btn" onclick="showHome()">🏠 Trang Chủ</button>
+    <button class="topbar-btn" onclick="doLogout()">🚪 Thoát</button>
+  </div>
+  <div class="notice-bar">📢 Tải 1.1.1.1 để truy cập vào link chính hãng <strong>SUN.WIN</strong> — Chơi có trách nhiệm!</div>
+
+  <!-- HOME PAGE -->
+  <div id="home-page" class="home-page">
+    <div class="banner">
+      <div class="banner-text">
+        <h2>🎮 Chào Mừng Đến SUN.WIN</h2>
+        <p>Nền tảng game đỉnh cao — Uy tín — Bảo mật<br>Hàng triệu người chơi tin tưởng mỗi ngày</p>
+      </div>
+      <div style="font-size:60px">🏆</div>
+    </div>
+
+    <!-- CODE INPUT -->
+    <div class="code-section">
+      <h3>🎁 Nhập Code:</h3>
+      <input class="code-input" id="code-input" placeholder="NHẬP CODE TẠI ĐÂY" maxlength="20">
+      <button class="btn-code" onclick="useGiftCode()">NHẬN THƯỞNG</button>
+      <div class="code-msg" id="code-msg"></div>
+    </div>
+
+    <div class="section-title">🎲 TRÒ CHƠI</div>
+    <div class="games-grid">
+      <div class="game-card" onclick="showGame('taixiu')">
+        <div class="game-card-thumb tx">🎲</div>
+        <div class="game-card-info">
+          <h3>TÀI XỈU</h3>
+          <p>Dự đoán kết quả xúc sắc — Tài hay Xỉu?</p>
+          <div class="game-card-jackpot" id="tx-jackpot">$ <span>---</span></div>
+        </div>
+      </div>
+      <div class="game-card" onclick="showGame('maybay')">
+        <div class="game-card-thumb mb">✈️</div>
+        <div class="game-card-info">
+          <h3>MÁY BAY</h3>
+          <p>Bay càng cao, thưởng càng lớn — Hạ cánh đúng lúc!</p>
+          <div class="game-card-jackpot">NHÂN x<span id="mb-jackpot-preview">1.00</span></div>
+        </div>
+      </div>
+      <div class="game-card" onclick="showGame('chanle')">
+        <div class="game-card-thumb cl">🎯</div>
+        <div class="game-card-info">
+          <h3>CHẴN LẺ</h3>
+          <p>Đặt cược Chẵn hoặc Lẻ — Đơn giản, hấp dẫn!</p>
+          <div class="game-card-jackpot" id="cl-jackpot">$ <span>---</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">🏆 BẢNG XẾP HẠNG</div>
+    <div style="background:var(--bg-card);border:var(--border-gold);border-radius:16px;overflow:hidden;">
+      <div style="background:linear-gradient(90deg,rgba(240,180,51,0.2),transparent);padding:14px 20px;font-family:'Orbitron',sans-serif;font-size:13px;color:#f0b433;display:flex;gap:20px;">
+        <span style="flex:0 0 60px">Xếp Hạng</span>
+        <span style="flex:1">Tên Tài Khoản</span>
+        <span>Tiền Thắng</span>
+      </div>
+      <div id="home-leaderboard" style="padding:10px 20px 16px;"></div>
+    </div>
+  </div>
+
+  <!-- TAIXIU GAME PAGE -->
+  <div id="taixiu-page" class="game-page">
+    <div class="game-header">
+      <button class="btn-back" onclick="showHome()">← Quay Lại</button>
+      <div class="game-title">🎲 TÀI XỈU</div>
+      <div style="margin-left:auto;font-size:13px;color:rgba(255,255,255,0.5)">Số dư: <strong id="tx-balance" style="color:#ffd700">0</strong></div>
+    </div>
+    <div class="tx-layout">
+      <div class="tx-main">
+        <div class="tx-room-id" id="tx-room-id">Phiên #0000</div>
+        <div class="tx-timer-bar">
+          <div>⏱</div>
+          <div class="tx-timer" id="tx-timer">35</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.4)" id="tx-phase">Đang đặt cược...</div>
+        </div>
+        <div class="tx-progress"><div class="tx-progress-bar" id="tx-progress" style="width:100%"></div></div>
+
+        <!-- Bowl / Dice Area -->
+        <div class="tx-bowl-area" id="tx-bowl-area">
+          <div class="dice-area" id="tx-dice-area" style="position:relative;">
+            <div class="dice-sum" id="tx-dice-sum" style="display:none">05</div>
+            <div class="dice" id="d1">1</div>
+            <div class="dice" id="d2">2</div>
+            <div class="dice" id="d3">3</div>
+          </div>
+          <div class="bowl-container" id="tx-bowl" style="position:absolute;" title="Bấm để lật bát xem kết quả">
+            <div class="bowl-handle"></div>
+            <div class="bowl-lid"></div>
+            <div class="bowl" id="bowl-body"></div>
+          </div>
+        </div>
+
+        <div class="tx-result-label" id="tx-result-label">TÀI</div>
+
+        <div class="chips-row" id="tx-chips">
+          <div class="chip active" data-val="10000" onclick="selectChip(this,'tx')">10K</div>
+          <div class="chip" data-val="20000" onclick="selectChip(this,'tx')">20K</div>
+          <div class="chip" data-val="50000" onclick="selectChip(this,'tx')">50K</div>
+          <div class="chip" data-val="100000" onclick="selectChip(this,'tx')">100K</div>
+          <div class="chip" data-val="200000" onclick="selectChip(this,'tx')">200K</div>
+          <div class="chip" data-val="500000" onclick="selectChip(this,'tx')">500K</div>
+        </div>
+
+        <div class="tx-bets">
+          <div class="bet-side tai-side">
+            <h3>TÀI</h3>
+            <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:4px">Tổng ≥ 11</div>
+            <div class="bet-pool" id="tx-tai-pool">$ 0</div>
+            <div class="bet-players" id="tx-tai-players">0 người cược</div>
+            <button class="btn-datcuoc" id="btn-tai" onclick="placeBet('tai')">ĐẶT CƯỢC TÀI</button>
+          </div>
+          <div class="bet-side xiu-side">
+            <h3>XỈU</h3>
+            <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:4px">Tổng ≤ 10</div>
+            <div class="bet-pool" id="tx-xiu-pool">$ 0</div>
+            <div class="bet-players" id="tx-xiu-players">0 người cược</div>
+            <button class="btn-datcuoc" id="btn-xiu" onclick="placeBet('xiu')">ĐẶT CƯỢC XỈU</button>
+          </div>
+        </div>
+
+        <div class="tx-my-bet" id="tx-my-bet">Chọn mệnh giá và bấm ĐẶT CƯỢC</div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="tx-sidebar">
+        <div class="sidebar-box">
+          <div class="sidebar-box-title">💬 CHAT</div>
+          <div class="chat-box">
+            <div class="chat-messages" id="tx-chat"></div>
+            <div class="chat-input-row">
+              <input class="chat-input" id="tx-chat-input" placeholder="Nhập nội dung chat..." onkeydown="if(event.key==='Enter')sendChat('tx')">
+              <button class="btn-chat-send" onclick="sendChat('tx')">Gửi</button>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-box">
+          <div class="sidebar-box-title">📜 LỊCH SỬ PHIÊN</div>
+          <div class="sidebar-box-content" id="tx-history"></div>
+        </div>
+        <div class="sidebar-box">
+          <div class="sidebar-box-title">💰 THẮNG CỦA TÔI</div>
+          <div class="sidebar-box-content" id="tx-my-wins" style="max-height:160px"></div>
+        </div>
+        <div class="sidebar-box">
+          <div class="sidebar-box-title">🏆 XẾP HẠNG</div>
+          <div class="sidebar-box-content" id="tx-leaderboard"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAYBAY GAME PAGE -->
+  <div id="maybay-page" class="game-page">
+    <div class="game-header">
+      <button class="btn-back" onclick="showHome()">← Quay Lại</button>
+      <div class="game-title">✈️ MÁY BAY</div>
+      <div style="margin-left:auto;font-size:13px;color:rgba(255,255,255,0.5)">Số dư: <strong id="mb-balance" style="color:#ffd700">0</strong></div>
+    </div>
+    <div style="max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 300px;gap:20px;">
+      <div>
+        <div class="mb-game-area">
+          <div class="mb-sky" id="mb-sky">
+            <div class="mb-stars" id="mb-stars"></div>
+            <div class="mb-multiplier" id="mb-multiplier">1.00x</div>
+            <div class="plane" id="mb-plane">✈️</div>
+            <div class="explosion" id="mb-explosion">💥</div>
+          </div>
+          <div class="mb-status" id="mb-status">⏳ Đang chờ vòng mới...</div>
+          <div class="mb-my-bet-info" id="mb-my-bet-info">Chọn mệnh giá và bấm ĐẶT CƯỢC</div>
+          <div class="chips-row" id="mb-chips">
+            <div class="chip active" data-val="10000" onclick="selectChip(this,'mb')">10K</div>
+            <div class="chip" data-val="20000" onclick="selectChip(this,'mb')">20K</div>
+            <div class="chip" data-val="50000" onclick="selectChip(this,'mb')">50K</div>
+            <div class="chip" data-val="100000" onclick="selectChip(this,'mb')">100K</div>
+            <div class="chip" data-val="200000" onclick="selectChip(this,'mb')">200K</div>
+            <div class="chip" data-val="500000" onclick="selectChip(this,'mb')">500K</div>
+          </div>
+          <div class="mb-controls">
+            <div class="mb-timer-txt" id="mb-countdown">15</div>
+            <button class="btn-datcuoc" id="btn-mb-bet" onclick="mbPlaceBet()" style="padding:12px 28px;background:linear-gradient(135deg,#f0b433,#ff8c00);color:#000;">ĐẶT CƯỢC</button>
+            <button class="btn-mb-land" id="btn-mb-land" onclick="mbLand()" disabled>🛬 HẠ CÁNH</button>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div class="sidebar-box">
+          <div class="sidebar-box-title">💬 CHAT</div>
+          <div class="chat-box">
+            <div class="chat-messages" id="mb-chat"></div>
+            <div class="chat-input-row">
+              <input class="chat-input" id="mb-chat-input" placeholder="Nhập chat..." onkeydown="if(event.key==='Enter')sendChat('mb')">
+              <button class="btn-chat-send" onclick="sendChat('mb')">Gửi</button>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-box">
+          <div class="sidebar-box-title">📜 LỊCH SỬ VÒNG</div>
+          <div class="sidebar-box-content" id="mb-history"></div>
+        </div>
+        <div class="sidebar-box">
+          <div class="sidebar-box-title">🏆 XẾP HẠNG</div>
+          <div class="sidebar-box-content" id="mb-leaderboard"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHANLE GAME PAGE -->
+  <div id="chanle-page" class="game-page">
+    <div class="game-header">
+      <button class="btn-back" onclick="showHome()">← Quay Lại</button>
+      <div class="game-title">🎯 CHẴN LẺ</div>
+      <div style="margin-left:auto;font-size:13px;color:rgba(255,255,255,0.5)">Số dư: <strong id="cl-balance" style="color:#ffd700">0</strong></div>
+    </div>
+    <div class="tx-layout">
+      <div class="tx-main">
+        <div class="tx-room-id" id="cl-room-id">Phiên #0000</div>
+        <div class="tx-timer-bar">
+          <div>⏱</div>
+          <div class="tx-timer" id="cl-timer">35</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.4)" id="cl-phase">Đang đặt cược...</div>
+        </div>
+        <div class="tx-progress"><div class="tx-progress-bar" id="cl-progress" style="width:100%"></div></div>
+        <div class="tx-bowl-area" id="cl-bowl-area">
+          <div class="dice-area" id="cl-dice-area" style="position:relative;">
+            <div class="dice-sum" id="cl-dice-sum" style="display:none">05</div>
+            <div class="dice" id="cd1">1</div>
+            <div class="dice" id="cd2">2</div>
+            <div class="dice" id="cd3">3</div>
+          </div>
+          <div class="bowl-container" id="cl-bowl" style="position:absolute;" title="Bấm để lật bát">
+            <div class="bowl-handle"></div>
+            <div class="bowl-lid"></div>
+            <div class="bowl" id="cl-bowl-body"></div>
+          </div>
+        </div>
+        <div class="tx-result-label" id="cl-result-label">CHẴN</div>
+        <div class="chips-row" id="cl-chips">
+          <div class="chip active" data-val="10000" onclick="selectChip(this,'cl')">10K</div>
+          <div class="chip" data-val="20000" onclick="selectChip(this,'cl')">20K</div>
+          <div class="chip" data-val="50000" onclick="selectChip(this,'cl')">50K</div>
+          <div class="chip" data-val="100000" onclick="selectChip(this,'cl')">100K</div>
+          <div class="chip" data-val="200000" onclick="selectChip(this,'cl')">200K</div>
+          <div class="chip" data-val="500000" onclick="selectChip(this,'cl')">500K</div>
+        </div>
+        <div class="tx-bets">
+          <div class="bet-side" style="border-color:rgba(255,212,59,0.3)">
+            <h3 style="color:#ffd43b">CHẴN</h3>
+            <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:4px">Tổng số chẵn</div>
+            <div class="bet-pool" id="cl-chan-pool">$ 0</div>
+            <div class="bet-players" id="cl-chan-players">0 người cược</div>
+            <button class="btn-datcuoc" id="btn-chan" onclick="placeBet('chan')" style="background:linear-gradient(135deg,#ffd43b,#f59f00);color:#000;">ĐẶT CƯỢC CHẴN</button>
+          </div>
+          <div class="bet-side" style="border-color:rgba(218,119,242,0.3)">
+            <h3 style="color:#da77f2">LẺ</h3>
+            <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:4px">Tổng số lẻ</div>
+            <div class="bet-pool" id="cl-le-pool">$ 0</div>
+            <div class="bet-players" id="cl-le-players">0 người cược</div>
+            <button class="btn-datcuoc" id="btn-le" onclick="placeBet('le')" style="background:linear-gradient(135deg,#da77f2,#9c36b5);color:#fff;">ĐẶT CƯỢC LẺ</button>
+          </div>
+        </div>
+        <div class="tx-my-bet" id="cl-my-bet">Chọn mệnh giá và bấm ĐẶT CƯỢC</div>
+      </div>
+      <div class="tx-sidebar">
+        <div class="sidebar-box">
+          <div class="sidebar-box-title">💬 CHAT</div>
+          <div class="chat-box">
+            <div class="chat-messages" id="cl-chat"></div>
+            <div class="chat-input-row">
+              <input class="chat-input" id="cl-chat-input" placeholder="Nhập chat..." onkeydown="if(event.key==='Enter')sendChat('cl')">
+              <button class="btn-chat-send" onclick="sendChat('cl')">Gửi</button>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-box">
+          <div class="sidebar-box-title">📜 LỊCH SỬ PHIÊN</div>
+          <div class="sidebar-box-content" id="cl-history"></div>
+        </div>
+        <div class="sidebar-box">
+          <div class="sidebar-box-title">💰 THẮNG CỦA TÔI</div>
+          <div class="sidebar-box-content" id="cl-my-wins" style="max-height:160px"></div>
+        </div>
+        <div class="sidebar-box">
+          <div class="sidebar-box-title">🏆 XẾP HẠNG</div>
+          <div class="sidebar-box-content" id="cl-leaderboard"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="game.js"></script>
+<script>
+// ===== STATE =====
+let currentUser = null;
+let selectedChip = { tx: 10000, mb: 10000, cl: 10000 };
+
+// Taixiu state
+let txState = {
+  phase: 'betting', // betting | revealing | waiting
+  timer: 35,
+  round: 1,
+  dice: [1,2,3],
+  sum: 6,
+  result: null, // 'tai' | 'xiu'
+  myBet: null, // { side, amount }
+  taiPool: 0, taiPlayers: 0,
+  xiuPool: 0, xiuPlayers: 0,
+  myWins: [],
+  interval: null
+};
+// Chanle state
+let clState = {
+  phase: 'betting',
+  timer: 35,
+  round: 1,
+  dice: [1,2,3],
+  sum: 6,
+  result: null,
+  myBet: null,
+  chanPool: 0, chanPlayers: 0,
+  lePool: 0, lePlayers: 0,
+  myWins: [],
+  interval: null
+};
+// Maybay state
+let mbState = {
+  phase: 'waiting', // waiting | flying | crashed
+  countdown: 15,
+  multiplier: 1.00,
+  myBet: null,
+  myLanded: false,
+  crashAt: 1.5,
+  flyInterval: null,
+  countInterval: null,
+  myWins: []
+};
+
+// ===== AUTH =====
+function switchAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register')));
+  document.getElementById('login-form').classList.toggle('active', tab==='login');
+  document.getElementById('register-form').classList.toggle('active', tab==='register');
+}
+function doLogin() {
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value;
+  if (!u || !p) { showMsg('login-msg','Vui lòng điền đầy đủ thông tin!','error'); return; }
+  const res = DB.login(u, p);
+  if (!res.ok) { showMsg('login-msg', res.msg, 'error'); return; }
+  currentUser = u;
+  initApp();
+}
+function doRegister() {
+  const u = document.getElementById('reg-user').value.trim();
+  const p = document.getElementById('reg-pass').value;
+  const p2 = document.getElementById('reg-pass2').value;
+  if (!u || !p || !p2) { showMsg('register-msg','Vui lòng điền đầy đủ!','error'); return; }
+  if (p !== p2) { showMsg('register-msg','Mật khẩu xác nhận không khớp!','error'); return; }
+  const res = DB.register(u, p);
+  if (!res.ok) { showMsg('register-msg', res.msg, 'error'); return; }
+  showMsg('register-msg','Đăng ký thành công! Đang đăng nhập...','success');
+  DB.login(u, p);
+  currentUser = u;
+  setTimeout(() => initApp(), 800);
+}
+function showMsg(id, msg, type) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = 'auth-msg ' + type;
+}
+function doLogout() {
+  stopAllGames();
+  DB.logout();
+  currentUser = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+}
+function initApp() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  updateTopBar();
+  showHome();
+  generateMockChats();
+}
+function updateTopBar() {
+  if (!currentUser) return;
+  document.getElementById('topbar-username').textContent = currentUser;
+  document.getElementById('topbar-balance').textContent = fmtMoney(DB.getBalance(currentUser));
+  // Update game balance displays
+  const bal = fmtMoney(DB.getBalance(currentUser));
+  ['tx','cl','mb'].forEach(g => {
+    const el = document.getElementById(g+'-balance');
+    if (el) el.textContent = bal;
+  });
+}
+
+// Check existing session
+window.addEventListener('load', () => {
+  const u = DB.getCurrentUser();
+  if (u && DB.getUser(u)) {
+    currentUser = u;
+    initApp();
+  }
+});
+
+// ===== NAVIGATION =====
+function showHome() {
+  stopAllGames();
+  document.querySelectorAll('.game-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('home-page').style.display = 'block';
+  updateTopBar();
+  renderHomeLeaderboard();
+  updateJackpots();
+}
+function showGame(game) {
+  document.getElementById('home-page').style.display = 'none';
+  document.querySelectorAll('.game-page').forEach(p => p.classList.remove('active'));
+  document.getElementById(game+'-page').classList.add('active');
+  updateTopBar();
+  if (game === 'taixiu') startTaixiu();
+  if (game === 'maybay') startMaybay();
+  if (game === 'chanle') startChanle();
+}
+function stopAllGames() {
+  if (txState.interval) clearInterval(txState.interval);
+  if (clState.interval) clearInterval(clState.interval);
+  if (mbState.flyInterval) clearInterval(mbState.flyInterval);
+  if (mbState.countInterval) clearInterval(mbState.countInterval);
+}
+function updateJackpots() {
+  const h = DB.getTaixiuHistory();
+  if (h.length) {
+    document.querySelector('#tx-jackpot span').textContent = fmtMoney(h[0].taiPool + h[0].xiuPool || 0);
+  }
+  const ch = DB.getChanLeHistory();
+  if (ch.length) {
+    document.querySelector('#cl-jackpot span').textContent = fmtMoney(ch[0].chanPool + ch[0].lePool || 0);
+  }
+}
+
+// ===== GIFT CODE =====
+function useGiftCode() {
+  const code = document.getElementById('code-input').value.trim().toUpperCase();
+  if (!code) return;
+  const res = DB.useCode(code, currentUser);
+  const el = document.getElementById('code-msg');
+  if (res.ok) {
+    el.className = 'code-msg ok';
+    el.textContent = `✅ Nhận thành công +${fmtMoney(res.amount)} đồng!`;
+    document.getElementById('code-input').value = '';
+    updateTopBar();
+    showToast(`Nhận code thành công! +${fmtMoney(res.amount)} ₫`, 'win');
+  } else {
+    el.className = 'code-msg err';
+    el.textContent = '❌ ' + res.msg;
+  }
+  setTimeout(() => el.textContent = '', 4000);
+}
+
+// ===== CHIPS =====
+function selectChip(el, game) {
+  document.querySelectorAll(`#${game}-chips .chip`).forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  selectedChip[game] = parseInt(el.dataset.val);
+}
+
+// ===== TAIXIU ENGINE =====
+const TX_TOTAL = 35;
+function startTaixiu() {
+  if (txState.interval) clearInterval(txState.interval);
+  txState.round = parseInt(Math.random() * 9000 + 1000);
+  resetTxRound();
+  loadTxHistory();
+  renderLeaderboard('tx');
+  renderLeaderboard('cl');
+  txState.interval = setInterval(txTick, 1000);
+}
+function resetTxRound() {
+  txState.phase = 'betting';
+  txState.timer = TX_TOTAL;
+  txState.myBet = null;
+  txState.taiPool = Math.floor(Math.random()*500000+200000);
+  txState.taiPlayers = Math.floor(Math.random()*30+5);
+  txState.xiuPool = Math.floor(Math.random()*500000+200000);
+  txState.xiuPlayers = Math.floor(Math.random()*30+5);
+  txState.result = null;
+  document.getElementById('tx-room-id').textContent = 'Phiên #' + txState.round;
+  document.getElementById('tx-result-label').className = 'tx-result-label';
+  document.getElementById('tx-my-bet').innerHTML = 'Chọn mệnh giá và bấm ĐẶT CƯỢC';
+  document.getElementById('tx-dice-sum').style.display = 'none';
+  ['d1','d2','d3'].forEach(id => {
+    const d = document.getElementById(id);
+    d.classList.remove('show');
+  });
+  document.getElementById('tx-bowl').style.display = 'block';
+  document.getElementById('tx-bowl').style.cursor = 'default';
+  document.getElementById('bowl-body').classList.remove('lifted');
+  document.getElementById('btn-tai').disabled = false;
+  document.getElementById('btn-xiu').disabled = false;
+  updateTxPools();
+  addBotChat('tx');
+}
+function txTick() {
+  if (txState.phase === 'betting') {
+    txState.timer--;
+    // Simulate others betting
+    if (Math.random() < 0.3) {
+      const side = Math.random() < 0.5 ? 'tai' : 'xiu';
+      const amount = [10000,20000,50000,100000][Math.floor(Math.random()*4)];
+      if (side === 'tai') { txState.taiPool += amount; txState.taiPlayers++; }
+      else { txState.xiuPool += amount; txState.xiuPlayers++; }
+      updateTxPools();
+    }
+    if (txState.timer <= 0) {
+      txState.phase = 'reveal';
+      txState.timer = 8;
+      document.getElementById('tx-phase').textContent = '🎲 Đang lắc xúc sắc...';
+      document.getElementById('btn-tai').disabled = true;
+      document.getElementById('btn-xiu').disabled = true;
+      generateTxDice();
+    }
+    updateTxTimer();
+  } else if (txState.phase === 'reveal') {
+    txState.timer--;
+    if (txState.timer === 6) {
+      // Slide bowl in
+      document.getElementById('tx-bowl').classList.add('bowl-animate');
+    }
+    if (txState.timer <= 0) {
+      showTxResult();
+      txState.phase = 'waiting';
+      txState.timer = 5;
+    }
+    updateTxTimer();
+  } else if (txState.phase === 'waiting') {
+    txState.timer--;
+    document.getElementById('tx-phase').textContent = `⏳ Vòng mới sau ${txState.timer}s`;
+    if (txState.timer <= 0) {
+      txState.round++;
+      resetTxRound();
+      txState.interval && clearInterval(txState.interval);
+      txState.interval = setInterval(txTick, 1000);
+    }
+    updateTxTimer();
+  }
+}
+function generateTxDice() {
+  // Check for controlled result
+  const ctrl = DB.getTaixiuResult();
+  let dice;
+  if (ctrl !== null) {
+    dice = distributeDice(ctrl);
+  } else {
+    dice = [
+      Math.floor(Math.random()*6)+1,
+      Math.floor(Math.random()*6)+1,
+      Math.floor(Math.random()*6)+1
+    ];
+  }
+  txState.dice = dice;
+  txState.sum = dice.reduce((a,b)=>a+b,0);
+  txState.result = txState.sum >= 11 ? 'tai' : 'xiu';
+  // Show dice faces in bowl area but hidden under bowl
+  const dFaces = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+  ['d1','d2','d3'].forEach((id,i) => {
+    document.getElementById(id).textContent = dFaces[dice[i]-1];
+  });
+}
+function distributeDice(target) {
+  // Distribute target sum across 3 dice (3-18)
+  let dice = [1,1,1];
+  let remaining = target - 3;
+  for (let i = 0; i < 3 && remaining > 0; i++) {
+    const add = Math.min(5, remaining);
+    dice[i] += add;
+    remaining -= add;
+  }
+  // Shuffle
+  for (let i = dice.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [dice[i],dice[j]] = [dice[j],dice[i]];
+  }
+  return dice;
+}
+function showTxResult() {
+  // Allow lifting bowl
+  const bowl = document.getElementById('tx-bowl');
+  bowl.style.cursor = 'pointer';
+  bowl.title = 'Click để lật bát!';
+  bowl.onclick = liftBowl;
+  // Show result label
+  const lbl = document.getElementById('tx-result-label');
+  lbl.textContent = txState.result === 'tai' ? '🔴 TÀI' : '🔵 XỈU';
+  lbl.className = 'tx-result-label show ' + txState.result;
+  // Sum display
+  document.getElementById('tx-dice-sum').textContent = String(txState.sum).padStart(2,'0');
+  document.getElementById('tx-dice-sum').style.display = 'block';
+  document.getElementById('tx-phase').textContent = `Kết quả: ${txState.result.toUpperCase()} (${txState.sum})`;
+  // Save history
+  DB.addTaixiuHistory({
+    round: txState.round,
+    dice: txState.dice,
+    sum: txState.sum,
+    result: txState.result,
+    taiPool: txState.taiPool,
+    xiuPool: txState.xiuPool,
+    timestamp: Date.now()
+  });
+  loadTxHistory();
+  renderLeaderboard('tx');
+  // Payout
+  if (txState.myBet) {
+    const won = txState.myBet.side === txState.result;
+    const winAmount = won ? Math.floor(txState.myBet.amount * 1.95) : 0;
+    if (won) {
+      DB.updateBalance(currentUser, winAmount);
+      txState.myWins.unshift({ round: txState.round, amount: winAmount, result: txState.result });
+      renderMyWins('tx');
+      showToast(`🎉 THẮNG! +${fmtMoney(winAmount)} ₫`, 'win');
+    } else {
+      showToast(`😞 Thua ${fmtMoney(txState.myBet.amount)} ₫ — Thử lại!`, 'lose');
+    }
+    updateTopBar();
+  }
+}
+function liftBowl() {
+  document.getElementById('bowl-body').classList.add('lifted');
+  document.getElementById('tx-bowl').style.cursor = 'default';
+  document.getElementById('tx-bowl').onclick = null;
+  ['d1','d2','d3'].forEach(id => {
+    setTimeout(() => document.getElementById(id).classList.add('show'), 200);
+  });
+}
+function updateTxTimer() {
+  const el = document.getElementById('tx-timer');
+  el.textContent = txState.timer;
+  el.className = 'tx-timer' + (txState.timer <= 5 ? ' urgent' : '');
+  const pct = txState.phase === 'betting' ? (txState.timer / TX_TOTAL * 100) : 0;
+  document.getElementById('tx-progress').style.width = pct + '%';
+}
+function updateTxPools() {
+  document.getElementById('tx-tai-pool').textContent = '$ ' + fmtMoney(txState.taiPool);
+  document.getElementById('tx-tai-players').textContent = txState.taiPlayers + ' người cược';
+  document.getElementById('tx-xiu-pool').textContent = '$ ' + fmtMoney(txState.xiuPool);
+  document.getElementById('tx-xiu-players').textContent = txState.xiuPlayers + ' người cược';
+}
+function placeBet(side) {
+  if (txState.phase !== 'betting') { showToast('Hết thời gian đặt cược!', 'info'); return; }
+  if (txState.myBet) { showToast('Bạn đã đặt cược rồi!', 'info'); return; }
+  const amount = selectedChip.tx;
+  const bal = DB.getBalance(currentUser);
+  if (bal < amount) { showToast('Số dư không đủ!', 'lose'); return; }
+  DB.updateBalance(currentUser, -amount);
+  txState.myBet = { side, amount };
+  if (side === 'tai') { txState.taiPool += amount; txState.taiPlayers++; }
+  else { txState.xiuPool += amount; txState.xiuPlayers++; }
+  updateTxPools();
+  updateTopBar();
+  const sideLabel = side === 'tai' ? 'TÀI' : 'XỈU';
+  document.getElementById('tx-my-bet').innerHTML = `Bạn đặt: <strong>${sideLabel}</strong> — <strong>${fmtMoney(amount)} ₫</strong>`;
+  document.getElementById('btn-tai').disabled = true;
+  document.getElementById('btn-xiu').disabled = true;
+  showToast(`Đặt ${sideLabel} ${fmtMoney(amount)} ₫ thành công!`, 'info');
+}
+function loadTxHistory() {
+  const h = DB.getTaixiuHistory().slice(0,15);
+  const el = document.getElementById('tx-history');
+  el.innerHTML = h.length ? h.map(r => `
+    <div class="history-item">
+      <span class="hist-round">#${r.round}</span>
+      <span class="hist-sum">${r.sum}</span>
+      <span class="hist-result hist-${r.result}">${r.result === 'tai' ? 'TÀI' : 'XỈU'}</span>
+    </div>`).join('') : '<div style="text-align:center;color:rgba(255,255,255,0.3);font-size:13px;padding:20px">Chưa có lịch sử</div>';
+}
+function renderMyWins(game) {
+  const wins = game === 'tx' ? txState.myWins : clState.myWins;
+  const el = document.getElementById(game+'-my-wins');
+  if (!el) return;
+  el.innerHTML = wins.length ? wins.slice(0,10).map(w => `
+    <div class="history-item">
+      <span class="hist-round">#${w.round}</span>
+      <span style="color:#51cf66;font-weight:700">+${fmtMoney(w.amount)} ₫</span>
+    </div>`).join('') : '<div style="text-align:center;color:rgba(255,255,255,0.3);font-size:13px;padding:20px">Chưa có thắng</div>';
+}
+function renderLeaderboard(game) {
+  const lb = DB.getLeaderboard();
+  const medals = ['🥇','🥈','🥉'];
+  const el = document.getElementById(game+'-leaderboard');
+  if (!el) return;
+  el.innerHTML = lb.slice(0,7).map((u,i) => `
+    <div class="lb-row">
+      <span class="lb-rank">${medals[i]||i+1}</span>
+      <span class="lb-name">${u.username}</span>
+      <span class="lb-amount">${fmtMoney(u.totalWin||0)}</span>
+    </div>`).join('') || '<div style="text-align:center;color:rgba(255,255,255,0.3);font-size:13px;padding:10px">Chưa có dữ liệu</div>';
+}
+function renderHomeLeaderboard() {
+  const lb = DB.getLeaderboard();
+  const medals = ['🥇','🥈','🥉'];
+  document.getElementById('home-leaderboard').innerHTML = lb.slice(0,10).map((u,i) => `
+    <div class="lb-row">
+      <span class="lb-rank" style="font-size:${i<3?'18px':'14px'}">${medals[i]||i+1}</span>
+      <span class="lb-name">${u.username}</span>
+      <span class="lb-amount">${fmtMoney(u.totalWin||0)} ₫</span>
+    </div>`).join('') || '<div style="text-align:center;color:rgba(255,255,255,0.3);font-size:13px;padding:20px">Chưa có dữ liệu</div>';
+}
+
+// ===== CHANLE ENGINE (mirrors Taixiu) =====
+const CL_TOTAL = 35;
+function startChanle() {
+  if (clState.interval) clearInterval(clState.interval);
+  clState.round = parseInt(Math.random() * 9000 + 1000);
+  resetClRound();
+  loadClHistory();
+  renderLeaderboard('cl');
+  clState.interval = setInterval(clTick, 1000);
+}
+function resetClRound() {
+  clState.phase = 'betting';
+  clState.timer = CL_TOTAL;
+  clState.myBet = null;
+  clState.chanPool = Math.floor(Math.random()*500000+200000);
+  clState.chanPlayers = Math.floor(Math.random()*30+5);
+  clState.lePool = Math.floor(Math.random()*500000+200000);
+  clState.lePlayers = Math.floor(Math.random()*30+5);
+  clState.result = null;
+  document.getElementById('cl-room-id').textContent = 'Phiên #' + clState.round;
+  document.getElementById('cl-result-label').className = 'tx-result-label';
+  document.getElementById('cl-my-bet').innerHTML = 'Chọn mệnh giá và bấm ĐẶT CƯỢC';
+  document.getElementById('cl-dice-sum').style.display = 'none';
+  ['cd1','cd2','cd3'].forEach(id => {
+    const d = document.getElementById(id);
+    d.classList.remove('show');
+  });
+  document.getElementById('cl-bowl').style.display = 'block';
+  document.getElementById('cl-bowl').style.cursor = 'default';
+  document.getElementById('cl-bowl-body').classList.remove('lifted');
+  document.getElementById('btn-chan').disabled = false;
+  document.getElementById('btn-le').disabled = false;
+  updateClPools();
+  addBotChat('cl');
+}
+function clTick() {
+  if (clState.phase === 'betting') {
+    clState.timer--;
+    if (Math.random() < 0.3) {
+      const side = Math.random() < 0.5 ? 'chan' : 'le';
+      const amount = [10000,20000,50000][Math.floor(Math.random()*3)];
+      if (side === 'chan') { clState.chanPool += amount; clState.chanPlayers++; }
+      else { clState.lePool += amount; clState.lePlayers++; }
+      updateClPools();
+    }
+    if (clState.timer <= 0) {
+      clState.phase = 'reveal';
+      clState.timer = 8;
+      document.getElementById('cl-phase').textContent = '🎲 Đang lắc xúc sắc...';
+      document.getElementById('btn-chan').disabled = true;
+      document.getElementById('btn-le').disabled = true;
+      generateClDice();
+    }
+    updateClTimer();
+  } else if (clState.phase === 'reveal') {
+    clState.timer--;
+    if (clState.timer <= 0) { showClResult(); clState.phase = 'waiting'; clState.timer = 5; }
+    updateClTimer();
+  } else if (clState.phase === 'waiting') {
+    clState.timer--;
+    document.getElementById('cl-phase').textContent = `⏳ Vòng mới sau ${clState.timer}s`;
+    if (clState.timer <= 0) {
+      clState.round++;
+      resetClRound();
+      if (clState.interval) clearInterval(clState.interval);
+      clState.interval = setInterval(clTick, 1000);
+    }
+    updateClTimer();
+  }
+}
+function generateClDice() {
+  const ctrl = DB.getChanLeResult();
+  let dice;
+  if (ctrl !== null) {
+    dice = distributeDice(ctrl);
+  } else {
+    dice = [Math.floor(Math.random()*6)+1, Math.floor(Math.random()*6)+1, Math.floor(Math.random()*6)+1];
+  }
+  clState.dice = dice;
+  clState.sum = dice.reduce((a,b)=>a+b,0);
+  clState.result = clState.sum % 2 === 0 ? 'chan' : 'le';
+  const dFaces = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+  ['cd1','cd2','cd3'].forEach((id,i) => document.getElementById(id).textContent = dFaces[dice[i]-1]);
+}
+function showClResult() {
+  const bowl = document.getElementById('cl-bowl');
+  bowl.style.cursor = 'pointer';
+  bowl.onclick = liftClBowl;
+  const lbl = document.getElementById('cl-result-label');
+  lbl.textContent = clState.result === 'chan' ? '🟡 CHẴN' : '🟣 LẺ';
+  lbl.className = 'tx-result-label show ' + clState.result;
+  document.getElementById('cl-dice-sum').textContent = String(clState.sum).padStart(2,'0');
+  document.getElementById('cl-dice-sum').style.display = 'block';
+  document.getElementById('cl-phase').textContent = `Kết quả: ${clState.result === 'chan' ? 'CHẴN' : 'LẺ'} (${clState.sum})`;
+  DB.addChanLeHistory({ round: clState.round, dice: clState.dice, sum: clState.sum, result: clState.result, chanPool: clState.chanPool, lePool: clState.lePool, timestamp: Date.now() });
+  loadClHistory();
+  if (clState.myBet) {
+    const won = clState.myBet.side === clState.result;
+    const winAmount = won ? Math.floor(clState.myBet.amount * 1.95) : 0;
+    if (won) {
+      DB.updateBalance(currentUser, winAmount);
+      clState.myWins.unshift({ round: clState.round, amount: winAmount });
+      renderMyWins('cl');
+      showToast(`🎉 THẮNG! +${fmtMoney(winAmount)} ₫`, 'win');
+    } else {
+      showToast(`😞 Thua ${fmtMoney(clState.myBet.amount)} ₫`, 'lose');
+    }
+    updateTopBar();
+  }
+}
+function liftClBowl() {
+  document.getElementById('cl-bowl-body').classList.add('lifted');
+  document.getElementById('cl-bowl').style.cursor = 'default';
+  document.getElementById('cl-bowl').onclick = null;
+  ['cd1','cd2','cd3'].forEach(id => setTimeout(() => document.getElementById(id).classList.add('show'), 200));
+}
+function updateClTimer() {
+  const el = document.getElementById('cl-timer');
+  el.textContent = clState.timer;
+  el.className = 'tx-timer' + (clState.timer <= 5 ? ' urgent' : '');
+  const pct = clState.phase === 'betting' ? (clState.timer / CL_TOTAL * 100) : 0;
+  document.getElementById('cl-progress').style.width = pct + '%';
+}
+function updateClPools() {
+  document.getElementById('cl-chan-pool').textContent = '$ ' + fmtMoney(clState.chanPool);
+  document.getElementById('cl-chan-players').textContent = clState.chanPlayers + ' người cược';
+  document.getElementById('cl-le-pool').textContent = '$ ' + fmtMoney(clState.lePool);
+  document.getElementById('cl-le-players').textContent = clState.lePlayers + ' người cược';
+}
+function placeBet(side) {
+  // Detect which game is active
+  const isCl = document.getElementById('chanle-page').classList.contains('active');
+  if (isCl) {
+    if (clState.phase !== 'betting') { showToast('Hết thời gian đặt cược!', 'info'); return; }
+    if (clState.myBet) { showToast('Bạn đã đặt cược rồi!', 'info'); return; }
+    const amount = selectedChip.cl;
+    const bal = DB.getBalance(currentUser);
+    if (bal < amount) { showToast('Số dư không đủ!', 'lose'); return; }
+    DB.updateBalance(currentUser, -amount);
+    clState.myBet = { side, amount };
+    if (side === 'chan') { clState.chanPool += amount; clState.chanPlayers++; }
+    else { clState.lePool += amount; clState.lePlayers++; }
+    updateClPools();
+    updateTopBar();
+    const lbl = side === 'chan' ? 'CHẴN' : 'LẺ';
+    document.getElementById('cl-my-bet').innerHTML = `Bạn đặt: <strong>${lbl}</strong> — <strong>${fmtMoney(amount)} ₫</strong>`;
+    document.getElementById('btn-chan').disabled = true;
+    document.getElementById('btn-le').disabled = true;
+    showToast(`Đặt ${lbl} ${fmtMoney(amount)} ₫ thành công!`, 'info');
+  } else {
+    // Tài Xỉu
+    if (txState.phase !== 'betting') { showToast('Hết thời gian đặt cược!', 'info'); return; }
+    if (txState.myBet) { showToast('Bạn đã đặt cược rồi!', 'info'); return; }
+    const amount = selectedChip.tx;
+    const bal = DB.getBalance(currentUser);
+    if (bal < amount) { showToast('Số dư không đủ!', 'lose'); return; }
+    DB.updateBalance(currentUser, -amount);
+    txState.myBet = { side, amount };
+    if (side === 'tai') { txState.taiPool += amount; txState.taiPlayers++; }
+    else { txState.xiuPool += amount; txState.xiuPlayers++; }
+    updateTxPools();
+    updateTopBar();
+    const lbl = side === 'tai' ? 'TÀI' : 'XỈU';
+    document.getElementById('tx-my-bet').innerHTML = `Bạn đặt: <strong>${lbl}</strong> — <strong>${fmtMoney(amount)} ₫</strong>`;
+    document.getElementById('btn-tai').disabled = true;
+    document.getElementById('btn-xiu').disabled = true;
+    showToast(`Đặt ${lbl} ${fmtMoney(amount)} ₫ thành công!`, 'info');
+  }
+}
+function loadClHistory() {
+  const h = DB.getChanLeHistory().slice(0,15);
+  const el = document.getElementById('cl-history');
+  el.innerHTML = h.length ? h.map(r => `
+    <div class="history-item">
+      <span class="hist-round">#${r.round}</span>
+      <span class="hist-sum">${r.sum}</span>
+      <span class="hist-result hist-${r.result}">${r.result === 'chan' ? 'CHẴN' : 'LẺ'}</span>
+    </div>`).join('') : '<div style="text-align:center;color:rgba(255,255,255,0.3);font-size:13px;padding:20px">Chưa có lịch sử</div>';
+}
+
+// ===== MAYBAY ENGINE =====
+function startMaybay() {
+  generateStars();
+  resetMbRound();
+  mbStartCountdown();
+  renderLeaderboard('mb');
+  loadMbHistory();
+}
+function generateStars() {
+  const c = document.getElementById('mb-stars');
+  c.innerHTML = '';
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2 + 1;
+    s.style.cssText = `width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-delay:${Math.random()*2}s`;
+    c.appendChild(s);
+  }
+}
+function resetMbRound() {
+  mbState.phase = 'waiting';
+  mbState.multiplier = 1.00;
+  mbState.myBet = null;
+  mbState.myLanded = false;
+  // Random crash point: weighted toward lower values
+  const r = Math.random();
+  if (r < 0.35) mbState.crashAt = 1.0 + Math.random() * 0.5;
+  else if (r < 0.65) mbState.crashAt = 1.5 + Math.random() * 1.5;
+  else if (r < 0.85) mbState.crashAt = 3.0 + Math.random() * 4.0;
+  else mbState.crashAt = 7.0 + Math.random() * 13.0;
+  mbState.crashAt = Math.round(mbState.crashAt * 100) / 100;
+  document.getElementById('mb-multiplier').textContent = '1.00x';
+  document.getElementById('mb-multiplier').className = 'mb-multiplier';
+  document.getElementById('mb-explosion').style.display = 'none';
+  document.getElementById('btn-mb-bet').disabled = false;
+  document.getElementById('btn-mb-land').disabled = true;
+  document.getElementById('mb-my-bet-info').textContent = 'Chọn mệnh giá và bấm ĐẶT CƯỢC';
+  document.getElementById('mb-status').textContent = '⏳ Đang chờ vòng mới...';
+  // Reset plane
+  const plane = document.getElementById('mb-plane');
+  plane.style.transition = 'none';
+  plane.style.left = '20px';
+  plane.style.bottom = '20px';
+  plane.className = 'plane';
+  addBotChat('mb');
+}
+function mbStartCountdown() {
+  if (mbState.countInterval) clearInterval(mbState.countInterval);
+  mbState.countdown = 15;
+  document.getElementById('mb-countdown').textContent = mbState.countdown;
+  mbState.countInterval = setInterval(() => {
+    mbState.countdown--;
+    document.getElementById('mb-countdown').textContent = mbState.countdown;
+    if (mbState.countdown <= 0) {
+      clearInterval(mbState.countInterval);
+      document.getElementById('btn-mb-bet').disabled = true;
+      mbStartFlight();
+    }
+  }, 1000);
+}
+function mbPlaceBet() {
+  if (mbState.phase !== 'waiting') { showToast('Đang bay! Không thể đặt cược.', 'info'); return; }
+  if (mbState.myBet) { showToast('Bạn đã đặt cược rồi!', 'info'); return; }
+  const amount = selectedChip.mb;
+  const bal = DB.getBalance(currentUser);
+  if (bal < amount) { showToast('Số dư không đủ!', 'lose'); return; }
+  DB.updateBalance(currentUser, -amount);
+  mbState.myBet = { amount };
+  updateTopBar();
+  document.getElementById('mb-my-bet-info').innerHTML = `Đã đặt: <strong>${fmtMoney(amount)} ₫</strong> — Nhân hệ số hiện tại khi hạ cánh!`;
+  showToast(`Đặt ${fmtMoney(amount)} ₫ thành công!`, 'info');
+}
+function mbStartFlight() {
+  mbState.phase = 'flying';
+  mbState.multiplier = 1.00;
+  document.getElementById('mb-status').textContent = '✈️ Máy bay đang bay — Hạ cánh để nhận thưởng!';
+  if (mbState.myBet) document.getElementById('btn-mb-land').disabled = false;
+  const plane = document.getElementById('mb-plane');
+  plane.className = 'plane flying';
+  if (mbState.flyInterval) clearInterval(mbState.flyInterval);
+  mbState.flyInterval = setInterval(() => {
+    // Increase multiplier
+    const inc = mbState.multiplier < 2 ? 0.03 : mbState.multiplier < 5 ? 0.06 : 0.1;
+    mbState.multiplier = Math.round((mbState.multiplier + inc) * 100) / 100;
+    const el = document.getElementById('mb-multiplier');
+    el.textContent = mbState.multiplier.toFixed(2) + 'x';
+    el.className = 'mb-multiplier' + (mbState.multiplier > 3 ? ' danger' : '');
+    // Move plane
+    const sky = document.getElementById('mb-sky');
+    const maxX = sky.offsetWidth - 60;
+    const maxY = sky.offsetHeight - 60;
+    const progress = Math.min(1, (mbState.multiplier - 1) / (mbState.crashAt - 1));
+    plane.style.transition = '0.3s linear';
+    plane.style.left = (20 + progress * (maxX - 40)) + 'px';
+    plane.style.bottom = (20 + progress * (maxY - 20)) + 'px';
+    // Update landing info
+    if (mbState.myBet && !mbState.myLanded) {
+      const potential = Math.floor(mbState.myBet.amount * mbState.multiplier);
+      document.getElementById('mb-my-bet-info').innerHTML = `Đặt: <strong>${fmtMoney(mbState.myBet.amount)} ₫</strong> → Nhận: <strong style="color:#51cf66">${fmtMoney(potential)} ₫</strong> (${mbState.multiplier.toFixed(2)}x)`;
+    }
+    // Check crash
+    if (mbState.multiplier >= mbState.crashAt) {
+      mbCrash();
+    }
+  }, 200);
+}
+function mbLand() {
+  if (mbState.phase !== 'flying' || !mbState.myBet || mbState.myLanded) return;
+  mbState.myLanded = true;
+  document.getElementById('btn-mb-land').disabled = true;
+  const winAmount = Math.floor(mbState.myBet.amount * mbState.multiplier);
+  DB.updateBalance(currentUser, winAmount);
+  mbState.myWins.unshift({ multiplier: mbState.multiplier, amount: winAmount });
+  updateTopBar();
+  showToast(`🛬 Hạ cánh! Nhận ${fmtMoney(winAmount)} ₫ (${mbState.multiplier.toFixed(2)}x)`, 'win');
+  document.getElementById('mb-my-bet-info').innerHTML = `✅ Đã hạ cánh: <strong style="color:#51cf66">+${fmtMoney(winAmount)} ₫</strong> (${mbState.multiplier.toFixed(2)}x)`;
+}
+function mbCrash() {
+  clearInterval(mbState.flyInterval);
+  mbState.phase = 'crashed';
+  document.getElementById('btn-mb-land').disabled = true;
+  document.getElementById('mb-explosion').style.display = 'block';
+  document.getElementById('mb-explosion').style.animation = 'none';
+  document.getElementById('mb-explosion').offsetHeight; // reflow
+  document.getElementById('mb-explosion').style.animation = 'explode 1s forwards';
+  document.getElementById('mb-multiplier').textContent = '💥 ' + mbState.crashAt.toFixed(2) + 'x';
+  document.getElementById('mb-status').textContent = `💥 Máy bay nổ tại ${mbState.crashAt.toFixed(2)}x!`;
+  if (mbState.myBet && !mbState.myLanded) {
+    showToast(`💥 Máy bay nổ tại ${mbState.crashAt.toFixed(2)}x — Mất ${fmtMoney(mbState.myBet.amount)} ₫`, 'lose');
+    document.getElementById('mb-my-bet-info').innerHTML = `❌ Thua <strong style="color:#ff6b6b">${fmtMoney(mbState.myBet.amount)} ₫</strong> (nổ ${mbState.crashAt.toFixed(2)}x)`;
+  }
+  DB.addMayBayHistory({ crashAt: mbState.crashAt, timestamp: Date.now() });
+  document.getElementById('mb-jackpot-preview').textContent = mbState.crashAt.toFixed(2);
+  loadMbHistory();
+  renderLeaderboard('mb');
+  // Start new round after delay
+  setTimeout(() => {
+    resetMbRound();
+    mbStartCountdown();
+  }, 4000);
+}
+function loadMbHistory() {
+  const h = DB.getMayBayHistory().slice(0,12);
+  const el = document.getElementById('mb-history');
+  el.innerHTML = h.length ? h.map(r => `
+    <div class="history-item">
+      <span style="color:rgba(255,255,255,0.4);font-size:11px">${new Date(r.timestamp).toLocaleTimeString('vi-VN')}</span>
+      <span style="color:${r.crashAt >= 2 ? '#51cf66' : '#ff6b6b'};font-weight:700">${r.crashAt.toFixed(2)}x 💥</span>
+    </div>`).join('') : '<div style="text-align:center;color:rgba(255,255,255,0.3);font-size:13px;padding:20px">Chưa có lịch sử</div>';
+}
+
+// ===== CHAT =====
+const botNames = ['canvat990','tgtgt123','okokk00','hokxinkk','xiisnun500k0'];
+const botMsgs_tx = ['TÀI 100%','xỉu chắc rồi','tai tai tai','xỉu đê','bú chuẩn tài','ALLLL xỉu','tài lol','ai đặt xỉu chung nào','10 ván tài liên tiếp rồi','xỉu đổi chiều thôi'];
+const botMsgs_mb = ['bay cao thôi','hạ cánh 1.5x','chờ 5x mới hạ','ai dám 10x không','máy bay nổ rồi','lần này bay xa','cẩn thận nổ sớm','đặt 500k bay thôi'];
+function generateMockChats() {
+  ['tx','mb','cl'].forEach(g => {
+    const el = document.getElementById(g+'-chat');
+    if (!el) return;
+    for (let i = 0; i < 5; i++) {
+      const name = botNames[Math.floor(Math.random()*botNames.length)];
+      const msgs = g === 'mb' ? botMsgs_mb : botMsgs_tx;
+      const msg = msgs[Math.floor(Math.random()*msgs.length)];
+      appendChat(g, name, msg);
+    }
+  });
+}
+function addBotChat(game) {
+  if (Math.random() < 0.6) {
+    const name = botNames[Math.floor(Math.random()*botNames.length)];
+    const msgs = game === 'mb' ? botMsgs_mb : botMsgs_tx;
+    const msg = msgs[Math.floor(Math.random()*msgs.length)];
+    appendChat(game, name, msg);
+  }
+}
+function appendChat(game, user, text) {
+  const el = document.getElementById(game+'-chat');
+  if (!el) return;
+  const div = document.createElement('div');
+  div.className = 'chat-msg';
+  div.innerHTML = `<span class="user">${user}:</span> <span class="txt">${text}</span>`;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
+function sendChat(game) {
+  const input = document.getElementById(game+'-chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  appendChat(game, currentUser, text);
+  input.value = '';
+}
+
+// ===== TOAST =====
+let toastTimer;
+function showToast(msg, type = 'info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.className = 'toast', 3000);
+}
+
+// Enter key support for auth
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    if (document.getElementById('login-form').classList.contains('active') && document.getElementById('auth-screen').style.display !== 'none') doLogin();
+    else if (document.getElementById('register-form').classList.contains('active') && document.getElementById('auth-screen').style.display !== 'none') doRegister();
+  }
+});
+</script>
+</body>
+</html>
