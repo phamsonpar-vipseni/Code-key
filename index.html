@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Tool tạo file mobileconfig</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>⚙️ Tạo file .mobileconfig theo yêu cầu</h1>
+        <form id="configForm">
+            <label>Tên cấu hình (PayloadDisplayName):</label>
+            <input type="text" id="configName" value="Cấu hình WiFi tự động" required>
+
+            <label>Mô tả (PayloadDescription):</label>
+            <input type="text" id="configDesc" value="Kết nối WiFi qua cấu hình" required>
+
+            <label>Mã định danh (PayloadIdentifier):</label>
+            <input type="text" id="identifier" value="com.example.wifi" required>
+
+            <label>SSID WiFi:</label>
+            <input type="text" id="ssid" value="FreeWiFi" required>
+
+            <label>Mật khẩu WiFi (để trống nếu không có):</label>
+            <input type="text" id="password" value="">
+
+            <label>Bảo mật (WEP/WPA/WPA2):</label>
+            <select id="security">
+                <option value="WPA">WPA/WPA2</option>
+                <option value="WEP">WEP</option>
+                <option value="None">Không có mật khẩu</option>
+            </select>
+
+            <button type="button" id="generateBtn">📲 Tạo và tải file .mobileconfig</button>
+        </form>
+        <p class="note">Sau khi tải, vào Cài đặt > Chung > VPN & Quản lý thiết bị để cài đặt.</p>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
