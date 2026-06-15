@@ -1,0 +1,1930 @@
+cat > /mnt/user-data/outputs/mobileconfig-generator.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MobileConfig Generator Pro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg: #0d0f14;
+  --surface: #161a23;
+  --surface2: #1c2130;
+  --border: #252a37;
+  --border2: #2e3545;
+  --accent: #4f8ef7;
+  --accent2: #a78bfa;
+  --green: #34d399;
+  --red: #f87171;
+  --orange: #fb923c;
+  --yellow: #fbbf24;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #1a1f2e 0%, #0d1117 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.logo-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+header h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
+.header-sub { font-size: 12px; color: var(--muted); margin-left: 4px; }
+.header-right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+
+/* LAYOUT */
+.app {
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  min-height: calc(100vh - 57px);
+}
+
+/* SIDEBAR */
+.sidebar {
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* NAV GROUPS */
+.nav-groups {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  flex-wrap: wrap;
+}
+.nav-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px 0;
+}
+.nav-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  color: var(--muted);
+  padding: 2px 0;
+  width: 100%;
+}
+.tab-btn {
+  padding: 6px 11px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+  display: flex; align-items: center; gap: 5px;
+}
+.tab-btn:hover { background: var(--border); color: var(--text); }
+.tab-btn.active {
+  background: rgba(79,142,247,.13);
+  border-color: rgba(79,142,247,.3);
+  color: var(--accent);
+}
+.tab-btn .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  display: none;
+}
+.tab-btn.enabled .dot { display: inline-block; }
+
+/* PANELS */
+.panels { flex: 1; overflow-y: auto; padding-bottom: 60px; }
+.tab-panel { display: none; padding: 18px; }
+.tab-panel.active { display: block; }
+
+/* FIELDS */
+.field { margin-bottom: 14px; }
+label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  margin-bottom: 5px;
+}
+label .req { color: var(--accent); margin-left: 2px; }
+input[type=text], input[type=email], input[type=password], input[type=number], input[type=url], textarea, select {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 11px;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border .2s;
+}
+input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+select option { background: #161a23; }
+input[readonly] { color: var(--muted); cursor: default; }
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+.section-title {
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  color: var(--accent);
+  padding: 4px 0 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title .icon { font-size: 14px; }
+
+/* TOGGLE */
+.toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #1a1f2c;
+  font-size: 13px;
+}
+.toggle-row span { flex: 1; padding-right: 12px; line-height: 1.4; }
+.toggle { position: relative; width: 38px; height: 21px; flex-shrink: 0; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute; inset: 0;
+  background: var(--border); border-radius: 22px;
+  cursor: pointer; transition: .25s;
+}
+.slider:before {
+  content: '';
+  position: absolute;
+  width: 15px; height: 15px;
+  left: 3px; top: 3px;
+  background: #fff; border-radius: 50%; transition: .25s;
+}
+input:checked + .slider { background: var(--accent); }
+input:checked + .slider:before { transform: translateX(17px); }
+
+.hint { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+
+/* DYNAMIC LIST */
+.dyn-list { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+.dyn-item { display: flex; gap: 6px; align-items: center; }
+.dyn-item input { flex: 1; }
+
+/* BUTTONS */
+.btn {
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; border: none;
+  transition: all .2s;
+  display: inline-flex; align-items: center; gap: 6px;
+  text-decoration: none;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #3a7af0; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(79,142,247,.4); }
+.btn-success { background: var(--green); color: #0a2010; }
+.btn-success:hover { background: #2dbd8a; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(52,211,153,.35); }
+.btn-ghost { background: var(--border2); color: var(--text); }
+.btn-ghost:hover { background: #384056; }
+.btn-danger { background: rgba(248,113,113,.12); color: var(--red); border: 1px solid rgba(248,113,113,.25); }
+.btn-danger:hover { background: rgba(248,113,113,.22); }
+.btn-sm { padding: 5px 10px; font-size: 11.5px; }
+.btn-icon {
+  padding: 6px 9px; background: var(--border);
+  border: none; border-radius: 7px; color: var(--muted);
+  cursor: pointer; font-size: 13px; transition: .2s; flex-shrink: 0;
+}
+.btn-icon:hover { background: var(--border2); color: var(--text); }
+.btn-icon.del:hover { color: var(--red); }
+.btn-w100 { width: 100%; justify-content: center; }
+
+/* ENABLE BANNER */
+.enable-banner {
+  background: rgba(79,142,247,.06);
+  border: 1px solid rgba(79,142,247,.2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 13px;
+}
+.enable-banner span { color: var(--muted); }
+
+/* PREVIEW PANE */
+.preview-pane { display: flex; flex-direction: column; }
+.preview-bar {
+  padding: 12px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap; gap-y: 6px;
+}
+.preview-bar h2 { font-size: 14px; font-weight: 600; }
+.badge {
+  font-size: 11px; padding: 2px 8px;
+  border-radius: 999px; background: #1e2d40;
+  color: var(--accent); font-family: 'JetBrains Mono', monospace;
+}
+.payload-count {
+  font-size: 11px; padding: 2px 8px;
+  border-radius: 999px; background: rgba(52,211,153,.12);
+  color: var(--green); font-family: 'JetBrains Mono', monospace;
+}
+
+pre#xml-preview {
+  flex: 1; overflow: auto; padding: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; line-height: 1.75;
+  color: #9ecaed; background: var(--bg); margin: 0;
+}
+
+/* ACTION BAR */
+.action-bar {
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  display: flex; gap: 8px; align-items: center;
+  flex-wrap: wrap;
+}
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+.status-text { font-size: 12px; color: var(--muted); }
+
+/* GENERATE MODAL */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.65); z-index: 500;
+  align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 14px;
+  padding: 28px;
+  width: 420px; max-width: 96vw;
+  box-shadow: 0 24px 64px rgba(0,0,0,.6);
+  animation: popIn .22s ease;
+}
+@keyframes popIn { from { opacity:0; transform: scale(.92) } to { opacity:1; transform: scale(1) } }
+.modal h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.modal .modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
+
+.success-screen {
+  text-align: center; padding: 10px 0;
+}
+.success-icon { font-size: 48px; margin-bottom: 12px; }
+.success-screen h3 { font-size: 18px; margin-bottom: 8px; }
+.success-screen p { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+.download-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* CERT TEXTAREA */
+.mono-area { font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+
+/* COLLAPSIBLE */
+.collapsible-header {
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; padding: 8px 0; user-select: none;
+  font-size: 12.5px; font-weight: 600; color: var(--muted);
+  border-bottom: 1px dashed var(--border);
+  margin-bottom: 8px;
+}
+.collapsible-header:hover { color: var(--text); }
+.collapsible-header .chevron { transition: transform .2s; }
+.collapsible-header.open .chevron { transform: rotate(180deg); }
+.collapsible-body { display: none; }
+.collapsible-body.open { display: block; }
+
+/* TAG-style pills for restrictions */
+.pill-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.pill {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 8px; padding: 5px 10px;
+  font-size: 12px; cursor: pointer; transition: all .18s;
+  user-select: none;
+}
+.pill input { display: none; }
+.pill .pill-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border2); transition: .18s; flex-shrink:0; }
+.pill.active { border-color: rgba(248,113,113,.4); background: rgba(248,113,113,.08); }
+.pill.active .pill-dot { background: var(--red); }
+.pill.allow-active { border-color: rgba(52,211,153,.4); background: rgba(52,211,153,.08); }
+.pill.allow-active .pill-dot { background: var(--green); }
+
+/* RESPONSIVE */
+@media (max-width: 820px) {
+  .app { grid-template-columns: 1fr; }
+  .preview-pane { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-icon">⚙️</div>
+  <h1>MobileConfig Generator</h1>
+  <span class="header-sub">iOS &amp; macOS Profile Builder</span>
+  <div class="header-right">
+    <button class="btn btn-success" onclick="openGenModal()">✦ Tạo &amp; Tải file</button>
+    <button class="btn btn-ghost btn-sm" onclick="copyXML()">📋 Copy XML</button>
+  </div>
+</header>
+
+<div class="app">
+  <!-- ═══ SIDEBAR ═══ -->
+  <div class="sidebar">
+    <div class="nav-groups">
+      <div class="nav-label">📋 Cấu hình chung</div>
+      <div class="nav-section">
+        <button class="tab-btn active" id="nav-general" onclick="switchTab('general',this)">🗂 Profile</button>
+      </div>
+      <div class="nav-label">🌐 Mạng</div>
+      <div class="nav-section">
+        <button class="tab-btn" id="nav-wifi" onclick="switchTab('wifi',this)"><span class="dot"></span>Wi-Fi</button>
+        <button class="tab-btn" id="nav-vpn" onclick="switchTab('vpn',this)"><span class="dot"></span>VPN</button>
+        <button class="tab-btn" id="nav-dns" onclick="switchTab('dns',this)"><span class="dot"></span>DNS</button>
+        <button class="tab-btn" id="nav-apn" onclick="switchTab('apn',this)"><span class="dot"></span>APN</button>
+        <button class="tab-btn" id="nav-proxy" onclick="switchTab('proxy',this)"><span class="dot"></span>Proxy</button>
+      </div>
+      <div class="nav-label">📧 Tài khoản &amp; Email</div>
+      <div class="nav-section">
+        <button class="tab-btn" id="nav-email" onclick="switchTab('email',this)"><span class="dot"></span>Email (IMAP/POP)</button>
+        <button class="tab-btn" id="nav-exchange" onclick="switchTab('exchange',this)"><span class="dot"></span>Exchange / EAS</button>
+        <button class="tab-btn" id="nav-caldav" onclick="switchTab('caldav',this)"><span class="dot"></span>CalDAV</button>
+        <button class="tab-btn" id="nav-carddav" onclick="switchTab('carddav',this)"><span class="dot"></span>CardDAV</button>
+      </div>
+      <div class="nav-label">🔒 Bảo mật</div>
+      <div class="nav-section">
+        <button class="tab-btn" id="nav-passcode" onclick="switchTab('passcode',this)"><span class="dot"></span>Mật mã</button>
+        <button class="tab-btn" id="nav-cert" onclick="switchTab('cert',this)"><span class="dot"></span>Chứng chỉ</button>
+        <button class="tab-btn" id="nav-scep" onclick="switchTab('scep',this)"><span class="dot"></span>SCEP</button>
+      </div>
+      <div class="nav-label">🖥 Quản lý thiết bị</div>
+      <div class="nav-section">
+        <button class="tab-btn" id="nav-restrict" onclick="switchTab('restrict',this)"><span class="dot"></span>Giới hạn</button>
+        <button class="tab-btn" id="nav-mdm" onclick="switchTab('mdm',this)"><span class="dot"></span>MDM</button>
+        <button class="tab-btn" id="nav-web" onclick="switchTab('web',this)"><span class="dot"></span>Web Clip</button>
+        <button class="tab-btn" id="nav-font" onclick="switchTab('font',this)"><span class="dot"></span>Font</button>
+      </div>
+    </div>
+
+    <div class="panels">
+
+      <!-- ══ GENERAL ══ -->
+      <div class="tab-panel active" id="tab-general">
+        <div class="section-title"><span class="icon">🗂</span> Thông tin Profile</div>
+        <div class="field">
+          <label>Tên Profile <span class="req">*</span></label>
+          <input id="pf-name" type="text" placeholder="My Configuration Profile" value="My Config Profile" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Mô tả</label>
+          <input id="pf-desc" type="text" placeholder="Mô tả ngắn về profile này" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Tổ chức / Tác giả</label>
+          <input id="pf-org" type="text" placeholder="Tên công ty hoặc cá nhân" oninput="renderPreview()" />
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Identifier <span class="req">*</span></label>
+            <input id="pf-id" type="text" placeholder="com.example.profile" value="com.example.profile" oninput="renderPreview()" />
+          </div>
+          <div class="field">
+            <label>Phiên bản</label>
+            <input id="pf-version" type="number" placeholder="1" value="1" oninput="renderPreview()" />
+          </div>
+        </div>
+        <div class="field">
+          <label>UUID</label>
+          <div style="display:flex;gap:8px;">
+            <input id="pf-uuid" type="text" placeholder="Tự tạo UUID" readonly />
+            <button class="btn btn-ghost" onclick="newUUID('pf-uuid')">🔄</button>
+          </div>
+          <div class="hint">Định danh duy nhất — nhấn 🔄 để tạo mới</div>
+        </div>
+
+        <div class="section-title" style="margin-top:18px;"><span class="icon">🔐</span> Bảo mật Profile</div>
+        <div class="toggle-row">
+          <span>Yêu cầu xác nhận khi cài đặt</span>
+          <label class="toggle"><input type="checkbox" id="pf-consent" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>Nội dung thông báo xác nhận</label>
+          <textarea id="pf-consent-text" placeholder="Vui lòng xác nhận để cài đặt profile này." oninput="renderPreview()"></textarea>
+        </div>
+        <div class="toggle-row">
+          <span>Không cho phép xóa profile</span>
+          <label class="toggle"><input type="checkbox" id="pf-nodelete" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>Chính sách xóa profile</label>
+          <select id="pf-removal" onchange="renderPreview()">
+            <option value="">Mặc định (có thể xóa)</option>
+            <option value="WithAuthorization">Yêu cầu xác thực</option>
+            <option value="Never">Không thể xóa</option>
+            <option value="Always">Tự do xóa</option>
+          </select>
+        </div>
+        <div class="toggle-row">
+          <span>Profile tự xóa (có hạn)</span>
+          <label class="toggle"><input type="checkbox" id="pf-expiry-enable" onchange="toggleExpiry();renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div id="expiry-block" style="display:none;margin-top:10px;">
+          <div class="field">
+            <label>Ngày hết hạn (ISO 8601)</label>
+            <input id="pf-expiry" type="text" placeholder="2025-12-31T00:00:00Z" oninput="renderPreview()" />
+            <div class="hint">Profile sẽ tự xóa sau ngày này</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ WI-FI ══ -->
+      <div class="tab-panel" id="tab-wifi">
+        <div class="enable-banner">
+          <span>Cấu hình Wi-Fi</span>
+          <label class="toggle"><input type="checkbox" id="wifi-enable" onchange="togglePayload('wifi');renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field">
+          <label>SSID (Tên mạng)</label>
+          <input id="wifi-ssid" type="text" placeholder="MyNetwork" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Bảo mật</label>
+          <select id="wifi-sec" onchange="updateWifiSec();renderPreview()">
+            <option value="WPA2">WPA2 Personal</option>
+            <option value="WPA3">WPA3 Personal</option>
+            <option value="WPA2Enterprise">WPA2 Enterprise (802.1X)</option>
+            <option value="WEP">WEP</option>
+            <option value="None">Mở (không bảo mật)</option>
+          </select>
+        </div>
+        <div id="wifi-pass-block" class="field">
+          <label>Mật khẩu</label>
+          <input id="wifi-pass" type="password" placeholder="••••••••" oninput="renderPreview()" />
+        </div>
+        <div id="wifi-8021x-block" style="display:none;">
+          <div class="section-title" style="font-size:10px;"><span class="icon">🔑</span> 802.1X Enterprise</div>
+          <div class="field">
+            <label>EAP Type</label>
+            <select id="wifi-eap" onchange="renderPreview()">
+              <option value="PEAP">PEAP</option>
+              <option value="EAP-TLS">EAP-TLS</option>
+              <option value="TTLS">EAP-TTLS</option>
+              <option value="FAST">EAP-FAST</option>
+              <option value="LEAP">LEAP</option>
+            </select>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label>Username</label>
+              <input id="wifi-8021x-user" type="text" oninput="renderPreview()" />
+            </div>
+            <div class="field">
+              <label>Password</label>
+              <input id="wifi-8021x-pass" type="password" oninput="renderPreview()" />
+            </div>
+          </div>
+        </div>
+        <div class="toggle-row">
+          <span>Mạng ẩn (Hidden SSID)</span>
+          <label class="toggle"><input type="checkbox" id="wifi-hidden" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Tự động kết nối</span>
+          <label class="toggle"><input type="checkbox" id="wifi-auto" checked onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Tắt MAC randomization</span>
+          <label class="toggle"><input type="checkbox" id="wifi-nomac" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Capture Portal (Hotspot)</span>
+          <label class="toggle"><input type="checkbox" id="wifi-captive" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field" style="margin-top:12px;">
+          <label>Giao thức ưu tiên</label>
+          <select id="wifi-proto" onchange="renderPreview()">
+            <option value="">Mặc định</option>
+            <option value="IPv4">IPv4 Only</option>
+            <option value="IPv6">IPv6 Only</option>
+            <option value="Dual">Dual Stack</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ══ VPN ══ -->
+      <div class="tab-panel" id="tab-vpn">
+        <div class="enable-banner">
+          <span>Cấu hình VPN</span>
+          <label class="toggle"><input type="checkbox" id="vpn-enable" onchange="togglePayload('vpn');renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field">
+          <label>Tên kết nối</label>
+          <input id="vpn-name" type="text" placeholder="Corporate VPN" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Loại VPN</label>
+          <select id="vpn-type" onchange="updateVpnType();renderPreview()">
+            <option value="IKEv2">IKEv2</option>
+            <option value="IPSec">IPSec/L2TP</option>
+            <option value="L2TP">L2TP</option>
+            <option value="PPTP">PPTP</option>
+            <option value="AlwaysOn">Always-On IKEv2</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Server / Host</label>
+          <input id="vpn-server" type="text" placeholder="vpn.example.com" oninput="renderPreview()" />
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Username</label>
+            <input id="vpn-user" type="text" oninput="renderPreview()" />
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input id="vpn-pass" type="password" oninput="renderPreview()" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Remote ID (IKEv2)</label>
+          <input id="vpn-remoteid" type="text" placeholder="vpn.example.com" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Local ID (IKEv2)</label>
+          <input id="vpn-localid" type="text" placeholder="client@example.com" oninput="renderPreview()" />
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Auth Method</label>
+            <select id="vpn-auth" onchange="renderPreview()">
+              <option value="SharedSecret">Shared Secret</option>
+              <option value="Certificate">Certificate</option>
+              <option value="Password">Password</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Shared Secret / PSK</label>
+            <input id="vpn-psk" type="password" oninput="renderPreview()" />
+          </div>
+        </div>
+        <div class="toggle-row">
+          <span>Kết nối khi khởi động</span>
+          <label class="toggle"><input type="checkbox" id="vpn-ondemand" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Split Tunneling</span>
+          <label class="toggle"><input type="checkbox" id="vpn-split" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>Proxy Server (tùy chọn)</label>
+          <input id="vpn-proxy" type="text" placeholder="proxy.example.com:8080" oninput="renderPreview()" />
+        </div>
+      </div>
+
+      <!-- ══ DNS ══ -->
+      <div class="tab-panel" id="tab-dns">
+        <div class="enable-banner">
+          <span>DNS riêng (DoH / DoT)</span>
+          <label class="toggle"><input type="checkbox" id="dns-enable" onchange="togglePayload('dns');renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field">
+          <label>Giao thức</label>
+          <select id="dns-type" onchange="renderPreview()">
+            <option value="HTTPS">DoH – DNS over HTTPS</option>
+            <option value="TLS">DoT – DNS over TLS</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>DNS URL / Hostname</label>
+          <input id="dns-url" type="url" placeholder="https://cloudflare-dns.com/dns-query" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Địa chỉ IP máy chủ DNS</label>
+          <div id="dns-servers" class="dyn-list">
+            <div class="dyn-item">
+              <input type="text" placeholder="1.1.1.1" oninput="renderPreview()" />
+              <button class="btn-icon del" onclick="removeDyn(this)">✕</button>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm btn-w100" style="margin-top:6px;" onclick="addDyn('dns-servers','IP máy chủ DNS')">＋ Thêm IP</button>
+        </div>
+        <div class="field">
+          <label>Search Domains</label>
+          <div id="dns-domains" class="dyn-list">
+            <div class="dyn-item">
+              <input type="text" placeholder="example.com" oninput="renderPreview()" />
+              <button class="btn-icon del" onclick="removeDyn(this)">✕</button>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm btn-w100" style="margin-top:6px;" onclick="addDyn('dns-domains','Domain')">＋ Thêm Domain</button>
+        </div>
+        <div class="toggle-row">
+          <span>Áp dụng cho tất cả kết nối</span>
+          <label class="toggle"><input type="checkbox" id="dns-global" checked onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>Exclude Domains (không áp dụng DNS này)</label>
+          <input id="dns-exclude" type="text" placeholder="corp.example.com, local" oninput="renderPreview()" />
+          <div class="hint">Phân cách bằng dấu phẩy</div>
+        </div>
+      </div>
+
+      <!-- ══ APN ══ -->
+      <div class="tab-panel" id="tab-apn">
+        <div class="enable-banner">
+          <span>APN / Dữ liệu di động</span>
+          <label class="toggle"><input type="checkbox" id="apn-enable" onchange="togglePayload('apn');renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field">
+          <label>APN</label>
+          <input id="apn-name" type="text" placeholder="internet" oninput="renderPreview()" />
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Username</label>
+            <input id="apn-user" type="text" oninput="renderPreview()" />
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input id="apn-pass" type="password" oninput="renderPreview()" />
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Proxy Server</label>
+            <input id="apn-proxy" type="text" placeholder="proxy.example.com" oninput="renderPreview()" />
+          </div>
+          <div class="field">
+            <label>Port</label>
+            <input id="apn-port" type="number" placeholder="8080" oninput="renderPreview()" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Loại APN</label>
+          <select id="apn-type" onchange="renderPreview()">
+            <option value="default">Default (Internet)</option>
+            <option value="mms">MMS</option>
+            <option value="default,mms">Default + MMS</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Authentication Type</label>
+          <select id="apn-auth" onchange="renderPreview()">
+            <option value="PAP">PAP</option>
+            <option value="CHAP">CHAP</option>
+            <option value="None">None</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ══ PROXY ══ -->
+      <div class="tab-panel" id="tab-proxy">
+        <div class="enable-banner">
+          <span>Global HTTP Proxy</span>
+          <label class="toggle"><input type="checkbox" id="proxy-enable" onchange="togglePayload('proxy');renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field">
+          <label>Loại Proxy</label>
+          <select id="proxy-type" onchange="updateProxyType();renderPreview()">
+            <option value="Manual">Manual</option>
+            <option value="Auto">PAC (Auto)</option>
+          </select>
+        </div>
+        <div id="proxy-manual-block">
+          <div class="row2">
+            <div class="field">
+              <label>Proxy Server</label>
+              <input id="proxy-server" type="text" placeholder="proxy.example.com" oninput="renderPreview()" />
+            </div>
+            <div class="field">
+              <label>Port</label>
+              <input id="proxy-port" type="number" placeholder="8080" oninput="renderPreview()" />
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label>Username (tùy chọn)</label>
+              <input id="proxy-user" type="text" oninput="renderPreview()" />
+            </div>
+            <div class="field">
+              <label>Password</label>
+              <input id="proxy-pass" type="password" oninput="renderPreview()" />
+            </div>
+          </div>
+        </div>
+        <div id="proxy-auto-block" style="display:none;">
+          <div class="field">
+            <label>PAC URL</label>
+            <input id="proxy-pac" type="url" placeholder="http://proxy.example.com/proxy.pac" oninput="renderPreview()" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Bypass Domains (không qua proxy)</label>
+          <input id="proxy-bypass" type="text" placeholder="*.local, 192.168.0.*" oninput="renderPreview()" />
+          <div class="hint">Phân cách bằng dấu phẩy</div>
+        </div>
+        <div class="toggle-row">
+          <span>Áp dụng khi dùng Captive Network</span>
+          <label class="toggle"><input type="checkbox" id="proxy-captive" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <!-- ══ EMAIL ══ -->
+      <div class="tab-panel" id="tab-email">
+        <div class="enable-banner">
+          <span>Tài khoản Email (IMAP/POP)</span>
+          <label class="toggle"><input type="checkbox" id="email-enable" onchange="togglePayload('email');renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Tên hiển thị</label>
+            <input id="email-dispname" type="text" placeholder="John Doe" oninput="renderPreview()" />
+          </div>
+          <div class="field">
+            <label>Địa chỉ Email</label>
+            <input id="email-addr" type="email" placeholder="user@example.com" oninput="renderPreview()" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Mô tả tài khoản</label>
+          <input id="email-desc" type="text" placeholder="Work Email" oninput="renderPreview()" />
+        </div>
+        <div class="collapsible-header" onclick="toggleCollapse(this)">
+          Cài đặt Incoming (IMAP/POP) <span class="chevron">▼</span>
+        </div>
+        <div class="collapsible-body">
+          <div class="field">
+            <label>Giao thức</label>
+            <select id="email-proto" onchange="renderPreview()">
+              <option value="EmailTypeIMAP">IMAP</option>
+              <option value="EmailTypePOP">POP3</option>
+            </select>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label>Server</label>
+              <input id="email-iserver" type="text" placeholder="imap.example.com" oninput="renderPreview()" />
+            </div>
+            <div class="field">
+              <label>Port</label>
+              <input id="email-iport" type="number" placeholder="993" oninput="renderPreview()" />
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label>Username</label>
+              <input id="email-iuser" type="text" oninput="renderPreview()" />
+            </div>
+            <div class="field">
+              <label>Password</label>
+              <input id="email-ipass" type="password" oninput="renderPreview()" />
+            </div>
+          </div>
+          <div class="toggle-row">
+            <span>Dùng SSL</span>
+            <label class="toggle"><input type="checkbox" id="email-issl" checked onchange="renderPreview()"><span class="slider"></span></label>
+          </div>
+        </div>
+        <div class="collapsible-header" onclick="toggleCollapse(this)" style="margin-top:10px;">
+          Cài đặt Outgoing (SMTP) <span class="chevron">▼</span>
+        </div>
+        <div class="collapsible-body">
+          <div class="row2">
+            <div class="field">
+              <label>SMTP Server</label>
+              <input id="email-oserver" type="text" placeholder="smtp.example.com" oninput="renderPreview()" />
+            </div>
+            <div class="field">
+              <label>Port</label>
+              <input id="email-oport" type="number" placeholder="587" oninput="renderPreview()" />
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label>Username</label>
+              <input id="email-ouser" type="text" oninput="renderPreview()" />
+            </div>
+            <div class="field">
+              <label>Password</label>
+              <input id="email-opass" type="password" oninput="renderPreview()" />
+            </div>
+          </div>
+          <div class="toggle-row">
+            <span>Dùng SSL (SMTP)</span>
+            <label class="toggle"><input type="checkbox" id="email-ossl" checked onchange="renderPreview()"><span class="slider"></span></label>
+          </div>
+        </div>
+        <div class="toggle-row" style="margin-top:10px;">
+          <span>Chỉ xem, không sửa cấu hình</span>
+          <label class="toggle"><input type="checkbox" id="email-movable" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Smime (ký email)</span>
+          <label class="toggle"><input type="checkbox" id="email-smime" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <!-- ══ EXCHANGE ══ -->
+      <div class="tab-panel" id="tab-exchange">
+        <div class="enable-banner">
+          <span>Exchange / ActiveSync (EAS)</span>
+          <label class="toggle"><input type="checkbox" id="eas-enable" onchange="togglePayload('eas');renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field">
+          <label>Tên hiển thị</label>
+          <input id="eas-name" type="text" placeholder="John Doe" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Địa chỉ Email</label>
+          <input id="eas-email" type="email" placeholder="user@corp.com" oninput="renderPreview()" />
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>EAS Server Host</label>
+            <input id="eas-host" type="text" placeholder="mail.corp.com" oninput="renderPreview()" />
+          </div>
+          <div class="field">
+            <label>Domain</label>
+            <input id="eas-domain" type="text" placeholder="CORP" oninput="renderPreview()" />
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Username</label>
+            <input id="eas-user" type="text" oninput="renderPreview()" />
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input id="eas-pass" type="password" oninput="renderPreview()" />
+          </div>
+        </div>
+        <div class="toggle-row">
+          <span>Dùng SSL</span>
+          <label class="toggle"><input type="checkbox" id="eas-ssl" checked onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Đồng bộ Mail</span>
+          <label class="toggle"><input type="checkbox" id="eas-mail" checked onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Đồng bộ Contacts</span>
+          <label class="toggle"><input type="checkbox" id="eas-contacts" checked onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Đồng bộ Calendar</span>
+          <label class="toggle"><input type="checkbox" id="eas-cal" checked onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Đồng bộ Tasks / Reminders</span>
+          <label class="toggle"><input type="checkbox" id="eas-tasks" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Đồng bộ Notes</span>
+          <label class="toggle"><input type="checkbox" id="eas-notes" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>Thời gian lấy mail (Past Days)</label>
+          <select id="eas-maildays" onchange="renderPreview()">
+            <option value="">Mặc định</option>
+            <option value="0">Tất cả</option>
+            <option value="1">1 ngày</option>
+            <option value="3">3 ngày</option>
+            <option value="7">7 ngày</option>
+            <option value="14">14 ngày</option>
+            <option value="31">1 tháng</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ══ CALDAV ══ -->
+      <div class="tab-panel" id="tab-caldav">
+        <div class="enable-banner">
+          <span>Lịch CalDAV</span>
+          <label class="toggle"><input type="checkbox" id="caldav-enable" onchange="togglePayload('caldav');renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field">
+          <label>Tên tài khoản</label>
+          <input id="caldav-desc" type="text" placeholder="Work Calendar" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Server Hostname</label>
+          <input id="caldav-host" type="text" placeholder="caldav.example.com" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Port</label>
+          <input id="caldav-port" type="number" placeholder="443" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Principal URL (tùy chọn)</label>
+          <input id="caldav-url" type="url" placeholder="/principals/users/johndoe" oninput="renderPreview()" />
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Username</label>
+            <input id="caldav-user" type="text" oninput="renderPreview()" />
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input id="caldav-pass" type="password" oninput="renderPreview()" />
+          </div>
+        </div>
+        <div class="toggle-row">
+          <span>Dùng SSL</span>
+          <label class="toggle"><input type="checkbox" id="caldav-ssl" checked onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <!-- ══ CARDDAV ══ -->
+      <div class="tab-panel" id="tab-carddav">
+        <div class="enable-banner">
+          <span>Danh bạ CardDAV</span>
+          <label class="toggle"><input type="checkbox" id="carddav-enable" onchange="togglePayload('carddav');renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field">
+          <label>Tên tài khoản</label>
+          <input id="carddav-desc" type="text" placeholder="Work Contacts" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Server Hostname</label>
+          <input id="carddav-host" type="text" placeholder="carddav.example.com" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Port</label>
+          <input id="carddav-port" type="number" placeholder="443" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Principal URL (tùy chọn)</label>
+          <input id="carddav-url" type="url" placeholder="/principals/users/johndoe" oninput="renderPreview()" />
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Username</label>
+            <input id="carddav-user" type="text" oninput="renderPreview()" />
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input id="carddav-pass" type="password" oninput="renderPreview()" />
+          </div>
+        </div>
+        <div class="toggle-row">
+          <span>Dùng SSL</span>
+          <label class="toggle"><input type="checkbox" id="carddav-ssl" checked onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <!-- ══ PASSCODE ══ -->
+      <div class="tab-panel" id="tab-passcode">
+        <div class="enable-banner">
+          <span>Chính sách Mật mã</span>
+          <label class="toggle"><input type="checkbox" id="pass-enable" onchange="togglePayload('passcode');renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Bắt buộc đặt mật khẩu</span>
+          <label class="toggle"><input type="checkbox" id="pass-required" checked onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Cho phép mật khẩu đơn giản</span>
+          <label class="toggle"><input type="checkbox" id="pass-simple" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Bắt buộc dùng chữ số và ký tự</span>
+          <label class="toggle"><input type="checkbox" id="pass-alpha" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="row2" style="margin-top:10px;">
+          <div class="field">
+            <label>Độ dài tối thiểu</label>
+            <input id="pass-minlen" type="number" placeholder="6" oninput="renderPreview()" />
+          </div>
+          <div class="field">
+            <label>Số ký tự đặc biệt tối thiểu</label>
+            <input id="pass-mincomplex" type="number" placeholder="0" oninput="renderPreview()" />
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Thời gian tự khóa (phút)</label>
+            <input id="pass-maxinactive" type="number" placeholder="5" oninput="renderPreview()" />
+          </div>
+          <div class="field">
+            <label>Số lần nhập sai tối đa</label>
+            <input id="pass-maxfail" type="number" placeholder="10" oninput="renderPreview()" />
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Thời hạn đổi mật khẩu (ngày)</label>
+            <input id="pass-maxage" type="number" placeholder="90" oninput="renderPreview()" />
+          </div>
+          <div class="field">
+            <label>Lịch sử mật khẩu (không trùng)</label>
+            <input id="pass-history" type="number" placeholder="5" oninput="renderPreview()" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Thời gian grace (phút)</label>
+          <select id="pass-grace" onchange="renderPreview()">
+            <option value="">Mặc định</option>
+            <option value="0">Ngay lập tức</option>
+            <option value="1">1 phút</option>
+            <option value="5">5 phút</option>
+            <option value="15">15 phút</option>
+            <option value="60">1 giờ</option>
+            <option value="240">4 giờ</option>
+          </select>
+        </div>
+        <div class="toggle-row">
+          <span>Cho phép Touch ID / Face ID</span>
+          <label class="toggle"><input type="checkbox" id="pass-biometric" checked onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Xóa thiết bị khi nhập sai quá nhiều</span>
+          <label class="toggle"><input type="checkbox" id="pass-wipe" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <!-- ══ CERT ══ -->
+      <div class="tab-panel" id="tab-cert">
+        <div class="enable-banner">
+          <span>Chứng chỉ (Certificate)</span>
+          <label class="toggle"><input type="checkbox" id="cert-enable" onchange="togglePayload('cert');renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field">
+          <label>Tên chứng chỉ</label>
+          <input id="cert-name" type="text" placeholder="Root CA" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Loại</label>
+          <select id="cert-type" onchange="renderPreview()">
+            <option value="com.apple.security.root">Root CA (Trust)</option>
+            <option value="com.apple.security.pkcs12">PKCS#12 (Client Cert)</option>
+            <option value="com.apple.security.pkcs1">PKCS#1</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Certificate Data (Base64 / PEM)</label>
+          <textarea id="cert-data" class="mono-area" placeholder="Dán nội dung certificate Base64 hoặc PEM vào đây..." oninput="renderPreview()"></textarea>
+          <div class="hint">Đối với PEM, xóa header/footer -----BEGIN CERTIFICATE-----</div>
+        </div>
+        <div class="field">
+          <label>Mật khẩu PKCS#12 (nếu có)</label>
+          <input id="cert-pass" type="password" oninput="renderPreview()" />
+        </div>
+        <div class="toggle-row">
+          <span>Trust cho tất cả apps</span>
+          <label class="toggle"><input type="checkbox" id="cert-trust" checked onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <!-- ══ SCEP ══ -->
+      <div class="tab-panel" id="tab-scep">
+        <div class="enable-banner">
+          <span>SCEP (Auto Cert Enrollment)</span>
+          <label class="toggle"><input type="checkbox" id="scep-enable" onchange="togglePayload('scep');renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field">
+          <label>Tên</label>
+          <input id="scep-name" type="text" placeholder="SCEP Enrollment" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>SCEP URL</label>
+          <input id="scep-url" type="url" placeholder="https://scep.example.com/scep" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Challenge</label>
+          <input id="scep-challenge" type="text" oninput="renderPreview()" />
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Subject (CN)</label>
+            <input id="scep-subject" type="text" placeholder="O=Company,CN=Device" oninput="renderPreview()" />
+          </div>
+          <div class="field">
+            <label>Key Size (bits)</label>
+            <select id="scep-keysize" onchange="renderPreview()">
+              <option value="1024">1024</option>
+              <option value="2048" selected>2048</option>
+              <option value="4096">4096</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Key Usage</label>
+          <select id="scep-keyuse" onchange="renderPreview()">
+            <option value="0">None</option>
+            <option value="5">Signing</option>
+            <option value="4">Encryption</option>
+            <option value="1">Both</option>
+          </select>
+        </div>
+        <div class="toggle-row">
+          <span>Tự gia hạn (Auto-renew)</span>
+          <label class="toggle"><input type="checkbox" id="scep-autorenew" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <!-- ══ RESTRICTIONS ══ -->
+      <div class="tab-panel" id="tab-restrict">
+        <div class="enable-banner">
+          <span>Giới hạn thiết bị</span>
+          <label class="toggle"><input type="checkbox" id="res-enable" onchange="togglePayload('restrict');renderPreview()"><span class="slider"></span></label>
+        </div>
+
+        <div class="section-title"><span class="icon">📱</span> Ứng dụng</div>
+        <div class="toggle-row"><span>Cấm cài từ App Store</span><label class="toggle"><input type="checkbox" id="r-noappstore" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Cấm xóa ứng dụng</span><label class="toggle"><input type="checkbox" id="r-nodelete" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Cấm mua trong ứng dụng (In-App)</span><label class="toggle"><input type="checkbox" id="r-noiap" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Yêu cầu xác thực khi mua iTunes</span><label class="toggle"><input type="checkbox" id="r-itunesauth" checked onchange="renderPreview()"><span class="slider"></span></label></div>
+
+        <div class="section-title" style="margin-top:12px;"><span class="icon">🎙</span> Tính năng</div>
+        <div class="toggle-row"><span>Cấm dùng Camera</span><label class="toggle"><input type="checkbox" id="r-nocam" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Cấm dùng Safari</span><label class="toggle"><input type="checkbox" id="r-nosafari" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Cấm JavaScript trong Safari</span><label class="toggle"><input type="checkbox" id="r-nojs" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Cấm Siri / Shortcuts</span><label class="toggle"><input type="checkbox" id="r-nosiri" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Cấm AirDrop</span><label class="toggle"><input type="checkbox" id="r-noairdrop" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Cấm AirPlay / chia sẻ màn hình</span><label class="toggle"><input type="checkbox" id="r-noairplay" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Cấm FaceTime</span><label class="toggle"><input type="checkbox" id="r-nofacetime" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Cấm iMessage</span><label class="toggle"><input type="checkbox" id="r-noimsg" onchange="renderPreview()"><span class="slider"></span></label></div>
+
+        <div class="section-title" style="margin-top:12px;"><span class="icon">☁️</span> iCloud & Quyền riêng tư</div>
+        <div class="toggle-row"><span>Cấm iCloud Backup</span><label class="toggle"><input type="checkbox" id="r-noicloudbackup" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Cấm iCloud Documents</span><label class="toggle"><input type="checkbox" id="r-noicloudocs" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Cấm iCloud Keychain</span><label class="toggle"><input type="checkbox" id="r-noicloudkc" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Cấm iCloud Photo Library</span><label class="toggle"><input type="checkbox" id="r-noicloudphotos" onchange="renderPreview()"><span class="slider"></span></label></div>
+
+        <div class="section-title" style="margin-top:12px;"><span class="icon">🔒</span> Bảo mật hệ thống</div>
+        <div class="toggle-row"><span>Cấm thay đổi mật khẩu</span><label class="toggle"><input type="checkbox" id="r-nopwchange" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Cấm xóa nội dung &amp; cài lại</span><label class="toggle"><input type="checkbox" id="r-noerase" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Cấm thay đổi cài đặt VPN</span><label class="toggle"><input type="checkbox" id="r-novpnchange" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Cấm thay đổi tài khoản</span><label class="toggle"><input type="checkbox" id="r-noaccchange" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Bắt buộc mã hóa iTunes Backup</span><label class="toggle"><input type="checkbox" id="r-encbackup" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Cấm Bluetooth Settings</span><label class="toggle"><input type="checkbox" id="r-nobt" onchange="renderPreview()"><span class="slider"></span></label></div>
+
+        <div class="section-title" style="margin-top:12px;"><span class="icon">📺</span> Nội dung</div>
+        <div class="field">
+          <label>Xếp hạng vùng</label>
+          <select id="r-region" onchange="renderPreview()">
+            <option value="">Mặc định</option>
+            <option value="us">Hoa Kỳ</option>
+            <option value="au">Úc</option>
+            <option value="ca">Canada</option>
+            <option value="de">Đức</option>
+            <option value="fr">Pháp</option>
+            <option value="ie">Ireland</option>
+            <option value="gb">UK</option>
+          </select>
+        </div>
+        <div class="toggle-row"><span>Cấm nội dung 18+</span><label class="toggle"><input type="checkbox" id="r-noadult" onchange="renderPreview()"><span class="slider"></span></label></div>
+        <div class="toggle-row"><span>Bật Bộ lọc Web (nội dung)</span><label class="toggle"><input type="checkbox" id="r-webfilter" onchange="renderPreview()"><span class="slider"></span></label></div>
+      </div>
+
+      <!-- ══ MDM ══ -->
+      <div class="tab-panel" id="tab-mdm">
+        <div class="enable-banner">
+          <span>MDM Enrollment</span>
+          <label class="toggle"><input type="checkbox" id="mdm-enable" onchange="togglePayload('mdm');renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field">
+          <label>Server URL</label>
+          <input id="mdm-url" type="url" placeholder="https://mdm.example.com/enroll" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Check-in URL</label>
+          <input id="mdm-checkin" type="url" placeholder="https://mdm.example.com/checkin" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Topic (APNs)</label>
+          <input id="mdm-topic" type="text" placeholder="com.example.mdm.push" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Identity Certificate UUID</label>
+          <input id="mdm-identity" type="text" placeholder="UUID của PKCS#12 cert" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Access Rights</label>
+          <select id="mdm-rights" onchange="renderPreview()">
+            <option value="2">Profile Install/Remove</option>
+            <option value="4">Device Lock</option>
+            <option value="8">Device Erase</option>
+            <option value="128">App Install</option>
+            <option value="255">All Rights</option>
+          </select>
+        </div>
+        <div class="toggle-row">
+          <span>Supervised Device Only</span>
+          <label class="toggle"><input type="checkbox" id="mdm-supervised" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>User Enrolled (BYOD)</span>
+          <label class="toggle"><input type="checkbox" id="mdm-userenroll" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Không xóa profile khi unenroll</span>
+          <label class="toggle"><input type="checkbox" id="mdm-keepprofile" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <!-- ══ WEB CLIP ══ -->
+      <div class="tab-panel" id="tab-web">
+        <div class="enable-banner">
+          <span>Web Clip (Shortcut Web App)</span>
+          <label class="toggle"><input type="checkbox" id="web-enable" onchange="togglePayload('webclip');renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field">
+          <label>Tên hiển thị</label>
+          <input id="web-label" type="text" placeholder="Company Portal" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>URL</label>
+          <input id="web-url" type="url" placeholder="https://portal.example.com" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Icon (Base64 PNG)</label>
+          <textarea id="web-icon" class="mono-area" placeholder="Dán Base64 encoded PNG icon..." oninput="renderPreview()"></textarea>
+          <div class="hint">Kích thước khuyến nghị: 60x60 hoặc 120x120px PNG</div>
+        </div>
+        <div class="toggle-row">
+          <span>Hiển thị đầy đủ màn hình (Fullscreen)</span>
+          <label class="toggle"><input type="checkbox" id="web-fullscreen" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Không thể xóa (Removable = false)</span>
+          <label class="toggle"><input type="checkbox" id="web-noremove" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <span>Bỏ navigation bar (Ignore Manifest)</span>
+          <label class="toggle"><input type="checkbox" id="web-ignoremanifest" onchange="renderPreview()"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <!-- ══ FONT ══ -->
+      <div class="tab-panel" id="tab-font">
+        <div class="enable-banner">
+          <span>Font tùy chỉnh</span>
+          <label class="toggle"><input type="checkbox" id="font-enable" onchange="togglePayload('font');renderPreview()"><span class="slider"></span></label>
+        </div>
+        <div class="field">
+          <label>Tên Font</label>
+          <input id="font-name" type="text" placeholder="MyCustomFont" oninput="renderPreview()" />
+        </div>
+        <div class="field">
+          <label>Font Data (Base64 TTF/OTF)</label>
+          <textarea id="font-data" class="mono-area" placeholder="Dán Base64 encoded font file (.ttf/.otf)..." oninput="renderPreview()"></textarea>
+          <div class="hint">Convert font: <code style="color:var(--accent);font-size:10.5px;">base64 -i font.ttf | pbcopy</code></div>
+        </div>
+      </div>
+
+    </div><!-- /panels -->
+  </div><!-- /sidebar -->
+
+  <!-- ═══ PREVIEW ═══ -->
+  <div class="preview-pane">
+    <div class="preview-bar">
+      <h2>Preview XML</h2>
+      <span class="badge">.mobileconfig</span>
+      <span class="payload-count" id="payload-count">0 payloads</span>
+      <div style="margin-left:auto;display:flex;gap:8px;">
+        <button class="btn btn-success" onclick="openGenModal()">✦ Tạo &amp; Tải file</button>
+        <button class="btn btn-ghost btn-sm" onclick="copyXML()">📋 Copy</button>
+      </div>
+    </div>
+    <pre id="xml-preview"></pre>
+    <div class="action-bar">
+      <span class="status-dot" id="status-dot"></span>
+      <span class="status-text" id="status-text">Sẵn sàng — điền thông tin rồi nhấn "Tạo & Tải file"</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GENERATE MODAL ═══ -->
+<div class="modal-overlay" id="gen-modal">
+  <div class="modal" id="gen-modal-inner">
+    <div id="modal-step-1">
+      <h3>✦ Tạo file .mobileconfig</h3>
+      <div class="modal-sub">Xác nhận thông tin trước khi tải file về thiết bị.</div>
+      <div id="modal-summary"></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeGenModal()">Hủy</button>
+        <button class="btn btn-success" onclick="doGenerate()">⬇ Tải xuống ngay</button>
+      </div>
+    </div>
+    <div id="modal-step-2" style="display:none;">
+      <div class="success-screen">
+        <div class="success-icon">✅</div>
+        <h3>File đã được tạo!</h3>
+        <p id="modal-filename">config.mobileconfig</p>
+        <div class="download-btns">
+          <button class="btn btn-success" onclick="downloadFile()">⬇ Tải .mobileconfig</button>
+          <button class="btn btn-ghost" onclick="copyXML();closeGenModal()">📋 Copy XML</button>
+        </div>
+        <div style="margin-top:16px;">
+          <button class="btn btn-ghost btn-sm" onclick="closeGenModal()">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── UUID ───
+function genUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16).toUpperCase();
+  });
+}
+function newUUID(id) {
+  document.getElementById(id).value = genUUID();
+  renderPreview();
+}
+
+// ─── TABS ───
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ─── PAYLOAD ENABLE TOGGLE ───
+function togglePayload(key) {
+  const nav = document.getElementById('nav-' + key);
+  if (!nav) return;
+  const ids = {
+    wifi: 'wifi-enable', vpn: 'vpn-enable', dns: 'dns-enable',
+    apn: 'apn-enable', proxy: 'proxy-enable', email: 'email-enable',
+    eas: 'eas-enable', caldav: 'caldav-enable', carddav: 'carddav-enable',
+    passcode: 'pass-enable', cert: 'cert-enable', scep: 'scep-enable',
+    restrict: 'res-enable', mdm: 'mdm-enable', webclip: 'web-enable', font: 'font-enable'
+  };
+  const chk = document.getElementById(ids[key]);
+  if (chk && chk.checked) {
+    nav.classList.add('enabled');
+  } else {
+    nav.classList.remove('enabled');
+  }
+}
+
+// ─── COLLAPSIBLE ───
+function toggleCollapse(hdr) {
+  hdr.classList.toggle('open');
+  const body = hdr.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+// ─── DYNAMIC LIST ───
+function addDyn(listId, placeholder) {
+  const list = document.getElementById(listId);
+  const div = document.createElement('div');
+  div.className = 'dyn-item';
+  div.innerHTML = `<input type="text" placeholder="${placeholder}" oninput="renderPreview()" /><button class="btn-icon del" onclick="removeDyn(this)">✕</button>`;
+  list.appendChild(div);
+}
+function removeDyn(btn) {
+  btn.parentElement.remove();
+  renderPreview();
+}
+function getDynList(listId) {
+  return [...document.querySelectorAll('#' + listId + ' input')].map(i => i.value.trim()).filter(Boolean);
+}
+
+// ─── WI-FI SEC TOGGLE ───
+function updateWifiSec() {
+  const sec = document.getElementById('wifi-sec').value;
+  document.getElementById('wifi-pass-block').style.display = (sec === 'None' || sec === 'WPA2Enterprise') ? 'none' : '';
+  document.getElementById('wifi-8021x-block').style.display = (sec === 'WPA2Enterprise') ? 'block' : 'none';
+}
+
+// ─── PROXY TYPE TOGGLE ───
+function updateProxyType() {
+  const t = document.getElementById('proxy-type').value;
+  document.getElementById('proxy-manual-block').style.display = t === 'Manual' ? '' : 'none';
+  document.getElementById('proxy-auto-block').style.display = t === 'Auto' ? '' : 'none';
+}
+
+// ─── EXPIRY TOGGLE ───
+function toggleExpiry() {
+  const en = document.getElementById('pf-expiry-enable').checked;
+  document.getElementById('expiry-block').style.display = en ? '' : 'none';
+}
+
+// ─── VPN TYPE ───
+function updateVpnType() {}
+
+// ─── XML HELPERS ───
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function kStr(k, v) { return `\t\t\t<key>${esc(k)}</key><string>${esc(v)}</string>\n`; }
+function kInt(k, v) { return `\t\t\t<key>${esc(k)}</key><integer>${esc(v)}</integer>\n`; }
+function kBool(k, v) { return `\t\t\t<key>${esc(k)}</key><${v ? 'true' : 'false'}/>\n`; }
+function kArr(k, items) {
+  if (!items || !items.length) return '';
+  return `\t\t\t<key>${esc(k)}</key>\n\t\t\t<array>\n${items.map(i => `\t\t\t\t<string>${esc(i)}</string>`).join('\n')}\n\t\t\t</array>\n`;
+}
+function payloadHeader(type, pfId, suffix) {
+  return `\t\t<key>PayloadType</key><string>${esc(type)}</string>\n\t\t\t<key>PayloadVersion</key><integer>1</integer>\n\t\t\t<key>PayloadIdentifier</key><string>${esc(pfId)}.${suffix}</string>\n\t\t\t<key>PayloadUUID</key><string>${genUUID()}</string>\n`;
+}
+
+// ─── BUILD XML ───
+function buildXML() {
+  const name    = v('pf-name') || 'My Profile';
+  const desc    = v('pf-desc');
+  const org     = v('pf-org');
+  const pfId    = v('pf-id') || 'com.example.profile';
+  const uuid    = v('pf-uuid') || genUUID();
+  const ver     = v('pf-version') || '1';
+  const consent = cb('pf-consent');
+  const nodelete= cb('pf-nodelete');
+  const removal = v('pf-removal');
+  const consentTxt = v('pf-consent-text') || 'Vui lòng xác nhận cài đặt profile này.';
+  const expiryEn = cb('pf-expiry-enable');
+  const expiry   = v('pf-expiry');
+
+  let payloads = '';
+  let payloadCount = 0;
+
+  // ── Wi-Fi ──
+  if (cb('wifi-enable')) {
+    payloadCount++;
+    const sec = v('wifi-sec');
+    payloads += `\t\t<dict>\n\t\t\t`;
+    payloads += payloadHeader('com.apple.wifi.managed', pfId, 'wifi');
+    payloads += kStr('SSID_STR', v('wifi-ssid'));
+    payloads += kStr('EncryptionType', sec);
+    if (v('wifi-pass') && sec !== 'None') payloads += kStr('Password', v('wifi-pass'));
+    payloads += kBool('HIDDEN_NETWORK', cb('wifi-hidden'));
+    payloads += kBool('AutoJoin', cb('wifi-auto'));
+    if (cb('wifi-nomac')) payloads += `\t\t\t<key>DisableAssociationMACRandomization</key><true/>\n`;
+    if (cb('wifi-captive')) payloads += `\t\t\t<key>CaptiveBypass</key><true/>\n`;
+    if (v('wifi-proto')) payloads += kStr('IPAddressMethod', v('wifi-proto'));
+    if (sec === 'WPA2Enterprise') {
+      payloads += `\t\t\t<key>EAPClientConfiguration</key>\n\t\t\t<dict>\n`;
+      payloads += `\t\t\t\t<key>AcceptEAPTypes</key><array><integer>25</integer></array>\n`;
+      payloads += `\t\t\t\t<key>UserName</key><string>${esc(v('wifi-8021x-user'))}</string>\n`;
+      payloads += `\t\t\t\t<key>UserPassword</key><string>${esc(v('wifi-8021x-pass'))}</string>\n`;
+      payloads += `\t\t\t</dict>\n`;
+    }
+    payloads += `\t\t</dict>\n`;
+  }
+
+  // ── VPN ──
+  if (cb('vpn-enable')) {
+    payloadCount++;
+    const vtype = v('vpn-type');
+    payloads += `\t\t<dict>\n\t\t\t`;
+    payloads += payloadHeader('com.apple.vpn.managed', pfId, 'vpn');
+    payloads += kStr('UserDefinedName', v('vpn-name') || 'My VPN');
+    payloads += kStr('VPNType', vtype);
+    payloads += `\t\t\t<key>${esc(vtype)}</key><dict>\n`;
+    payloads += `\t\t\t\t<key>RemoteAddress</key><string>${esc(v('vpn-server'))}</string>\n`;
+    if (v('vpn-user')) payloads += `\t\t\t\t<key>AuthName</key><string>${esc(v('vpn-user'))}</string>\n`;
+    if (v('vpn-pass')) payloads += `\t\t\t\t<key>AuthPassword</key><string>${esc(v('vpn-pass'))}</string>\n`;
+    if (v('vpn-remoteid')) payloads += `\t\t\t\t<key>RemoteIdentifier</key><string>${esc(v('vpn-remoteid'))}</string>\n`;
+    if (v('vpn-localid')) payloads += `\t\t\t\t<key>LocalIdentifier</key><string>${esc(v('vpn-localid'))}</string>\n`;
+    if (v('vpn-psk')) payloads += `\t\t\t\t<key>SharedSecret</key><string>${esc(v('vpn-psk'))}</string>\n`;
+    if (v('vpn-auth')) payloads += `\t\t\t\t<key>AuthenticationMethod</key><string>${esc(v('vpn-auth'))}</string>\n`;
+    if (cb('vpn-ondemand')) payloads += `\t\t\t\t<key>OnDemandEnabled</key><true/>\n`;
+    payloads += `\t\t\t</dict>\n`;
+    if (v('vpn-proxy')) {
+      const [phost, pport] = v('vpn-proxy').split(':');
+      payloads += `\t\t\t<key>Proxies</key><dict>\n`;
+      payloads += `\t\t\t\t<key>HTTPProxy</key><string>${esc(phost)}</string>\n`;
+      if (pport) payloads += `\t\t\t\t<key>HTTPPort</key><integer>${esc(pport)}</integer>\n`;
+      payloads += `\t\t\t</dict>\n`;
+    }
+    payloads += `\t\t</dict>\n`;
+  }
+
+  // ── DNS ──
+  if (cb('dns-enable')) {
+    payloadCount++;
+    const servers = getDynList('dns-servers');
+    const domains = getDynList('dns-domains');
+    const excludes = v('dns-exclude').split(',').map(s=>s.trim()).filter(Boolean);
+    payloads += `\t\t<dict>\n\t\t\t`;
+    payloads += payloadHeader('com.apple.dnsSettings.managed', pfId, 'dns');
+    payloads += kStr('DNSProtocol', v('dns-type'));
+    if (v('dns-url')) payloads += kStr('ServerURL', v('dns-url'));
+    if (servers.length) payloads += kArr('ServerAddresses', servers);
+    if (domains.length) payloads += kArr('SearchDomains', domains);
+    if (excludes.length) payloads += kArr('ExcludedDomains', excludes);
+    if (!cb('dns-global')) payloads += `\t\t\t<key>OnDemandEnabled</key><false/>\n`;
+    payloads += `\t\t</dict>\n`;
+  }
+
+  // ── APN ──
+  if (cb('apn-enable')) {
+    payloadCount++;
+    payloads += `\t\t<dict>\n\t\t\t`;
+    payloads += payloadHeader('com.apple.apn', pfId, 'apn');
+    payloads += `\t\t\t<key>DefaultsData</key>\n\t\t\t<dict>\n`;
+    if (v('apn-name')) payloads += `\t\t\t\t<key>apn</key><string>${esc(v('apn-name'))}</string>\n`;
+    if (v('apn-user')) payloads += `\t\t\t\t<key>username</key><string>${esc(v('apn-user'))}</string>\n`;
+    if (v('apn-pass')) payloads += `\t\t\t\t<key>password</key><string>${esc(v('apn-pass'))}</string>\n`;
+    if (v('apn-proxy')) payloads += `\t\t\t\t<key>proxy</key><string>${esc(v('apn-proxy'))}</string>\n`;
+    if (v('apn-port')) payloads += `\t\t\t\t<key>proxyPort</key><integer>${esc(v('apn-port'))}</integer>\n`;
+    if (v('apn-auth') && v('apn-auth') !== 'None') payloads += `\t\t\t\t<key>AuthType</key><string>${esc(v('apn-auth'))}</string>\n`;
+    payloads += `\t\t\t</dict>\n\t\t\t<key>DefaultsDomain</key><string>com.apple.managedCarrier</string>\n`;
+    payloads += `\t\t</dict>\n`;
+  }
+
+  // ── Global Proxy ──
+  if (cb('proxy-enable')) {
+    payloadCount++;
+    const ptype = v('proxy-type');
+    payloads += `\t\t<dict>\n\t\t\t`;
+    payloads += payloadHeader('com.apple.proxy.http.global', pfId, 'proxy');
+    payloads += kStr('ProxyType', ptype);
+    if (ptype === 'Manual') {
+      if (v('proxy-server')) payloads += kStr('ProxyServer', v('proxy-server'));
+      if (v('proxy-port')) payloads += kInt('ProxyServerPort', v('proxy-port'));
+      if (v('proxy-user')) payloads += kStr('ProxyUsername', v('proxy-user'));
+      if (v('proxy-pass')) payloads += kStr('ProxyPassword', v('proxy-pass'));
+    } else {
+      if (v('proxy-pac')) payloads += kStr('ProxyPACURL', v('proxy-pac'));
+    }
+    const bypasses = v('proxy-bypass').split(',').map(s=>s.trim()).filter(Boolean);
+    if (bypasses.length) payloads += kArr('ExceptionsList', bypasses);
+    payloads += `\t\t</dict>\n`;
+  }
+
+  // ── Email ──
+  if (cb('email-enable')) {
+    payloadCount++;
+    payloads += `\t\t<dict>\n\t\t\t`;
+    payloads += payloadHeader('com.apple.mail.managed', pfId, 'email');
+    if (v('email-desc')) payloads += kStr('EmailAccountDescription', v('email-desc'));
+    if (v('email-dispname')) payloads += kStr('EmailAccountName', v('email-dispname'));
+    if (v('email-addr')) payloads += kStr('EmailAddress', v('email-addr'));
+    payloads += kStr('EmailAccountType', v('email-proto'));
+    payloads += kStr('IncomingMailServerHostName', v('email-iserver'));
+    if (v('email-iport')) payloads += kInt('IncomingMailServerPortNumber', v('email-iport'));
+    if (v('email-iuser')) payloads += kStr('IncomingMailServerUsername', v('email-iuser'));
+    if (v('email-ipass')) payloads += kStr('IncomingPassword', v('email-ipass'));
+    payloads += kBool('IncomingMailServerUseSSL', cb('email-issl'));
+    payloads += kStr('OutgoingMailServerHostName', v('email-oserver'));
+    if (v('email-oport')) payloads += kInt('OutgoingMailServerPortNumber', v('email-oport'));
+    if (v('email-ouser')) payloads += kStr('OutgoingMailServerUsername', v('email-ouser'));
+    if (v('email-opass')) payloads += kStr('OutgoingPassword', v('email-opass'));
+    payloads += kBool('OutgoingMailServerUseSSL', cb('email-ossl'));
+    if (cb('email-movable')) payloads += `\t\t\t<key>PreventMove</key><true/>\n`;
+    if (cb('email-smime')) payloads += `\t\t\t<key>SMIMEEnabled</key><true/>\n`;
+    payloads += `\t\t</dict>\n`;
+  }
+
+  // ── Exchange ──
+  if (cb('eas-enable')) {
+    payloadCount++;
+    payloads += `\t\t<dict>\n\t\t\t`;
+    payloads += payloadHeader('com.apple.eas.account', pfId, 'eas');
+    if (v('eas-name')) payloads += kStr('PayloadDisplayName', v('eas-name'));
+    if (v('eas-email')) payloads += kStr('EmailAddress', v('eas-email'));
+    if (v('eas-host')) payloads += kStr('Host', v('eas-host'));
+    if (v('eas-domain')) payloads += kStr('Domain', v('eas-domain'));
+    if (v('eas-user')) payloads += kStr('UserName', v('eas-user'));
+    if (v('eas-pass')) payloads += kStr('Password', v('eas-pass'));
+    payloads += kBool('SSL', cb('eas-ssl'));
+    payloads += kBool('PayloadCertificateUUID', false);
+    if (cb('eas-mail')) payloads += `\t\t\t<key>EnableMail</key><true/>\n`;
+    if (cb('eas-contacts')) payloads += `\t\t\t<key>EnableContacts</key><true/>\n`;
+    if (cb('eas-cal')) payloads += `\t\t\t<key>EnableCalendars</key><true/>\n`;
+    if (cb('eas-tasks')) payloads += `\t\t\t<key>EnableTasks</key><true/>\n`;
+    if (cb('eas-notes')) payloads += `\t\t\t<key>EnableNotes</key><true/>\n`;
+    if (v('eas-maildays')) payloads += kInt('MailNumberOfPastDaysToSync', v('eas-maildays'));
+    payloads += `\t\t</dict>\n`;
+  }
+
+  // ── CalDAV ──
+  if (cb('caldav-enable')) {
+    payloadCount++;
+    payloads += `\t\t<dict>\n\t\t\t`;
+    payloads += payloadHeader('com.apple.caldav.account', pfId, 'caldav');
+    if (v('caldav-desc')) payloads += kStr('CalDAVAccountDescription', v('caldav-desc'));
+    if (v('caldav-host')) payloads += kStr('CalDAVHostName', v('caldav-host'));
+    if (v('caldav-port')) payloads += kInt('CalDAVPort', v('caldav-port'));
+    if (v('caldav-url')) payloads += kStr('CalDAVPrincipalURL', v('caldav-url'));
+    if (v('caldav-user')) payloads += kStr('CalDAVUsername', v('caldav-user'));
+    if (v('caldav-pass')) payloads += kStr('CalDAVPassword', v('caldav-pass'));
+    payloads += kBool('CalDAVUseSSL', cb('caldav-ssl'));
+    payloads += `\t\t</dict>\n`;
+  }
+
+  // ── CardDAV ──
+  if (cb('carddav-enable')) {
+    payloadCount++;
+    payloads += `\t\t<dict>\n\t\t\t`;
+    payloads += payloadHeader('com.apple.carddav.account', pfId, 'carddav');
+    if (v('carddav-desc')) payloads += kStr('CardDAVAccountDescription', v('carddav-desc'));
+    if (v('carddav-host')) payloads += kStr('CardDAVHostName', v('carddav-host'));
+    if (v('carddav-port')) payloads += kInt('CardDAVPort', v('carddav-port'));
+    if (v('carddav-url')) payloads += kStr('CardDAVPrincipalURL', v('carddav-url'));
+    if (v('carddav-user')) payloads += kStr('CardDAVUsername', v('carddav-user'));
+    if (v('carddav-pass')) payloads += kStr('CardDAVPassword', v('carddav-pass'));
+    payloads += kBool('CardDAVUseSSL', cb('carddav-ssl'));
+    payloads += `\t\t</dict>\n`;
+  }
+
+  // ── Passcode ──
+  if (cb('pass-enable')) {
+    payloadCount++;
+    payloads += `\t\t<dict>\n\t\t\t`;
+    payloads += payloadHeader('com.apple.mobiledevice.passwordpolicy', pfId, 'passcode');
+    payloads += kBool('forcePIN', cb('pass-required'));
+    payloads += kBool('allowSimple', cb('pass-simple'));
+    payloads += kBool('requireAlphanumeric', cb('pass-alpha'));
+    if (v('pass-minlen')) payloads += kInt('minLength', v('pass-minlen'));
+    if (v('pass-mincomplex')) payloads += kInt('minComplexChars', v('pass-mincomplex'));
+    if (v('pass-maxinactive')) payloads += kInt('maxInactivity', v('pass-maxinactive'));
+    if (v('pass-maxfail')) payloads += kInt('maxFailedAttempts', v('pass-maxfail'));
+    if (v('pass-maxage')) payloads += kInt('maxPINAgeInDays', v('pass-maxage'));
+    if (v('pass-history')) payloads += kInt('pinHistory', v('pass-history'));
+    if (v('pass-grace')) payloads += kInt('maxGracePeriod', v('pass-grace'));
+    if (!cb('pass-biometric')) payloads += `\t\t\t<key>allowFingerprintModification</key><false/>\n`;
+    if (cb('pass-wipe')) payloads += `\t\t\t<key>dataWipeEnabled</key><true/>\n`;
+    payloads += `\t\t</dict>\n`;
+  }
+
+  // ── Certificate ──
+  if (cb('cert-enable')) {
+    payloadCount++;
+    const ctype = v('cert-type');
+    payloads += `\t\t<dict>\n\t\t\t`;
+    payloads += payloadHeader(ctype, pfId, 'cert');
+    if (v('cert-name')) payloads += kStr('PayloadDisplayName', v('cert-name'));
+    if (v('cert-data')) payloads += `\t\t\t<key>PayloadContent</key>\n\t\t\t<data>${v('cert-data').replace(/\s/g,'')}</data>\n`;
+    if (v('cert-pass')) payloads += kStr('Password', v('cert-pass'));
+    if (cb('cert-trust')) payloads += `\t\t\t<key>PayloadCertificateFileName</key><string>${esc(v('cert-name') || 'cert')}.crt</string>\n`;
+    payloads += `\t\t</dict>\n`;
+  }
+
+  // ── SCEP ──
+  if (cb('scep-enable')) {
+    payloadCount++;
+    payloads += `\t\t<dict>\n\t\t\t`;
+    payloads += payloadHeader('com.apple.security.scep', pfId, 'scep');
+    if (v('scep-name')) payloads += kStr('PayloadDisplayName', v('scep-name'));
+    payloads += `\t\t\t<key>PayloadContent</key>\n\t\t\t<dict>\n`;
+    if (v('scep-url')) payloads += `\t\t\t\t<key>URL</key><string>${esc(v('scep-url'))}</string>\n`;
+    if (v('scep-challenge')) payloads += `\t\t\t\t<key>Challenge</key><string>${esc(v('scep-challenge'))}</string>\n`;
+    if (v('scep-subject')) payloads += `\t\t\t\t<key>Subject</key><array><array><array><string>CN</string><string>${esc(v('scep-subject'))}</string></array></array></array>\n`;
+    payloads += `\t\t\t\t<key>Keysize</key><integer>${esc(v('scep-keysize') || '2048')}</integer>\n`;
+    payloads += `\t\t\t\t<key>KeyUsage</key><integer>${esc(v('scep-keyuse') || '0')}</integer>\n`;
+    payloads += `\t\t\t\t<key>KeyType</key><string>RSA</string>\n`;
+    payloads += `\t\t\t</dict>\n`;
+    payloads += `\t\t</dict>\n`;
+  }
+
+  // ── Restrictions ──
+  if (cb('res-enable')) {
+    payloadCount++;
+    payloads += `\t\t<dict>\n\t\t\t`;
+    payloads += payloadHeader('com.apple.applicationaccess', pfId, 'restrictions');
+    const rstMap = [
+      ['r-noappstore','allowAppInstallation'],['r-nodelete','allowAppRemoval'],
+      ['r-noiap','allowInAppPurchases'],['r-itunesauth','forceITunesStorePasswordEntry'],
+      ['r-nocam','allowCamera'],['r-nosafari','allowSafari'],['r-nojs','safariAllowJavaScript'],
+      ['r-nosiri','allowAssistant'],['r-noairdrop','allowAirDrop'],
+      ['r-noairplay','allowAirPlayIncomingRequests'],['r-nofacetime','allowFaceTime'],
+      ['r-noimsg','allowIMessage'],['r-noicloudbackup','allowCloudBackup'],
+      ['r-noicloudocs','allowCloudDocumentSync'],['r-noicloudkc','allowCloudKeychainSync'],
+      ['r-noicloudphotos','allowPhotoStream'],['r-nopwchange','allowPasscodeModification'],
+      ['r-noerase','allowEraseContentAndSettings'],['r-novpnchange','allowVPNCreation'],
+      ['r-noaccchange','allowAccountModification'],['r-nobt','allowBluetoothModification'],
+      ['r-encbackup','forceEncryptedBackup'],['r-noadult','allowExplicitContent'],
+    ];
+    rstMap.forEach(([id, key]) => {
+      const checked = cb(id);
+      // For "allow" keys, checked = blocked → false. For "force/no" keys, checked = forced → true.
+      const isForcedKey = key.startsWith('force') || key.startsWith('safari');
+      const val = isForcedKey ? checked : !checked;
+      payloads += kBool(key, val);
+    });
+    if (v('r-region')) payloads += kStr('ratingRegion', v('r-region'));
+    if (cb('r-webfilter')) payloads += `\t\t\t<key>allowWebBrowsing</key><true/>\n\t\t\t<key>restrictedBrowsing</key><true/>\n`;
+    payloads += `\t\t</dict>\n`;
+  }
+
+  // ── MDM ──
+  if (cb('mdm-enable')) {
+    payloadCount++;
+    payloads += `\t\t<dict>\n\t\t\t`;
+    payloads += payloadHeader('com.apple.mdm', pfId, 'mdm');
+    if (v('mdm-url')) payloads += kStr('ServerURL', v('mdm-url'));
+    if (v('mdm-checkin')) payloads += kStr('CheckInURL', v('mdm-checkin'));
+    if (v('mdm-topic')) payloads += kStr('Topic', v('mdm-topic'));
+    if (v('mdm-identity')) payloads += kStr('IdentityCertificateUUID', v('mdm-identity'));
+    if (v('mdm-rights')) payloads += kInt('AccessRights', v('mdm-rights'));
+    payloads += kBool('CheckOutWhenRemoved', true);
+    if (cb('mdm-supervised')) payloads += `\t\t\t<key>SupervisedDeviceOnly</key><true/>\n`;
+    if (cb('mdm-userenroll')) payloads += `\t\t\t<key>UserEnrollment</key><true/>\n`;
+    payloads += `\t\t</dict>\n`;
+  }
+
+  // ── Web Clip ──
+  if (cb('web-enable')) {
+    payloadCount++;
+    payloads += `\t\t<dict>\n\t\t\t`;
+    payloads += payloadHeader('com.apple.webClip.managed', pfId, 'webclip');
+    if (v('web-label')) payloads += kStr('Label', v('web-label'));
+    if (v('web-url')) payloads += kStr('URL', v('web-url'));
+    if (v('web-icon')) payloads += `\t\t\t<key>Icon</key>\n\t\t\t<data>${v('web-icon').replace(/\s/g,'')}</data>\n`;
+    payloads += kBool('IsRemovable', !cb('web-noremove'));
+    if (cb('web-fullscreen')) payloads += `\t\t\t<key>FullScreen</key><true/>\n`;
+    if (cb('web-ignoremanifest')) payloads += `\t\t\t<key>IgnoreManifestScope</key><true/>\n`;
+    payloads += `\t\t</dict>\n`;
+  }
+
+  // ── Font ──
+  if (cb('font-enable')) {
+    payloadCount++;
+    payloads += `\t\t<dict>\n\t\t\t`;
+    payloads += payloadHeader('com.apple.font', pfId, 'font');
+    if (v('font-name')) payloads += kStr('Name', v('font-name'));
+    if (v('font-data')) payloads += `\t\t\t<key>Font</key>\n\t\t\t<data>${v('font-data').replace(/\s/g,'')}</data>\n`;
+    payloads += `\t\t</dict>\n`;
+  }
+
+  // ─── ASSEMBLE ───
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+  xml += `<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"\n`;
+  xml += `  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n`;
+  xml += `<plist version="1.0">\n<dict>\n`;
+  xml += `\t<key>PayloadDisplayName</key><string>${esc(name)}</string>\n`;
+  if (desc) xml += `\t<key>PayloadDescription</key><string>${esc(desc)}</string>\n`;
+  if (org) xml += `\t<key>PayloadOrganization</key><string>${esc(org)}</string>\n`;
+  xml += `\t<key>PayloadIdentifier</key><string>${esc(pfId)}</string>\n`;
+  xml += `\t<key>PayloadType</key><string>Configuration</string>\n`;
+  xml += `\t<key>PayloadVersion</key><integer>${esc(ver)}</integer>\n`;
+  xml += `\t<key>PayloadUUID</key><string>${esc(uuid)}</string>\n`;
+  if (consent) {
+    xml += `\t<key>ConsentText</key>\n\t<dict>\n\t\t<key>default</key><string>${esc(consentTxt)}</string>\n\t</dict>\n`;
+  }
+  if (nodelete) xml += `\t<key>PayloadRemovalDisallowed</key><true/>\n`;
+  if (removal) xml += `\t<key>PayloadRemovalAllowed</key><string>${esc(removal)}</string>\n`;
+  if (expiryEn && expiry) xml += `\t<key>RemovalDate</key><string>${esc(expiry)}</string>\n`;
+  xml += `\t<key>PayloadContent</key>\n\t<array>\n`;
+  xml += payloads || `\t\t<!-- Bật ít nhất một payload từ menu bên trái -->\n`;
+  xml += `\t</array>\n</dict>\n</plist>`;
+
+  // update count
+  document.getElementById('payload-count').textContent = `${payloadCount} payload${payloadCount !== 1 ? 's' : ''}`;
+
+  return xml;
+}
+
+// ─── HELPERS ───
+function v(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function cb(id) { const el = document.getElementById(id); return el ? el.checked : false; }
+
+// ─── HIGHLIGHT ───
+function highlight(xml) {
+  return xml
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/(&lt;\?[^&]*?&gt;)/g,'<span style="color:#6b7fa8">$1</span>')
+    .replace(/(&lt;!DOCTYPE[^&]*?&gt;)/g,'<span style="color:#6b7fa8">$1</span>')
+    .replace(/(&lt;!--[\s\S]*?--&gt;)/g,'<span style="color:#6b7fa8;font-style:italic">$1</span>')
+    .replace(/(&lt;\/?(?:plist|dict|array|key|string|integer|true|false|data)(?:\s[^&]*?)?\/?&gt;)/g, s => {
+      if (s.includes('&lt;key&gt;')) return `<span style="color:#7ec8e3">${s}</span>`;
+      if (s.includes('&lt;/key&gt;')) return `<span style="color:#7ec8e3">${s}</span>`;
+      if (s.includes('&lt;string')) return `<span style="color:#b5e8a0">${s}</span>`;
+      if (s.includes('&lt;/string')) return `<span style="color:#b5e8a0">${s}</span>`;
+      if (s.includes('true') || s.includes('false')) return `<span style="color:#f9a86e">${s}</span>`;
+      if (s.includes('integer')) return `<span style="color:#fbbf24">${s}</span>`;
+      if (s.includes('data')) return `<span style="color:#a78bfa">${s}</span>`;
+      return `<span style="color:#e2a76f">${s}</span>`;
+    });
+}
+
+// ─── RENDER ───
+function renderPreview() {
+  try {
+    const xml = buildXML();
+    document.getElementById('xml-preview').innerHTML = highlight(xml);
+    document.getElementById('status-text').textContent = 'Preview cập nhật ✓';
+    document.getElementById('status-dot').style.background = 'var(--green)';
+  } catch(e) {
+    document.getElementById('status-text').textContent = '⚠ Lỗi: ' + e.message;
+    document.getElementById('status-dot').style.background = 'var(--red)';
+  }
+}
+
+// ─── MODAL ───
+let _generatedXML = '';
+let _generatedName = '';
+
+function openGenModal() {
+  _generatedXML = buildXML();
+  _generatedName = (v('pf-name') || 'config').replace(/\s+/g, '_');
+
+  // Build summary
+  const payloads = [];
+  const checks = [
+    ['wifi-enable','Wi-Fi'],['vpn-enable','VPN'],['dns-enable','DNS'],
+    ['apn-enable','APN'],['proxy-enable','Proxy'],['email-enable','Email'],
+    ['eas-enable','Exchange'],['caldav-enable','CalDAV'],['carddav-enable','CardDAV'],
+    ['pass-enable','Mật mã'],['cert-enable','Certificate'],['scep-enable','SCEP'],
+    ['res-enable','Restrictions'],['mdm-enable','MDM'],['web-enable','Web Clip'],['font-enable','Font'],
+  ];
+  checks.forEach(([id, label]) => { if (cb(id)) payloads.push(label); });
+
+  let summaryHtml = `
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:6px;">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Thông tin</div>
+      <div style="font-size:13px;margin-bottom:4px;"><strong>${_generatedName}.mobileconfig</strong></div>
+      <div style="font-size:12px;color:var(--muted);">${v('pf-id') || 'com.example.profile'}</div>
+    </div>
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">Payloads (${payloads.length})</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${payloads.length ? payloads.map(p => `<span style="background:rgba(79,142,247,.12);border:1px solid rgba(79,142,247,.25);border-radius:6px;padding:3px 9px;font-size:12px;color:var(--accent)">${p}</span>`).join('') : '<span style="color:var(--muted);font-size:13px;">Chưa bật payload nào.</span>'}
+      </div>
+    </div>`;
+
+  document.getElementById('modal-summary').innerHTML = summaryHtml;
+  document.getElementById('modal-step-1').style.display = '';
+  document.getElementById('modal-step-2').style.display = 'none';
+  document.getElementById('gen-modal').classList.add('open');
+}
+
+function closeGenModal() {
+  document.getElementById('gen-modal').classList.remove('open');
+}
+
+function doGenerate() {
+  document.getElementById('modal-step-1').style.display = 'none';
+  document.getElementById('modal-step-2').style.display = '';
+  document.getElementById('modal-filename').textContent = _generatedName + '.mobileconfig';
+  downloadFile();
+}
+
+function downloadFile() {
+  const blob = new Blob([_generatedXML], { type: 'application/x-apple-aspen-config' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = _generatedName + '.mobileconfig';
+  a.click();
+  document.getElementById('status-text').textContent = `✅ Đã tải: ${_generatedName}.mobileconfig`;
+}
+
+// ─── COPY ───
+function copyXML() {
+  navigator.clipboard.writeText(buildXML()).then(() => {
+    document.getElementById('status-text').textContent = '📋 Đã copy XML vào clipboard!';
+  });
+}
+
+// ─── CLOSE MODAL ON BACKDROP ───
+document.getElementById('gen-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeGenModal();
+});
+
+// ─── INIT ───
+newUUID('pf-uuid');
+renderPreview();
+</script>
+</body>
+</html>
