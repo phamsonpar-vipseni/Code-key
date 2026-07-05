@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin PhamSon | Proxy Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">PhamSon</div>
+        <ul>
+            <li onclick="showSection('create')">Tạo Key Mới</li>
+            <li onclick="showSection('history')">Lịch Sử Key</li>
+            <li onclick="showSection('check')">Kiểm Tra Key</li>
+            <li onclick="showSection('ban')">Quản Lý Ban</li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <header><h2>Admin PhamSon Dashboard</h2></header>
+        
+        <section id="create" class="content-section">
+            <h3>Tạo Key Mới</h3>
+            <input type="text" id="ownerName" placeholder="Tên người dùng">
+            <input type="number" id="duration" placeholder="Số giờ hiệu lực">
+            <button onclick="createKey()">Tạo Key</button>
+        </section>
+
+        <section id="history" class="content-section" style="display:none;">
+            <h3>Danh Sách Key</h3>
+            <input type="text" id="searchKey" placeholder="Tìm theo tên..." onkeyup="searchKeys()">
+            <table id="keyTable">
+                <thead><tr><th>Key</th><th>Tên</th><th>Hết hạn</th><th>Hành động</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+        
+        </div>
+    <script src="admin.js"></script>
+</body>
+</html>
