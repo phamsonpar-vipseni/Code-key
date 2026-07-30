@@ -14,7 +14,7 @@ const VALID_KEYS = [
   {
     key: "FREE-DH37-BEI89",
     label: "VIP PRO",
-    expiresAt: "2036-12-31",
+    expiresAt: "2026-7-31",
     maxDevices: 5999
   },
 ];
