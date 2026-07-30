@@ -17,4 +17,10 @@ const VALID_KEYS = [
     expiresAt: "2026-7-31",
     maxDevices: 5999
   },
+  {
+    key: "FREE-APP-DB38B-4BDI7",
+    label: "FREE",
+    expiresAt: "2026-12-31",
+    maxDevices: 5
+  },
 ];
