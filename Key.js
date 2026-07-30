@@ -1,8 +1,8 @@
 const VALID_KEYS = [
   {
     key: "phamson-ios-47CNAO-X37DBF",
-    label: "ĐỊT MẸ",
-    expiresAt: "2026-7-11",
+    label: "ADMIN",
+    expiresAt: "2099-7-11",
     maxDevices: 1
   },
   {
