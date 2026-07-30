@@ -1,9 +1,9 @@
 const VALID_KEYS = [
   {
-    key: "phamson-ios-47CNAO-X37DBF",
-    label: "ADMIN",
+    key: "FREE-BULONEM36",
+    label: "BULONEM",
     expiresAt: "2099-07-11",
-    maxDevices: 1
+    maxDevices: 199999999
   },
   {
     key: "phamson-ios-A1B2C3D4-E5F6G7H8",
