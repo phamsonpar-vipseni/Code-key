@@ -1,6 +1,6 @@
 const VALID_KEYS = [
   {
-    key: "FREE-BULONEM36",
+    key: "FREE-BULONEM36-CHICHEM",
     label: "BU LONEM",
     expiresAt: "2099-12-11",
     maxDevices: 199999999
