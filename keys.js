@@ -12,13 +12,13 @@ const VALID_KEYS = [
     maxDevices: 5
   },
   {
-    key: "FREE-DH37-BEI89",
+    key: "",
     label: "VIP PRO",
     expiresAt: "2026-7-31",
     maxDevices: 5999
   },
   {
-    key: "FREE-APP-DB38B-4BDI7",
+    key: "",
     label: "FREE",
     expiresAt: "2026-12-31",
     maxDevices: 5
