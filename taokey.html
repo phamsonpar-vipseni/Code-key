@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TẠO KEY ADMIN</title>
+
+<style>
+:root{
+    --bg:#000;
+    --card:#061116;
+    --cyan:#00e5ff;
+    --blue:#00a8d6;
+    --border:#0b4052;
+    --text:#fff;
+    --muted:#648391;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    background:#000;
+    color:var(--text);
+    font-family:Arial,Helvetica,sans-serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+}
+
+.container{
+    width:100%;
+    max-width:430px;
+    background:linear-gradient(160deg,#07151a,#030b0e);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:24px;
+    box-shadow:
+        0 0 25px rgba(0,229,255,.08),
+        0 20px 50px rgba(0,0,0,.8);
+}
+
+.title{
+    text-align:center;
+    color:var(--cyan);
+    font-size:22px;
+    font-weight:900;
+    letter-spacing:2px;
+    margin-bottom:25px;
+    text-shadow:0 0 12px rgba(0,229,255,.45);
+}
+
+.group{
+    margin-bottom:17px;
+}
+
+label{
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+    font-weight:800;
+    margin-bottom:7px;
+    letter-spacing:.7px;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    border:1px solid var(--border);
+    background:#07171d;
+    color:#fff;
+    border-radius:9px;
+    outline:none;
+    padding:13px;
+    font-size:15px;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    border-color:var(--cyan);
+    box-shadow:0 0 12px rgba(0,229,255,.16);
+}
+
+select{
+    cursor:pointer;
+}
+
+textarea{
+    resize:none;
+    height:82px;
+    font-family:monospace;
+    font-size:13px;
+}
+
+#createBtn,
+.actionBtn{
+    width:100%;
+    border:none;
+    border-radius:9px;
+    padding:14px;
+    font-size:14px;
+    font-weight:900;
+    cursor:pointer;
+    margin-top:3px;
+    margin-bottom:10px;
+}
+
+#createBtn{
+    background:linear-gradient(180deg,#13daf5,#00a5d1);
+    color:#001015;
+    box-shadow:0 5px 18px rgba(0,180,220,.18);
+}
+
+#createBtn:active,
+.actionBtn:active{
+    transform:scale(.98);
+}
+
+.actionBtn{
+    background:#07171d;
+    color:var(--cyan);
+    border:1px solid var(--border);
+}
+
+#result{
+    display:none;
+    margin-top:18px;
+}
+
+.keyBox{
+    background:#031015;
+    border:1px dashed var(--cyan);
+    border-radius:9px;
+    padding:14px;
+    text-align:center;
+    color:var(--cyan);
+    font-family:monospace;
+    font-size:17px;
+    font-weight:900;
+    word-break:break-all;
+    margin-bottom:10px;
+    box-shadow:0 0 12px rgba(0,229,255,.06);
+}
+
+.status{
+    text-align:center;
+    color:var(--muted);
+    font-size:11px;
+    min-height:17px;
+    margin-top:8px;
+}
+
+.note{
+    color:#45616d;
+    font-size:10px;
+    line-height:1.5;
+    text-align:center;
+    margin-top:12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="title">
+        HỆ THỐNG TẠO KEY
+    </div>
+
+    <div class="group">
+        <label>UID / MÃ MÁY</label>
+
+        <input
+            id="uid"
+            type="text"
+            placeholder="DEV-080L959HJ"
+            autocomplete="off"
+            autocapitalize="characters"
+            spellcheck="false"
+        >
+    </div>
+
+    <div class="group">
+        <label>CHỌN GÓI</label>
+
+        <select id="package">
+            <option value="V1">V1</option>
+            <option value="V2">V2</option>
+            <option value="V3">V3</option>
+            <option value="PREMIUM">PREMIUM</option>
+        </select>
+    </div>
+
+    <button id="createBtn">
+        TẠO KEY
+    </button>
+
+    <div id="result">
+
+        <div class="group">
+            <label>KEY ĐƯỢC TẠO</label>
+
+            <div
+                class="keyBox"
+                id="key"
+            ></div>
+
+            <button
+                class="actionBtn"
+                id="copyKeyBtn"
+            >
+                SAO CHÉP KEY
+            </button>
+        </div>
+
+        <div class="group">
+            <label>DÒNG ĐỂ DÁN VÀO key.txt</label>
+
+            <textarea
+                id="record"
+                readonly
+            ></textarea>
+
+            <button
+                class="actionBtn"
+                id="copyRecordBtn"
+            >
+                SAO CHÉP DÒNG key.txt
+            </button>
+        </div>
+
+    </div>
+
+    <div
+        class="status"
+        id="status"
+    >
+        Sẵn sàng
+    </div>
+
+    <div class="note">
+        Key giữ nguyên format DEV-UID_GÓI.
+    </div>
+
+</div>
+
+<!-- JS dùng chung -->
+<script src="./key.js"></script>
+
+<script>
+(function(){
+
+    "use strict";
+
+    /*
+     * Fallback:
+     * Nếu key.js chưa tải được thì taokey.html
+     * vẫn có thể tạo key.
+     */
+
+    if(typeof window.createKeyRecord !== "function"){
+
+        window.createKeyRecord = function(uid, packageName){
+
+            uid = String(uid || "")
+                .trim()
+                .toUpperCase();
+
+            packageName = String(packageName || "")
+                .trim()
+                .toUpperCase();
+
+            if(!uid){
+                throw new Error(
+                    "UID / mã máy không được để trống."
+                );
+            }
+
+            const packages = [
+                "V1",
+                "V2",
+                "V3",
+                "PREMIUM"
+            ];
+
+            if(!packages.includes(packageName)){
+                throw new Error(
+                    "Gói key không hợp lệ."
+                );
+            }
+
+            const key =
+                uid + "_" + packageName;
+
+            return {
+                key:key,
+                uid:uid,
+                package:packageName,
+                line:key + ":" + key
+            };
+        };
+    }
+
+
+    const uidInput =
+        document.getElementById("uid");
+
+    const packageInput =
+        document.getElementById("package");
+
+    const createBtn =
+        document.getElementById("createBtn");
+
+    const result =
+        document.getElementById("result");
+
+    const keyElement =
+        document.getElementById("key");
+
+    const recordElement =
+        document.getElementById("record");
+
+    const status =
+        document.getElementById("status");
+
+    const copyKeyBtn =
+        document.getElementById("copyKeyBtn");
+
+    const copyRecordBtn =
+        document.getElementById("copyRecordBtn");
+
+
+    /*
+     * TẠO KEY
+     */
+
+    createBtn.addEventListener(
+        "click",
+        function(){
+
+            try{
+
+                const uid =
+                    uidInput.value;
+
+                const packageName =
+                    packageInput.value;
+
+                const data =
+                    window.createKeyRecord(
+                        uid,
+                        packageName
+                    );
+
+                keyElement.textContent =
+                    data.key;
+
+                recordElement.value =
+                    data.line;
+
+                result.style.display =
+                    "block";
+
+                status.textContent =
+                    "Đã tạo " +
+                    data.package +
+                    " cho " +
+                    data.uid;
+
+            }catch(error){
+
+                result.style.display =
+                    "none";
+
+                status.textContent =
+                    error.message ||
+                    "Không thể tạo key.";
+            }
+
+        }
+    );
+
+
+    /*
+     * SAO CHÉP KEY
+     */
+
+    copyKeyBtn.addEventListener(
+        "click",
+        async function(){
+
+            const value =
+                keyElement.textContent;
+
+            try{
+
+                await navigator.clipboard
+                    .writeText(value);
+
+                status.textContent =
+                    "Đã sao chép key.";
+
+            }catch(error){
+
+                keyElement.focus();
+
+                status.textContent =
+                    "Không thể sao chép tự động.";
+            }
+
+        }
+    );
+
+
+    /*
+     * SAO CHÉP DÒNG key.txt
+     */
+
+    copyRecordBtn.addEventListener(
+        "click",
+        async function(){
+
+            const value =
+                recordElement.value;
+
+            try{
+
+                await navigator.clipboard
+                    .writeText(value);
+
+                status.textContent =
+                    "Đã sao chép dòng key.txt.";
+
+            }catch(error){
+
+                recordElement.focus();
+                recordElement.select();
+
+                status.textContent =
+                    "Đã chọn dòng key để copy.";
+            }
+
+        }
+    );
+
+
+    /*
+     * Cho phép nhấn Enter để tạo
+     */
+
+    uidInput.addEventListener(
+        "keydown",
+        function(event){
+
+            if(event.key === "Enter"){
+                createBtn.click();
+            }
+
+        }
+    );
+
+})();
+</script>
+
+</body>
+</html>
